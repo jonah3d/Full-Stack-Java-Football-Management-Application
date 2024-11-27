@@ -10,6 +10,8 @@ import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.intellijthemes.FlatDarkFlatIJTheme;
 import com.formdev.flatlaf.intellijthemes.FlatGradiantoDarkFuchsiaIJTheme;
+import com.formdev.flatlaf.themes.FlatMacDarkLaf;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import javax.swing.UIManager;
 import org.joe.applicacion.initialize.Application;
 import org.joe.applicacion.views.LoginScreen;
@@ -22,7 +24,7 @@ public class Main {
     
     public static void main(String[] args) {
         try {
-         UIManager.setLookAndFeel( new FlatDarkFlatIJTheme());
+         UIManager.setLookAndFeel( new FlatMacDarkLaf());
          
     
         new Application();

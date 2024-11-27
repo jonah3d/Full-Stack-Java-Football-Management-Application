@@ -8,11 +8,11 @@ public class Team {
     private int id;
     private String name;
     private Date season_year;
-    private Category category;
-    private char team_type;
+    private String categoryName;
+    private String team_type;
 
 
-        public Team(String name, Date season_year, Category category, char team_type) {
+        public Team(String name, Date season_year, String category, String team_type) {
         setName(name);
         setSeason_year(season_year);
         setCategory(category);
@@ -36,19 +36,19 @@ public class Team {
         this.season_year = season_year;
     }
 
-    public Category getCategory() {
-        return category;
+    public String getCategory() {
+        return categoryName;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setCategory(String category) {
+        this.categoryName = category;
     }
 
-    public char getTeam_type() {
+    public String getTeam_type() {
         return team_type;
     }
 
-    public void setTeam_type(char team_type) {
+    public void setTeam_type(String team_type) {
         this.team_type = team_type;
     }
 
@@ -58,6 +58,15 @@ public class Team {
 
     public void setId(int id) {
         this.id = id;
+    }
+    
+    public void mostrarDetalle(){
+        System.out.println("ID: " + getId());
+        System.out.println("Nombre: " + getName());
+        System.out.println("Season: " + getSeason_year().toString());
+        System.out.println("Category: " + getCategory());
+        System.out.println("Team Type: " + getTeam_type());
+ 
     }
     
     

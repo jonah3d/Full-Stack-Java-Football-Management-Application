@@ -24,6 +24,7 @@ import org.joe.gestion.model.persistence.EquipDataInterfaceException;
 import org.joe.gestion.model.sqlpersistencia.EquipDataImplementationSQL;
 import javax.sql.rowset.serial.SerialBlob;
 import org.joe.gestion.model.data.Category;
+import org.joe.gestion.model.data.Team;
 
 /**
  *
@@ -40,7 +41,7 @@ public class TestSQL {
          Player p1 = new Player();
          p1.setName("Santiago");
          p1.setSurname("lopez");
-         p1.setSex('H');
+         p1.setSex("H");
         try {
             p1.setBirth_year(sdf.parse("2001-09-05"));
         } catch (ParseException ex) {
@@ -100,7 +101,7 @@ public class TestSQL {
     
     public static void RESTOREPASS(){
             EquipDataImplementationSQL isql = new EquipDataImplementationSQL();
-            isql.restorePassword("frank", "admin");
+            isql.restorePassword("admin", "ADMIN");
             
     }
     
@@ -111,10 +112,50 @@ public class TestSQL {
        player.mostrarJugDetalle();
     }
     
+
+           public static void GETTEAMSBYCAT(){
+           List<Team> teamsbycat = new ArrayList<>();
+           
+        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+        teamsbycat = implementationSQL.getTeamsByCategory("Cadet");
+        
+        for(Team t : teamsbycat){
+           System.out.println("\n=========================\n");
+              t.mostrarDetalle();
+        }
+        
+      
+    }
+       
+public static void GETTEAMSBYTYE() {
+    EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+     List<Team> teamsbytype = new ArrayList<>();
+ 
+    teamsbytype = implementationSQL.getTeamsByType("D");
+
+    if (teamsbytype == null || teamsbytype.isEmpty()) {
+        System.out.println("No teams found for the given type.");
+        return;
+    }
+
+ 
+    for (Team t : teamsbytype) {
+        System.out.println("\n=========================\n");
+        t.mostrarDetalle();
+    }
+}
+
+    
     public static void DELETEPLAYER(){
         EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
         
         implementationSQL.eliminarJugador("ID01");
+    }
+    
+     public static void DELETETEAM(){
+        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+        
+        implementationSQL.deleteTeam("FcBarcelona");
     }
     
     public static void PLAYSBYYEAR(){
@@ -174,13 +215,23 @@ public class TestSQL {
    public  static void ADDNEWTEAM(){
         EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
         try {
-            implementationSQL.addNewTeam("FcElEljidoFEM", 'D', "Juvenil", sdf.parse("2024-09-01"));
+            implementationSQL.addNewTeam("FcBarcelona", "D", "Juvenil", sdf.parse("2024-09-01"));
         } catch (ParseException ex) {
             System.out.println(ex.getMessage());
         }
    }
    
-   
+   public static void PLAYERSTEAM(){
+       
+           EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+       List<Player> playerlist = new ArrayList<>();
+
+        playerlist = implementationSQL.getTeamPlayers("FcCanPalladesMIX");
+            for(Player play:playerlist){
+              System.out.println("\n=========================\n");
+              play.mostrarJugDetalle();
+          }
+   }
         
     public static void main(String[] args) {
           
@@ -198,7 +249,10 @@ public class TestSQL {
       //GETPLAYERSBYSURNAME();
      //GETALLCATEGORIES();
      //ADDNEWTEAM();
-     
+     DELETETEAM();
+     //GETTEAMSBYCAT();
+     //GETTEAMSBYTYE();
+     //PLAYERSTEAM();
     }
 
 

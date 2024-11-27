@@ -14,7 +14,7 @@ public class Player {
     private int id;
     protected String name;
     protected String surname;
-    protected char sex;
+    protected String sex;
     protected Date birth_year;
     protected String legal_id;
     protected String iban;
@@ -25,14 +25,14 @@ public class Player {
     public Player() {
     }
 
-            public Player(String name, String surname, char sex, Date birth_year) {
+            public Player(String name, String surname, String sex, Date birth_year) {
         setName(name);
         setSurname(surname);
         setSex(sex);
         setBirth_year(birth_year);
     }
 
-    public Player(String name, String surname, char sex, Date birth_year, String legal_id, String iban, String address, Blob image, Date medical_rev_fin) {
+    public Player(String name, String surname, String sex, Date birth_year, String legal_id, String iban, String address, Blob image, Date medical_rev_fin) {
         setName(name);
         setSurname(surname);
         setSex(sex);
@@ -62,7 +62,7 @@ public class Player {
         return surname;
     }
 
-    public char getSex() {
+    public String getSex() {
         return sex;
     }
 
@@ -106,10 +106,11 @@ public class Player {
         }
     }
 
-    public void setSex(char sex) {
-      if(Character.toLowerCase(sex)== 'h' || Character.toLowerCase(sex) == 'd'){
-          this.sex = sex;
-      }
+    public void setSex(String sex) {
+        
+     if(sex.toUpperCase().equals("H") || sex.toUpperCase().equals("D")){
+         this.sex = sex;
+     }
       else{
           throw new RuntimeException("The Sex Of The Character Must Either be H or D");
       }

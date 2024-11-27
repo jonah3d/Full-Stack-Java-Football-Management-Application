@@ -35,10 +35,10 @@ public interface EquipDataInterface {
     //Team Management
     public List<Category> getCategorys();
     public List<Team> getTeamsByCategory(String cat);
-    public List<Team> getTeamsByType (char type);
-    public List<Team> getTeamsBySeason (Date season);
+    public List<Team> getTeamsByType (String type);
+  
     
-     public void addNewTeam(String name, char teamtype, String cat_name,Date  seasondate);
+     public void addNewTeam(String name, String teamtype, String cat_name,Date  seasondate);
     public List<Player> getTeamPlayers(String teamName);
     public void addPlayerToTeam(String LegalID);
     public void deletePlayerFromTeam(String legalID);

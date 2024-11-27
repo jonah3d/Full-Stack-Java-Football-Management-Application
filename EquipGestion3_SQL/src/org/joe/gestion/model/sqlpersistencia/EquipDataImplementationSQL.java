@@ -44,6 +44,12 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
     PreparedStatement playerbyname;
     PreparedStatement editplayer;
     PreparedStatement newteam;
+    PreparedStatement teambyCat;
+    PreparedStatement teamtype;
+    PreparedStatement teamSea;
+    PreparedStatement teamPlyers;
+    PreparedStatement delteam;
+    PreparedStatement newSeasonDate;
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     
@@ -155,7 +161,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
                     photo = null;
                 }
                 
-                return new Player(name, surname, sexe.charAt(0), datebirth, legalId, iban, address, photo, medicalfin);
+                return new Player(name, surname, sexe, datebirth, legalId, iban, address, photo, medicalfin);
             }else{
                 throw new EquipDataInterfaceException("Query returned with zero players");
             }
@@ -215,7 +221,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
                     photo = null;
                 }
                 
-                 Player play = new Player(name, surname, sexe.charAt(0), datebirth, legalId, iban, address, photo, medicalfin);
+                 Player play = new Player(name, surname, sexe, datebirth, legalId, iban, address, photo, medicalfin);
                  players.add(play);
                  
                  
@@ -225,6 +231,80 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             throw new EquipDataInterfaceException("Unable To get Players");
         }
                 return players;
+    }
+    
+private List<Team> getTeams(ResultSet rs) {
+    List<Team> teams = new ArrayList<>();
+    try {
+        while (rs.next()) {  
+            Integer teamId = rs.getInt("ID");
+            String teamName = rs.getString("NAME");
+            String teamType = rs.getString("TEAM_TYPE");
+            String teamCatName = rs.getString("CATEGORY_NAME");
+            Date teamSeason = rs.getDate("SEASON_YEAR");
+
+           
+            teamName = teamName == null ? "" : teamName;
+            teamType = teamType == null ? "" : teamType;
+            teamCatName = teamCatName == null ? "" : teamCatName;
+
+           
+            Team nteam = new Team(teamName, teamSeason, teamCatName, teamType);
+            teams.add(nteam);
+        }
+
+        if (teams.isEmpty()) {
+            System.out.println("No teams found in ResultSet.");
+        }
+
+    } catch (SQLException e) {
+        System.out.println(e.getMessage());
+        throw new EquipDataInterfaceException("Unable to get teams.");
+    }
+    return teams;
+}
+
+    
+    private Team getTeam(ResultSet rs){
+        
+        try{
+            
+          if(rs.next()){
+              
+            Integer teamid =  rs.getInt("ID");
+            if(rs.wasNull()){
+                teamid = null;
+            }
+            
+            String teamname = rs.getString("Name");
+            if(rs.wasNull()){
+                teamname = "";
+            }
+              String teamType = rs.getString("TEAM_TYPE");
+                if(rs.wasNull()){
+                    teamType = "";
+                }
+                String teamCatName = rs.getString("CATEGORY_NAME");
+                if(rs.wasNull()){
+                    teamCatName = "";
+                }
+                Date teamSeason = rs.getDate("Season_year");
+                if(rs.wasNull()){
+                    teamSeason = null;
+                }
+                
+              Team nteam = new Team(teamname, teamSeason, teamCatName, teamType);
+              nteam.setId(teamid);
+              return nteam;
+              
+          }else{
+                throw new EquipDataInterfaceException("Query returned with no team");
+            }
+            
+        }catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            throw new EquipDataInterfaceException("Unable To get Player(s)");
+        }
     }
 
 @Override
@@ -387,7 +467,7 @@ public Player getPlayerByLegalId(String legalID) {
                     photo = null;
                 }
                 
-                return new Player(name, surname, sexe.charAt(0), datebirth, legalId, iban, address, photo, medicalfin);
+                return new Player(name, surname, sexe, datebirth, legalId, iban, address, photo, medicalfin);
             }else{
                throw new EquipDataInterfaceException("Supplied ID Doesn't Correspond To An ID Of Any Player");
             }
@@ -626,21 +706,56 @@ public Player getPlayerByLegalId(String legalID) {
     
     @Override
     public List<Team> getTeamsByCategory(String cat) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        
+        
+          if(cat.equals("") || cat == null){
+              throw new EquipDataInterfaceException("Category Can't Be Null or Empty");
+        }
+          String query = "SELECT * FROM Team WHERE UPPER(CATEGORY_NAME) = UPPER(?)";
+          
+            try {
+            teambyCat = con.prepareStatement(query);
+            teambyCat.setString(1, cat);
+            
+            ResultSet rs = teambyCat.executeQuery();
+            
+            return getTeams(rs);
+
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+             throw new EquipDataInterfaceException("Error Trying To Retrieve The Teams By Categories");
+        }
+            
     }
 
     @Override
-    public List<Team> getTeamsByType(char type) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+public List<Team> getTeamsByType(String type) {
+   
+    if (type == null || type.length() > 1) {
+        throw new EquipDataInterfaceException("Introduced Type Is Null Or More Than 1 Character");
     }
 
-    @Override
-    public List<Team> getTeamsBySeason(Date season) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+   
+String query = "SELECT * FROM TEAM WHERE TEAM_TYPE = '" + type + "'";
+    ResultSet rs = null;
+    try {
+
+        Statement stm = con.createStatement();
+       rs = stm.executeQuery(query);
+       return getTeams(rs);
+   
+
+      
+    } catch (SQLException ex) {
+        System.out.println(ex.getMessage());
+        throw new EquipDataInterfaceException("Error Getting Teams By Type " + type);
     }
+}
+
+
 
     @Override
-    public void addNewTeam(String name, char teamtype, String cat_name, Date  seasondate) {
+    public void addNewTeam(String name, String teamtype, String cat_name, Date  seasondate) {
        if(name==null || name.isBlank() || cat_name == null || seasondate == null 
              ){
            throw new EquipDataInterfaceException("Invalid Input For Creating A new Team");
@@ -652,7 +767,7 @@ public Player getPlayerByLegalId(String legalID) {
         try {
             newteam = con.prepareStatement(query);
             newteam.setString(1, name);
-            newteam.setString(2, Character.toString(teamtype));
+            newteam.setString(2, teamtype);
             newteam.setString(3, cat_name);
             
             java.util.Date utildate = seasondate;
@@ -675,12 +790,32 @@ public Player getPlayerByLegalId(String legalID) {
 
     @Override
     public List<Player> getTeamPlayers(String teamName) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if(teamName == null){
+              throw new EquipDataInterfaceException("team name Can't Be Null or Empty");
+        }        
+        String query = "SELECT p.* " +
+               "FROM PLAYERTEAM pt " +
+               "JOIN PLAYER p ON pt.player = p.id " +
+               "JOIN TEAM t ON pt.team = t.id " +
+               "WHERE t.name = ?";
+
+        try {
+            teamPlyers = con.prepareStatement(query);
+            teamPlyers.setString(1, teamName);
+            ResultSet rs = teamPlyers.executeQuery();
+            
+            return getPlayers(rs);
+
+        } catch (SQLException ex) {
+           System.out.println(ex.getMessage());
+        throw new EquipDataInterfaceException("Error Getting Players Of Team " + teamName);
+        }
+   
     }
 
     @Override
     public void addPlayerToTeam(String LegalID) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        
     }
 
     @Override
@@ -690,13 +825,59 @@ public Player getPlayerByLegalId(String legalID) {
 
     @Override
     public void deleteTeam(String name) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+              if(name == null ){
+          throw new EquipDataInterfaceException("The Name Field Can't Be Null");
+         }
+         
+         String query  = "DELETE FROM TEAM WHERE NAME = ?";
+         
+        try {
+            delteam = con.prepareStatement(query);
+            delteam.setString(1, name);
+           int results =  delteam.executeUpdate();
+           
+           
+        if (results > 0) {
+            System.out.println("Team with name " + name + " has been successfully deleted.");
+        } else {
+            throw new EquipDataInterfaceException("No player found with legal ID " + name);
+        }
+            
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            throw new EquipDataInterfaceException("Somthing Went Wrong Trying To Create The Delete Statement");
+        }
+        
+        
     }
 
-    @Override
-    public void addNewSeason(String season_n, Date date) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+   @Override
+public void addNewSeason(String season_n, Date date) {
+
+    if (season_n == null || season_n.isEmpty()) {
+        throw new EquipDataInterfaceException("Season name can't be null or empty.");
     }
+    if (date == null) {
+        throw new EquipDataInterfaceException("Season date can't be null.");
+    }
+
+   
+    String query = "INSERT INTO SEASON (season_year) VALUES (?)";
+
+    try {
+       
+         newSeasonDate = con.prepareStatement(query);
+            newSeasonDate.setDate(1, (java.sql.Date) date);
+
+        
+        newSeasonDate.executeUpdate();
+        System.out.println("New season " + season_n + " added successfully with date " + date);
+    } catch (SQLException ex) {
+        System.out.println(ex.getMessage());
+        throw new EquipDataInterfaceException("Error adding new season " + season_n);
+    }
+}
+
 
     @Override
     public void removeSeason(String season_n) {
@@ -705,7 +886,7 @@ public Player getPlayerByLegalId(String legalID) {
 
     @Override
     public void removeTeamFromSeason(String t_name) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        
     }
 
     @Override
