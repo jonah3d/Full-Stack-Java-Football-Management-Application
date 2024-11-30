@@ -127,7 +127,7 @@ public class TestSQL {
       
     }
        
-public static void GETTEAMSBYTYE() {
+public static void getTeamsByType() {
     EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
      List<Team> teamsbytype = new ArrayList<>();
  
@@ -239,7 +239,7 @@ public static void GETTEAMSBYTYE() {
         
         
      //ADDNEWPLAYER();
-      //CREATEUSER();
+      CREATEUSER();
       //VALIDATEUSER();
       //RESTOREPASS();
       //GETPLAYERBYLEGALIID();
@@ -249,9 +249,9 @@ public static void GETTEAMSBYTYE() {
       //GETPLAYERSBYSURNAME();
      //GETALLCATEGORIES();
      //ADDNEWTEAM();
-     DELETETEAM();
+     //DELETETEAM();
      //GETTEAMSBYCAT();
-     //GETTEAMSBYTYE();
+     //getTeamsByType();
      //PLAYERSTEAM();
     }
 

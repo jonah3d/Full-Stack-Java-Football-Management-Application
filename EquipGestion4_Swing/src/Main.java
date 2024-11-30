@@ -13,18 +13,18 @@ import com.formdev.flatlaf.intellijthemes.FlatGradiantoDarkFuchsiaIJTheme;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import javax.swing.UIManager;
-import org.joe.applicacion.initialize.Application;
-import org.joe.applicacion.views.LoginScreen;
+import org.joe.application.initialize.Application;
+import org.joe.application.views.LoginScreen;
 
 /**
  *
  * @author Usuari
- */
+ *//*
 public class Main {
     
     public static void main(String[] args) {
         try {
-         UIManager.setLookAndFeel( new FlatMacDarkLaf());
+         UIManager.setLookAndFeel( new FlatLightLaf());
          
     
         new Application();
@@ -35,3 +35,4 @@ public class Main {
     }
     
 }
+*/

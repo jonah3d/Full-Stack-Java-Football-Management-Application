@@ -14,7 +14,6 @@ import org.joe.gestion.model.data.Team;
 
 public interface EquipDataInterface {
 
-    
        //Application Management
    public boolean createUser(String username, String name,String password);
     public boolean validateUser(String username,String password);
