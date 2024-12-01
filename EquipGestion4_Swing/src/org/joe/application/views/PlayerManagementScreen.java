@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.border.Border;
 import org.joe.application.constants.ManagemetConstants;
+import org.joe.application.views.tabs.AnadirJugadores;
 import org.joe.application.views.tabs.VerJugadores;
 
 /**
@@ -95,8 +96,10 @@ public class PlayerManagementScreen {
         playersections.setBackground(Color.red);
         
      VerJugadores verjugTab = new VerJugadores();
+     AnadirJugadores anadirJugadores = new AnadirJugadores();
         playersections.addTab("Team 1",verjugTab);
-        playersections.addTab("Team 2", new JLabel("Content for Team 2"));
+        playersections.addTab("Team 2", anadirJugadores);
+        playersections.addTab("Team 2", new JLabel("Content for Team 3"));
         
        
         frame.setSize(ManagemetConstants.mgmtScrn_Width,ManagemetConstants.mgmtScrn_Height);
