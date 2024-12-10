@@ -10,8 +10,7 @@ import java.util.logging.Logger;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import org.joe.application.controllers.LoginScreenController;
-import org.joe.application.views.LoginScreen;
-import org.joe.application.views.PlayerManagementScreen;
+import org.joe.application.views.Management;
 import org.joe.gestion.model.persistence.EquipDataInterface;
 
 /**
@@ -19,6 +18,7 @@ import org.joe.gestion.model.persistence.EquipDataInterface;
  * @author Usuari
  */
 public class Application {
+
     private LoginScreenController screenController;
 
     private static String nomClassePersistencia = null;
@@ -27,7 +27,7 @@ public class Application {
     public Application() {
         // Launch the login screen and connect to the database asynchronously
         screenController = new LoginScreenController(nomClassePersistencia);
-        
+
     }
 
     public static void main(String[] args) {
@@ -42,9 +42,8 @@ public class Application {
             System.exit(0);
         }
         nomClassePersistencia = args[0];
-       // new Application();
-        
-        new PlayerManagementScreen();
+        // new Application();
+        new Management();
+        //new PlayerManagementScreen();
     }
 }
-
