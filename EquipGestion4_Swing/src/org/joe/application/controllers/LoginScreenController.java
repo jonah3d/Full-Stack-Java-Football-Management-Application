@@ -20,7 +20,7 @@ public class LoginScreenController implements ActionListener {
     private LoginScreen loginScreen;
     private EquipDataInterface edi;
     private String persistenceClassName;
-
+    JProgressBar progressBar;
     public LoginScreenController(String persistenceClassName) {
       this.persistenceClassName = persistenceClassName;
         loginScreen = new LoginScreen();
@@ -54,7 +54,7 @@ public class LoginScreenController implements ActionListener {
     private void connectToDatabase(){
         new Thread(()->{
                 try {
-                    JProgressBar progressBar = loginScreen.getConnectionBar();
+                     progressBar = loginScreen.getConnectionBar();
                     progressBar.setValue(0);
                     for (int i = 1; i <= 100; i+=20) {
                         Thread.sleep(500);
@@ -71,9 +71,10 @@ public class LoginScreenController implements ActionListener {
                          e.getMessage(),
                         "Error De Conexion",
                 JOptionPane.ERROR_MESSAGE
+                       
                 
                 );
-               
+                progressBar.setVisible(false);
         }
         
         } ).start();

@@ -25,4 +25,5 @@ public class ManagemetConstants {
     public static final int sdpane_Y = 0;
     
     public static final String sideicon_path = "org/joe/application/resources/icons/";
+    public static final String extraicon_path = "org/joe/application/resources/icons/";
 }

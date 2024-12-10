@@ -4,7 +4,9 @@
  */
 package org.joe.application.initialize;
 
+import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.UIManager;
@@ -42,9 +44,9 @@ public class Application {
             System.exit(0);
         }
         nomClassePersistencia = args[0];
-       // new Application();
+     // new Application();
         
-        new PlayerManagementScreen();
+     new PlayerManagementScreen();
     }
 }
 

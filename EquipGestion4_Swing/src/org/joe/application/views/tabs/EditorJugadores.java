@@ -5,8 +5,6 @@
 package org.joe.application.views.tabs;
 
 import com.formdev.flatlaf.extras.FlatSVGIcon;
-import java.awt.Color;
-import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
@@ -18,9 +16,9 @@ import raven.datetime.component.date.DatePicker;
 
 /**
  *
- * @author jonah
+ * @author Usuari
  */
-public class AnadirJugadores extends JPanel{
+public class EditorJugadores extends JPanel {
     
    JLabel nif_lbl;
    JTextField nif_tf;
@@ -49,12 +47,10 @@ public class AnadirJugadores extends JPanel{
     JFormattedTextField dateeditor_naix; 
     DatePicker datePicker_rev;
     JFormattedTextField dateeditor_rev;
-    
     JLabel profile_lb;
     
     
-    
-    public AnadirJugadores(){
+      public EditorJugadores(){
         setLayout(null);
         setSize(1589, 970);
         init_Components();
@@ -94,8 +90,6 @@ public class AnadirJugadores extends JPanel{
        
        datePicker_rev = new DatePicker();
        dateeditor_rev = new JFormattedTextField();
-       
-      
     }
     
     private void addComponents(){
