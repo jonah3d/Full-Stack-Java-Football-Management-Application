@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import org.joe.application.controllers.LoginScreenController;
-import org.joe.application.views.Management;
+import org.joe.application.controllers.ManagementFrameController;
 import org.joe.gestion.model.persistence.EquipDataInterface;
 
 /**
@@ -43,7 +43,8 @@ public class Application {
         }
         nomClassePersistencia = args[0];
         // new Application();
-        new Management();
+        //new Management();
         //new PlayerManagementScreen();
+        new ManagementFrameController();
     }
 }
