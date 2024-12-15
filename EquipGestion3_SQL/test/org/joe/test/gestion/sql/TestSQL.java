@@ -195,7 +195,31 @@ public class TestSQL {
 
     }
 
-    public static void GETALLCATEGORIES() {
+    public static void getPlayerBySurname_Ordbycognom() {
+        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+        List<Player> playerlist = new ArrayList<>();
+
+        playerlist = implementationSQL.getPlayerBySurname_ordCognom("Reyes");
+        for (Player play : playerlist) {
+            System.out.println("\n=========================\n");
+            play.mostrarJugDetalle();
+        }
+
+    }
+
+    public static void getPlayerBySurname_Orddatnaix() {
+        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+        List<Player> playerlist = new ArrayList<>();
+
+        playerlist = implementationSQL.getPlayerBySurname_ordDatnaix("Reyes");
+        for (Player play : playerlist) {
+            System.out.println("\n=========================\n");
+            play.mostrarJugDetalle();
+        }
+
+    }
+
+    public static void getAllCategories() {
         EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
         List<Category> catlist = new ArrayList<>();
         catlist = implementationSQL.getCategorys();
@@ -292,6 +316,28 @@ public class TestSQL {
         }
     }
 
+    public static void getPlayersByBirtYear() throws ParseException {
+        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+        List<Player> playerlist = new ArrayList<>();
+
+        playerlist = implementationSQL.getPlayerByBirthYear(sdf.parse("2007-05-16"));
+        for (Player play : playerlist) {
+            System.out.println("\n=========================\n");
+            play.mostrarJugDetalle();
+        }
+    }
+
+    public static void getPlayersByBirtYear_OrdbySurname() throws ParseException {
+        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+        List<Player> playerlist = new ArrayList<>();
+
+        playerlist = implementationSQL.getPlayerByBirthYear_ordCognom(sdf.parse("2007-05-16"));
+        for (Player play : playerlist) {
+            System.out.println("\n=========================\n");
+            play.mostrarJugDetalle();
+        }
+    }
+
     public static void main(String[] args) {
 
         //ADDNEWPLAYER();
@@ -302,7 +348,9 @@ public class TestSQL {
         // DELETEPLAYER();
         //PLAYSBYYEAR();
         //GETPLAYERSBYNAME();
-        getPlayerBySurname();
+        //getPlayerBySurname();
+        //getPlayerBySurname_Ordbycognom();
+        // getPlayerBySurname_Orddatnaix();
         //GETALLCATEGORIES();
         //ADDNEWTEAM();
         //DELETETEAM();
@@ -315,6 +363,12 @@ public class TestSQL {
         //getPlayersCat();
         //getPlayersCat_ordbycognom();
         //getPlayersCat_ordbydatnaix();
+        /*  try {
+            getPlayersByBirtYear();
+            //getPlayersByBirtYear_OrdbySurname();
+        } catch (ParseException ex) {
+            System.out.println(ex);
+        }*/
     }
 
 }

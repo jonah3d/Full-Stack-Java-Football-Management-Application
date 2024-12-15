@@ -22,6 +22,7 @@ import org.joe.application.views.tabs.VerJugadores;
 import org.joe.gestion.model.data.Category;
 import org.joe.gestion.model.data.Player;
 import org.joe.gestion.model.persistence.EquipDataInterface;
+import org.joe.gestion.model.persistence.EquipDataInterfaceException;
 
 /**
  *
@@ -59,16 +60,31 @@ public class VerJugadoresController implements ActionListener {
             String emptycal = "--/--/----";
 
             List<Player> filteredPlayers = edi.getPlayers();
+
+            //GET ALL PLAYERS AND ORDER THEM
+            if (nameFilter.isBlank() && nifFilter.isBlank() && birthDate.equals(emptycal) && categoryFilter.isBlank() && ordenar.equals("Cognom")) {
+                filteredPlayers = edi.getPlayers_ordCognom();
+            } else if (nameFilter.isBlank() && nifFilter.isBlank() && birthDate.equals(emptycal) && categoryFilter.isBlank() && ordenar.equals("Data Naixement")) {
+                filteredPlayers = edi.getPlayers_ordDatnaix();
+
+            }
+
+            //GET PLAYERS BY LEGAL ID
             if (nameFilter.isBlank() && nifFilter.length() > 2 && birthDate.equals(emptycal) && categoryFilter.isBlank() && ordenar.isBlank()) {
                 filteredPlayers = edi.getPlayersByLegalId(nifFilter);
 
             }
-
+            //GET PLAYERS BY SURNAME
             if (nameFilter.length() > 3 && nifFilter.isBlank() && birthDate.equals(emptycal) && categoryFilter.isBlank() && ordenar.isBlank()) {
                 filteredPlayers = edi.getPlayerBySurname(nameFilter);
+            } else if (nameFilter.length() > 3 && nifFilter.isBlank() && birthDate.equals(emptycal) && categoryFilter.isBlank() && ordenar.equals("Cognom")) {
+                filteredPlayers = edi.getPlayerBySurname_ordCognom(nameFilter);
+            } else if (nameFilter.length() > 3 && nifFilter.isBlank() && birthDate.equals(emptycal) && categoryFilter.isBlank() && ordenar.equals("Data Naixement")) {
+                filteredPlayers = edi.getPlayerBySurname_ordDatnaix(nameFilter);
             }
 
-            if (nameFilter.isBlank() && nifFilter.isBlank() && birthDate.length() > 5 && categoryFilter.isBlank() && ordenar.isBlank()) {
+            //GET PLAYERS BY BIRTH YEAR AND ORDER THEM
+            if (nameFilter.isBlank() && nifFilter.isBlank() && !birthDate.equals(emptycal) && categoryFilter.isBlank() && ordenar.isBlank()) {
 
                 try {
                     filteredPlayers = edi.getPlayerByBirthYear(sdf.parse(birthDate));
@@ -80,15 +96,31 @@ public class VerJugadoresController implements ActionListener {
                             JOptionPane.ERROR_MESSAGE
                     );
                 }
+            } else if (nameFilter.isBlank() && nifFilter.isBlank() && !birthDate.equals(emptycal) && categoryFilter.isBlank() && ordenar.equals("Cognom")) {
+                try {
+                    filteredPlayers = edi.getPlayerByBirthYear_ordCognom(sdf.parse(birthDate));
+                } catch (ParseException ex) {
+
+                    JOptionPane.showMessageDialog(null,
+                            ex.getMessage(),
+                            "Date Parsing Error",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                }
+            } else if (nameFilter.isBlank() && nifFilter.isBlank() && !birthDate.equals(emptycal) && categoryFilter.isBlank() && ordenar.equals("Data Naixement")) {
+                try {
+                    filteredPlayers = edi.getPlayerByBirthYear_ordCognom(sdf.parse(birthDate));
+                } catch (ParseException ex) {
+
+                    JOptionPane.showMessageDialog(null,
+                            ex.getMessage(),
+                            "Date Parsing Error",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                }
             }
 
-            if (nameFilter.isBlank() && nifFilter.isBlank() && birthDate.equals(emptycal) && categoryFilter.isBlank() && ordenar.equals("Cognom")) {
-                filteredPlayers = edi.getPlayers_ordCognom();
-            } else if (nameFilter.isBlank() && nifFilter.isBlank() && birthDate.equals(emptycal) && categoryFilter.isBlank() && ordenar.equals("Data Naixement")) {
-                filteredPlayers = edi.getPlayers_ordDatnaix();
-
-                //CAT JUVENIL
-            } else if (nameFilter.isBlank() && nifFilter.isBlank() && birthDate.equals(emptycal) && categoryFilter.equals("Juvenil") && ordenar.isBlank()) {
+            if (nameFilter.isBlank() && nifFilter.isBlank() && birthDate.equals(emptycal) && categoryFilter.equals("Juvenil") && ordenar.isBlank()) {
 
                 filteredPlayers = edi.getPlayersByCat(categoryFilter);
             } else if (nameFilter.isBlank() && nifFilter.isBlank() && birthDate.equals(emptycal) && categoryFilter.equals("Juvenil") && ordenar.equals("Cognom")) {

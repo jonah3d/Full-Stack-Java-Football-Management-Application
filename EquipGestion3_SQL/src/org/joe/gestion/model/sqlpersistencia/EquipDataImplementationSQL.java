@@ -480,6 +480,32 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
         calendar.setTime(date);
         int year = calendar.get(Calendar.YEAR);
 
+        String query = "SELECT * FROM PLAYER WHERE EXTRACT(YEAR FROM BIRTH_YEAR) = ?";
+
+        try {
+            playersbyyear = con.prepareStatement(query);
+            playersbyyear.setInt(1, year);
+
+            ResultSet rs = playersbyyear.executeQuery();
+            return getPlayers(rs);
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            throw new EquipDataInterfaceException("Error Trying To Retrieve The Players");
+        }
+
+    }
+
+    @Override
+    public List<Player> getPlayerByBirthYear_orddDatnaix(Date date) {
+
+        if (date == null) {
+            throw new EquipDataInterfaceException("Date Can't Be Null");
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        int year = calendar.get(Calendar.YEAR);
+
         String query = "SELECT * FROM PLAYER WHERE EXTRACT(YEAR FROM BIRTH_YEAR) = ?"
                 + " ORDER BY BIRTH_YEAR";
 
@@ -494,6 +520,31 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             throw new EquipDataInterfaceException("Error Trying To Retrieve The Players");
         }
 
+    }
+
+    @Override
+    public List<Player> getPlayerByBirthYear_ordCognom(Date date) {
+        if (date == null) {
+            throw new EquipDataInterfaceException("Date Can't Be Null");
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        int year = calendar.get(Calendar.YEAR);
+
+        String query = "SELECT * FROM PLAYER WHERE EXTRACT(YEAR FROM BIRTH_YEAR) = ?"
+                + " ORDER BY surname";
+
+        try {
+            playersbyyear = con.prepareStatement(query);
+            playersbyyear.setInt(1, year);
+
+            ResultSet rs = playersbyyear.executeQuery();
+            return getPlayers(rs);
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            throw new EquipDataInterfaceException("Error Trying To Retrieve The Players");
+        }
     }
 
     @Override
@@ -570,7 +621,51 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             throw new EquipDataInterfaceException("Surname Can't Be Null or Empty");
         }
 
-        String query = "SELECT * FROM PLAYER WHERE UPPER(SURNAME) = UPPER(?) ORDER BY SURNAME ASC";
+        String query = "SELECT * FROM PLAYER WHERE UPPER(SURNAME) = UPPER(?)";
+
+        try {
+            playerbyname = con.prepareStatement(query);
+            playerbyname.setString(1, surname);
+
+            ResultSet rs = playerbyname.executeQuery();
+
+            return getPlayers(rs);
+
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            throw new EquipDataInterfaceException("Error Trying To Retrieve The Players");
+        }
+    }
+
+    @Override
+    public List<Player> getPlayerBySurname_ordCognom(String surname) {
+        if (surname.equals("") || surname == null) {
+            throw new EquipDataInterfaceException("Surname Can't Be Null or Empty");
+        }
+
+        String query = "SELECT * FROM PLAYER WHERE UPPER(SURNAME) = UPPER(?) ORDER BY SURNAME";
+
+        try {
+            playerbyname = con.prepareStatement(query);
+            playerbyname.setString(1, surname);
+
+            ResultSet rs = playerbyname.executeQuery();
+
+            return getPlayers(rs);
+
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            throw new EquipDataInterfaceException("Error Trying To Retrieve The Players");
+        }
+    }
+
+    @Override
+    public List<Player> getPlayerBySurname_ordDatnaix(String surname) {
+        if (surname.equals("") || surname == null) {
+            throw new EquipDataInterfaceException("Surname Can't Be Null or Empty");
+        }
+
+        String query = "SELECT * FROM PLAYER WHERE UPPER(SURNAME) = UPPER(?) ORDER BY BIRTH_YEAR";
 
         try {
             playerbyname = con.prepareStatement(query);

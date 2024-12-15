@@ -180,7 +180,7 @@ public class Player {
     }
 
     public void setLegal_id(String legal_id) {
-        if (!legal_id.isEmpty()) {
+        if (!legal_id.isEmpty() && legal_id.length() == 8) {
             this.legal_id = legal_id;
         } else {
             throw new RuntimeException("Legal ID Can't Be Empty");

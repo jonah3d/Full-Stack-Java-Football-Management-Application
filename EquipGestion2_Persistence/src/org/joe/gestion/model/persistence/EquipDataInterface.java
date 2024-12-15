@@ -29,9 +29,17 @@ public interface EquipDataInterface {
 
     public List<Player> getPlayerByBirthYear(Date date);
 
+    public List<Player> getPlayerByBirthYear_ordCognom(Date date);
+
+    public List<Player> getPlayerByBirthYear_orddDatnaix(Date date);
+
     public List<Player> getPlayerByName(String Name);
 
     public List<Player> getPlayerBySurname(String surname);
+
+    public List<Player> getPlayerBySurname_ordCognom(String surname);
+
+    public List<Player> getPlayerBySurname_ordDatnaix(String surname);
 
     public List<Player> getPlayers();
 

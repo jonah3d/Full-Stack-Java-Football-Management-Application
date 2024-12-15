@@ -7,6 +7,8 @@ package org.joe.application.views.tabs;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.icons.FlatFileViewComputerIcon;
+import java.awt.Color;
+import java.awt.event.ActionListener;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -26,34 +28,49 @@ import raven.datetime.component.date.DatePicker;
 public class AnadirJugadores extends JPanel {
 
     JLabel nif_lbl;
+    JLabel niferror;
     JTextField nif_tf;
     JLabel nombre_lbl;
     JTextField nombre_tf;
+    JLabel nombreerror;
     JLabel addr_lbl;
     JTextField add_tf;
+    JLabel dirrerror;
     JLabel ciu_lbl;
     JTextField ciu_tf;
+    JLabel ciuerror;
     JLabel codipos_lbl;
     JTextField codipos_tf;
+    JLabel codiposerror;
     JLabel pais_lbl;
     JTextField pais_tf;
+    JLabel paiserror;
     JLabel appellido_lbl;
     JTextField appellido_tf;
+    JLabel appellidoerror;
     JLabel sexe_lbl;
     JRadioButton hombre_rb;
     JRadioButton mujer_rb;
+    JLabel sexeerror;
     JLabel Iban_lbl;
     JTextField iban_tf;
+    JLabel ibanerror;
     JLabel categ_lbl;
     JLabel profileJLabel;
+    JLabel profilerror;
     JLabel revisionmedicaJLabel;
+    JLabel revisionmederror;
     JRadioButton siRadioButton;
     JRadioButton noJRadioButton;
     ButtonGroup revmedbtngrp;
+    JLabel provincialabel;
+    JTextField provincia_tf;
+    JLabel provinciaerror;
 
     JLabel datnnaix_lbl;
     DatePicker datePicker;
     JFormattedTextField dateeditor;
+    JLabel dateerror;
     ButtonGroup sexebutons_btn;
 
     JButton addplayer;
@@ -94,17 +111,31 @@ public class AnadirJugadores extends JPanel {
         noJRadioButton = new JRadioButton("No");
         revmedbtngrp = new ButtonGroup();
 
+        //Error Messages
+        niferror = new JLabel("Error");
+        nombreerror = new JLabel("Error");
+        dirrerror = new JLabel("Error");
+        ciuerror = new JLabel("Error");
+        codiposerror = new JLabel("Error");
+        paiserror = new JLabel("Error");
+        appellidoerror = new JLabel("Error");
+        sexeerror = new JLabel("Error");
+        ibanerror = new JLabel("Error");
+        profilerror = new JLabel("Error");
+        revisionmederror = new JLabel("Error");
+        dateerror = new JLabel("Error");
+
         datnnaix_lbl = new JLabel("Data De Naixement");
         datePicker = new DatePicker();
         dateeditor = new JFormattedTextField();
         addplayer = new JButton("Anadir");
         addplayer.setIcon(new FlatSVGIcon(ManagemetConstants.sideicon_path + "icon_addjug.svg", 0.7f));
         profileJLabel = new JLabel();
-        ImageIcon profileIcon = new ImageIcon(getClass().getClassLoader().getResource("org/joe/application/resources/img/User.png"));
+        /*ImageIcon profileIcon = new ImageIcon(getClass().getClassLoader().getResource("org/joe/application/resources/img/User.png"));
         if (profileIcon.getIconWidth() == -1) {
             System.out.println("Image not found!");
         }
-        profileJLabel.setIcon(profileIcon);
+        profileJLabel.setIcon(profileIcon);*/
 
     }
 
@@ -144,6 +175,20 @@ public class AnadirJugadores extends JPanel {
         this.add(noJRadioButton);
         revmedbtngrp.add(siRadioButton);
         revmedbtngrp.add(noJRadioButton);
+
+        this.add(niferror);
+        this.add(nombreerror);
+        this.add(dirrerror);
+        this.add(ciuerror);
+        this.add(codiposerror);
+        this.add(paiserror);
+        this.add(appellidoerror);
+        this.add(sexeerror);
+        this.add(ibanerror);
+        this.add(profilerror);
+        this.add(revisionmederror);
+        this.add(dateerror);
+
     }
 
     private void setupcomponents() {
@@ -196,5 +241,218 @@ public class AnadirJugadores extends JPanel {
         profileJLabel.setBounds(700, 50, 280, 280);
 
         addplayer.setBounds(350, 530, 160, 40);
+
+        //ERROR MESSAGES
+        niferror.setBounds(25, 80, 200, 17);
+        nombreerror.setBounds(25, 185, 200, 17);
+        dirrerror.setBounds(25, 290, 200, 17);
+        ciuerror.setBounds(25, 395, 200, 17);
+        codiposerror.setBounds(305, 395, 200, 17);
+        paiserror.setBounds(25, 500, 200, 17);
+        appellidoerror.setBounds(305, 185, 200, 17);
+        sexeerror.setBounds(305, 80, 200, 17);
+        ibanerror.setBounds(305, 290, 200, 17);
+        profilerror.setBounds(750, 340, 200, 17);
+        revisionmederror.setBounds(650, 500, 200, 17);
+        dateerror.setBounds(305, 500, 200, 17);
+
+        niferror.setForeground(Color.red);
+        niferror.setVisible(false);
+        nombreerror.setForeground(Color.red);
+        nombreerror.setVisible(false);
+        dirrerror.setForeground(Color.red);
+        dirrerror.setVisible(false);
+        ciuerror.setForeground(Color.red);
+        ciuerror.setVisible(false);
+        codiposerror.setForeground(Color.red);
+        codiposerror.setVisible(false);
+        paiserror.setForeground(Color.red);
+        paiserror.setVisible(false);
+        appellidoerror.setForeground(Color.red);
+        appellidoerror.setVisible(false);
+        sexeerror.setForeground(Color.red);
+        sexeerror.setVisible(false);
+        ibanerror.setForeground(Color.red);
+        ibanerror.setVisible(false);
+        profilerror.setForeground(Color.red);
+        profilerror.setVisible(false);
+        revisionmederror.setForeground(Color.red);
+        revisionmederror.setVisible(false);
+        dateerror.setForeground(Color.red);
+        dateerror.setVisible(false);
+
     }
+
+    public JButton getAddplayer() {
+        return addplayer;
+    }
+
+    public void addPlayer_OnClick(ActionListener listener) {
+        this.addplayer.addActionListener(listener);
+    }
+
+    public JLabel getNif_lbl() {
+        return nif_lbl;
+    }
+
+    public JLabel getNiferror() {
+        return niferror;
+    }
+
+    public JTextField getNif_tf() {
+        return nif_tf;
+    }
+
+    public JLabel getNombre_lbl() {
+        return nombre_lbl;
+    }
+
+    public JTextField getNombre_tf() {
+        return nombre_tf;
+    }
+
+    public JLabel getNombreerror() {
+        return nombreerror;
+    }
+
+    public JLabel getAddr_lbl() {
+        return addr_lbl;
+    }
+
+    public JTextField getAdd_tf() {
+        return add_tf;
+    }
+
+    public JLabel getDirrerror() {
+        return dirrerror;
+    }
+
+    public JLabel getCiu_lbl() {
+        return ciu_lbl;
+    }
+
+    public JTextField getCiu_tf() {
+        return ciu_tf;
+    }
+
+    public JLabel getCiuerror() {
+        return ciuerror;
+    }
+
+    public JLabel getCodipos_lbl() {
+        return codipos_lbl;
+    }
+
+    public JTextField getCodipos_tf() {
+        return codipos_tf;
+    }
+
+    public JLabel getCodiposerror() {
+        return codiposerror;
+    }
+
+    public JLabel getPais_lbl() {
+        return pais_lbl;
+    }
+
+    public JTextField getPais_tf() {
+        return pais_tf;
+    }
+
+    public JLabel getPaiserror() {
+        return paiserror;
+    }
+
+    public JLabel getAppellido_lbl() {
+        return appellido_lbl;
+    }
+
+    public JTextField getAppellido_tf() {
+        return appellido_tf;
+    }
+
+    public JLabel getAppellidoerror() {
+        return appellidoerror;
+    }
+
+    public JLabel getSexe_lbl() {
+        return sexe_lbl;
+    }
+
+    public JRadioButton getHombre_rb() {
+        return hombre_rb;
+    }
+
+    public JRadioButton getMujer_rb() {
+        return mujer_rb;
+    }
+
+    public JLabel getSexeerror() {
+        return sexeerror;
+    }
+
+    public JLabel getIban_lbl() {
+        return Iban_lbl;
+    }
+
+    public JTextField getIban_tf() {
+        return iban_tf;
+    }
+
+    public JLabel getIbanerror() {
+        return ibanerror;
+    }
+
+    public JLabel getCateg_lbl() {
+        return categ_lbl;
+    }
+
+    public JLabel getProfileJLabel() {
+        return profileJLabel;
+    }
+
+    public JLabel getProfilerror() {
+        return profilerror;
+    }
+
+    public JLabel getRevisionmedicaJLabel() {
+        return revisionmedicaJLabel;
+    }
+
+    public JLabel getRevisionmederror() {
+        return revisionmederror;
+    }
+
+    public JRadioButton getSiRadioButton() {
+        return siRadioButton;
+    }
+
+    public JRadioButton getNoJRadioButton() {
+        return noJRadioButton;
+    }
+
+    public ButtonGroup getRevmedbtngrp() {
+        return revmedbtngrp;
+    }
+
+    public JLabel getDatnnaix_lbl() {
+        return datnnaix_lbl;
+    }
+
+    public DatePicker getDatePicker() {
+        return datePicker;
+    }
+
+    public JFormattedTextField getDateeditor() {
+        return dateeditor;
+    }
+
+    public JLabel getDateerror() {
+        return dateerror;
+    }
+
+    public ButtonGroup getSexebutons_btn() {
+        return sexebutons_btn;
+    }
+
 }
