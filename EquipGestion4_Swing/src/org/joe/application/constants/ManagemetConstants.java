@@ -10,8 +10,8 @@ package org.joe.application.constants;
  */
 public class ManagemetConstants {
     
-    public static final int mgmtScrn_Width = 1920;
-    public static final int mgmtScrn_Height = 1080;
+    public static final int mgmtScrn_Width = 1280;
+    public static final int mgmtScrn_Height = 671;
     
     public static final int cnpane_Width = 1589;
     public static final int cnpane_Height = 970;

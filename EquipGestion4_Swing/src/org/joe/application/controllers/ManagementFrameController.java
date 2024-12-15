@@ -7,6 +7,7 @@ package org.joe.application.controllers;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import org.joe.application.views.Management;
+import org.joe.gestion.model.persistence.EquipDataInterface;
 
 /**
  *
@@ -16,8 +17,11 @@ public class ManagementFrameController implements ActionListener {
 
     private Management managementview;
 
-    public ManagementFrameController() {
-        managementview = new Management();
+    EquipDataInterface edi;
+
+    public ManagementFrameController(EquipDataInterface edi) {
+        this.edi = edi;
+        managementview = new Management(edi);
 
         managementview.PlayerMangementBTN_Onclick(this);
         managementview.TeamManagementBTN_OnClick(this);

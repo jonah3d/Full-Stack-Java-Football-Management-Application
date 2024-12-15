@@ -16,6 +16,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import org.joe.application.constants.ManagemetConstants;
+import org.joe.application.controllers.PlayerManagementController;
+import org.joe.gestion.model.persistence.EquipDataInterface;
 
 /**
  *
@@ -32,8 +34,10 @@ public class Management extends JFrame {
     JButton playermngmtBTN;
     JButton teammngmtBTN;
     JTabbedPane managementTyTabbedPane;
+    private EquipDataInterface edi;
 
-    public Management() {
+    public Management(EquipDataInterface edi) {
+        this.edi = edi;
         initializeComponents();
     }
 
@@ -68,10 +72,11 @@ public class Management extends JFrame {
         panel2.setBackground(Color.MAGENTA);
         panel2.add(new JLabel("This is Panel 2"));
 
-        managementTyTabbedPane.setBounds(0, 48, 1280, 633);
-        managementTyTabbedPane.add("Panel1", panel1);
-        managementTyTabbedPane.add("Panel2", panel2);
+        PlayerManagementController pms = new PlayerManagementController(edi);
 
+        managementTyTabbedPane.setBounds(0, 10, 1280, 671);
+        managementTyTabbedPane.add("Panel1", pms.getPlayerManagementScreen());
+        managementTyTabbedPane.add("Panel2", panel2);
         menuBar.add(fileMenu);
         menuBar.add(dataMenu);
         menuBar.add(helpMenu);

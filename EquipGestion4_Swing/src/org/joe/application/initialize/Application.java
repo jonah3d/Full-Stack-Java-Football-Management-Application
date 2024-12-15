@@ -20,14 +20,19 @@ import org.joe.gestion.model.persistence.EquipDataInterface;
 public class Application {
 
     private LoginScreenController screenController;
-
     private static String nomClassePersistencia = null;
     private EquipDataInterface dbad = null;
 
     public Application() {
-        // Launch the login screen and connect to the database asynchronously
-        screenController = new LoginScreenController(nomClassePersistencia);
+        try {
 
+            dbad = (EquipDataInterface) Class.forName(nomClassePersistencia).newInstance();
+
+            screenController = new LoginScreenController(dbad);
+        } catch (Exception e) {
+            System.err.println("Error initializing persistence class: " + e.getMessage());
+            System.exit(1);
+        }
     }
 
     public static void main(String[] args) {
@@ -42,9 +47,8 @@ public class Application {
             System.exit(0);
         }
         nomClassePersistencia = args[0];
-        // new Application();
-        //new Management();
-        //new PlayerManagementScreen();
-        new ManagementFrameController();
+
+        // Start the application
+        new Application();
     }
 }

@@ -14,7 +14,7 @@ public class PlayerModelTest {
         
         Player player1 = new Player("Bru", "Protonoy", "H", birthDate);
         player1.setLegal_id("X6200841H");
-        player1.setAddress("Trav del Valles 11, 08500, Igualada - Vic");
+        player1.setDireccion("Trav del Valles 11, 08500, Igualada - Vic");
         player1.mostrarJugDetalle();
     }
 }

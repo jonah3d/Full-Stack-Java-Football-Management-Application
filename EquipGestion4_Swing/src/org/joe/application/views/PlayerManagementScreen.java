@@ -9,6 +9,7 @@ import com.formdev.flatlaf.FlatPropertiesLaf;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JButton;
@@ -22,131 +23,107 @@ import javax.swing.JTabbedPane;
 import javax.swing.border.Border;
 import org.joe.application.constants.ManagemetConstants;
 import org.joe.application.views.tabs.AnadirJugadores;
+import org.joe.application.views.tabs.EditarJugadores;
 import org.joe.application.views.tabs.VerJugadores;
 
 /**
  *
  * @author jonah
  */
+public class PlayerManagementScreen extends JPanel {
 
-public class PlayerManagementScreen {
-    JFrame frame;
-    JMenuBar menuBar;
-    JMenu fileMenu;
-    JMenu dataMenu;
-    JMenu aboutMenu;
-    JMenu helpMenu;
-    JPanel contentPanel;
-    JPanel sidepane;
-    JPanel centerpane;
+    JPanel sideJPanel;
     JButton seeply_BTN;
     JButton addply_BTN;
     JButton edply_BTN;
     JButton delply_BTN;
-    JComboBox<String> uisection;
-    JTabbedPane playersections;
-    
-    public PlayerManagementScreen(){
-        window();
-        //verEquipos();
+    JTabbedPane centerJPanel;
+
+    public PlayerManagementScreen() {
+        initializeComponents();
     }
-    
- private void window(){
-        
-        //Initialising The component
-        frame = new JFrame("Player Management");
-        menuBar = new JMenuBar();
-        fileMenu = new JMenu("File");
-        dataMenu = new JMenu("Data");
-        helpMenu = new JMenu("Help");
-        aboutMenu = new JMenu("About");
-        contentPanel = new JPanel();
-        sidepane = new JPanel();
-        centerpane = new JPanel();
+
+    private void initializeComponents() {
+
+        sideJPanel = new JPanel(null);
+        // sideJPanel.setBackground(Color.BLUE);
+        sideJPanel.setBounds(0, 4, 244, 634);
         seeply_BTN = new JButton("Ver Jugadores");
         addply_BTN = new JButton("Añadir Jugadores");
         edply_BTN = new JButton("Editar Jugador");
         delply_BTN = new JButton("Eliminar Jugador");
-        uisection = new JComboBox<>();
-        playersections = new JTabbedPane(JTabbedPane.TOP);
-                
-        
-        
-        seeply_BTN.setBounds(17,318, 257, 43);
+
+        centerJPanel = new JTabbedPane();
+        centerJPanel.setBackground(Color.magenta);
+        centerJPanel.setBounds(244, -33, 1022, 671);
+
+        //VerJugadores verjugTab = new VerJugadores();
+        //AnadirJugadores anadirJugadores = new AnadirJugadores();
+        //EditarJugadores editarJugadores = new EditarJugadores();
+        //centerJPanel.addTab("Team 1", verjugTab);
+        //centerJPanel.addTab("Team 2", anadirJugadores);
+        //centerJPanel.addTab("Team 3", editarJugadores);
+        seeply_BTN.setBounds(17, 100, 200, 43);
         seeply_BTN.putClientProperty(FlatClientProperties.BUTTON_TYPE, "borderless");
-        seeply_BTN.setIcon(new FlatSVGIcon(ManagemetConstants.sideicon_path + "icon_verjug.svg",0.7f));
-        
-        addply_BTN.setBounds(17,421,257,43);
+        seeply_BTN.setIcon(new FlatSVGIcon(ManagemetConstants.sideicon_path + "icon_verjug.svg", 0.7f));
+
+        addply_BTN.setBounds(17, 200, 200, 43);
         addply_BTN.putClientProperty(FlatClientProperties.BUTTON_TYPE, "borderless");
-        addply_BTN.setIcon(new FlatSVGIcon(ManagemetConstants.sideicon_path + "icon_addjug.svg",0.7f));
-        
-        edply_BTN.setBounds(17, 529, 257, 43);
+        addply_BTN.setIcon(new FlatSVGIcon(ManagemetConstants.sideicon_path + "icon_addjug.svg", 0.7f));
+
+        edply_BTN.setBounds(17, 300, 200, 43);
         edply_BTN.putClientProperty(FlatClientProperties.BUTTON_TYPE, "borderless");
-        edply_BTN.setIcon(new FlatSVGIcon(ManagemetConstants.sideicon_path + "icon_editjug.svg",0.7f));
-        
-        delply_BTN.setBounds(17,633,257,43);
+        edply_BTN.setIcon(new FlatSVGIcon(ManagemetConstants.sideicon_path + "icon_editjug.svg", 0.7f));
+
+        delply_BTN.setBounds(17, 400, 200, 43);
         delply_BTN.putClientProperty(FlatClientProperties.BUTTON_TYPE, "borderless");
-        delply_BTN.setIcon(new FlatSVGIcon(ManagemetConstants.sideicon_path + "icon_deljug.svg",0.7f));
-        
-        uisection.setBounds(9, 96, 279, 81);
-        uisection.addItem("Player Management");
-        uisection.addItem("Team Management");
-        
-        playersections.setBounds(0, 0, 1589, 970);
-        playersections.setBackground(Color.red);
-        
-     VerJugadores verjugTab = new VerJugadores();
-     AnadirJugadores anadirJugadores = new AnadirJugadores();
-        playersections.addTab("Team 1",verjugTab);
-        playersections.addTab("Team 2", anadirJugadores);
-        playersections.addTab("Team 2", new JLabel("Content for Team 3"));
-        
-       
-        frame.setSize(ManagemetConstants.mgmtScrn_Width,ManagemetConstants.mgmtScrn_Height);
-        frame.setLayout(null);
-        
-        contentPanel.setSize(ManagemetConstants.mgmtScrn_Width,ManagemetConstants.mgmtScrn_Height);
-        contentPanel.setLayout(null);
-        //contentPanel.setBackground(Color.red);
-       
-        sidepane.setLayout(null);
-        //sidepane.setBackground(Color.yellow);
-        sidepane.setBounds(ManagemetConstants.sdpane_X, ManagemetConstants.sdpane_Y, ManagemetConstants.sdpane_Width, ManagemetConstants.sdpane_Height);
-        sidepane.add(seeply_BTN);
-        sidepane.add(addply_BTN);
-        sidepane.add(edply_BTN);
-        sidepane.add(delply_BTN);
-        sidepane.add(uisection);
+        delply_BTN.setIcon(new FlatSVGIcon(ManagemetConstants.sideicon_path + "icon_deljug.svg", 0.7f));
 
-        centerpane.setLayout(null);
-        centerpane.setBackground(Color.WHITE);
-        centerpane.putClientProperty(FlatClientProperties.STYLE, "arc:65;");
-        centerpane.setBounds(ManagemetConstants.cnpane_X,ManagemetConstants.cnpane_Y,ManagemetConstants.cnpane_Width,ManagemetConstants.cnpane_Height);
-        centerpane.add(playersections);
-        centerpane.revalidate();
-        centerpane.repaint();
-        
-          
-       
-       
-        
-        menuBar.add(fileMenu);
-        menuBar.add(dataMenu);
-        menuBar.add(helpMenu);
-        menuBar.add(aboutMenu);
-        
-        contentPanel.add(sidepane);
-        contentPanel.add(centerpane);
-        
-        frame.add(contentPanel);
-        frame.setJMenuBar(menuBar);
-        frame.setVisible(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLocationRelativeTo(null);
-        frame.setResizable(false);
-        
-        
-    } 
+        sideJPanel.add(seeply_BTN);
+        sideJPanel.add(addply_BTN);
+        sideJPanel.add(edply_BTN);
+        sideJPanel.add(delply_BTN);
 
+        this.add(sideJPanel);
+        this.add(centerJPanel);
 
+        setLayout(null);
+    }
+
+    public JTabbedPane getCenterJPanel() {
+        return centerJPanel;
+    }
+
+    public JButton getSeeply_BTN() {
+        return seeply_BTN;
+    }
+
+    public JButton getAddply_BTN() {
+        return addply_BTN;
+    }
+
+    public JButton getEdply_BTN() {
+        return edply_BTN;
+    }
+
+    public JButton getDelply_BTN() {
+        return delply_BTN;
+    }
+
+    public void verJugadores_OnClick(ActionListener listener) {
+        seeply_BTN.addActionListener(listener);
+    }
+
+    public void anadirJugadores_OnClick(ActionListener listener) {
+        addply_BTN.addActionListener(listener);
+    }
+
+    public void editarJugadores_OnClick(ActionListener listener) {
+        edply_BTN.addActionListener(listener);
+
+    }
+
+    public void deleteJugadores_OnCLick(ActionListener listener) {
+        delply_BTN.addActionListener(listener);
+    }
 }

@@ -50,6 +50,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
     PreparedStatement teamPlyers;
     PreparedStatement delteam;
     PreparedStatement newSeasonDate;
+    PreparedStatement playersbyCat;
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     public EquipDataImplementationSQL() {
@@ -145,13 +146,28 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
                 if (rs.wasNull()) {
                     iban = "";
                 }
-
-                String address = rs.getString("address");
-                if (address == null) {
-                    address = "";
+                String direccion = rs.getString("direcion");
+                if (direccion == null) {
+                    direccion = "";
+                }
+                String codigopostal = rs.getString("codigo_postal");
+                if (codigopostal == null) {
+                    codigopostal = "";
+                }
+                String localidad = rs.getString("localidad");
+                if (localidad == null) {
+                    localidad = "";
+                }
+                String provincia = rs.getString("provincia");
+                if (provincia == null) {
+                    provincia = "";
+                }
+                String pais = rs.getString("pais");
+                if (pais == null) {
+                    pais = "";
                 }
 
-                Date medicalfin = rs.getDate("medical_rev_fin");
+                Integer medicalfin = rs.getInt("medical_rev_fin");
                 if (rs.wasNull()) {
                     medicalfin = null;
                 }
@@ -161,7 +177,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
                     photo = null;
                 }
 
-                return new Player(name, surname, sexe, datebirth, legalId, iban, address, photo, medicalfin);
+                return new Player(name, surname, sexe, datebirth, legalId, iban, direccion, codigopostal, localidad, provincia, pais, photo, medicalfin);
             } else {
                 throw new EquipDataInterfaceException("Query returned with zero players");
             }
@@ -207,12 +223,28 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
                     iban = "";
                 }
 
-                String address = rs.getString("address");
-                if (address == null) {
-                    address = "";
+                String direccion = rs.getString("direcion");
+                if (direccion == null) {
+                    direccion = "";
+                }
+                String codigopostal = rs.getString("codigo_postal");
+                if (codigopostal == null) {
+                    codigopostal = "";
+                }
+                String localidad = rs.getString("localidad");
+                if (localidad == null) {
+                    localidad = "";
+                }
+                String provincia = rs.getString("provincia");
+                if (provincia == null) {
+                    provincia = "";
+                }
+                String pais = rs.getString("pais");
+                if (pais == null) {
+                    pais = "";
                 }
 
-                Date medicalfin = rs.getDate("medical_rev_fin");
+                Integer medicalfin = rs.getInt("medical_rev_fin");
                 if (rs.wasNull()) {
                     medicalfin = null;
                 }
@@ -222,7 +254,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
                     photo = null;
                 }
 
-                Player play = new Player(name, surname, sexe, datebirth, legalId, iban, address, photo, medicalfin);
+                Player play = new Player(name, surname, sexe, datebirth, legalId, iban, direccion, codigopostal, localidad, provincia, pais, photo, medicalfin);
                 players.add(play);
 
             }
@@ -392,7 +424,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
     }
 
     @Override
-    public Player getPlayerByLegalId(String legalID) {
+    public List<Player> getPlayersByLegalId(String legalID) {
 
         if (legalID == null || legalID.isEmpty()) {
             throw new EquipDataInterfaceException("The legal ID provided is null or empty");
@@ -405,56 +437,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             getplaybyid.setString(1, legalID);
 
             ResultSet rs = getplaybyid.executeQuery();
-            if (rs.next()) {
-                Integer playerid = rs.getInt("id");
 
-                String name = rs.getString("name");
-                if (rs.wasNull()) {
-                    name = "";
-                }
-
-                String surname = rs.getString("surname");
-                if (rs.wasNull()) {
-                    surname = "";
-                }
-
-                String legalId = rs.getString("legal_id");
-                if (rs.wasNull()) {
-                    legalId = "";
-                }
-                String sexe = rs.getString("sex");
-                if (rs.wasNull()) {
-                    sexe = "";
-                }
-                Date datebirth = rs.getDate("birth_year");
-                if (rs.wasNull()) {
-                    datebirth = null;
-                }
-
-                String iban = rs.getString("iban");
-                if (rs.wasNull()) {
-                    iban = "";
-                }
-
-                String address = rs.getString("address");
-                if (address == null) {
-                    address = "";
-                }
-
-                Date medicalfin = rs.getDate("medical_rev_fin");
-                if (rs.wasNull()) {
-                    medicalfin = null;
-                }
-
-                Blob photo = rs.getBlob("photo");
-                if (rs.wasNull()) {
-                    photo = null;
-                }
-
-                return new Player(name, surname, sexe, datebirth, legalId, iban, address, photo, medicalfin);
-            } else {
-                throw new EquipDataInterfaceException("Supplied ID Doesn't Correspond To An ID Of Any Player");
-            }
+            return getPlayers(rs);
 
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
@@ -465,7 +449,24 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
 
     @Override
     public List<Player> getPlayersByCat(String cat) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if (cat.equals("") || cat == null) {
+            throw new EquipDataInterfaceException("Category Can't Be Null or Empty");
+        }
+
+        String query = "select * from player p "
+                + "join playerteam pl on p.id = pl.player "
+                + "join team t on pl.team = t.id "
+                + "where t.category_name = ?";
+        try {
+            playersbyCat = con.prepareStatement(query);
+            playersbyCat.setString(1, cat);
+
+            ResultSet rs = playersbyCat.executeQuery();
+            return getPlayers(rs);
+
+        } catch (SQLException ex) {
+            throw new EquipDataInterfaceException("Error Trying To Get Players From Category " + cat, ex);
+        }
     }
 
     @Override
@@ -496,6 +497,52 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
     }
 
     @Override
+    public List<Player> getPlayeraByCat_ordCognom(String cat) {
+        if (cat.equals("") || cat == null) {
+            throw new EquipDataInterfaceException("Category Can't Be Null or Empty");
+        }
+
+        String query = "select * from player p "
+                + "join playerteam pl on p.id = pl.player "
+                + "join team t on pl.team = t.id "
+                + "where t.category_name = ? "
+                + "order by p.surname";
+        try {
+            playersbyCat = con.prepareStatement(query);
+            playersbyCat.setString(1, cat);
+
+            ResultSet rs = playersbyCat.executeQuery();
+            return getPlayers(rs);
+
+        } catch (SQLException ex) {
+            throw new EquipDataInterfaceException("Error Trying To Get Players From Category " + cat, ex);
+        }
+    }
+
+    @Override
+    public List<Player> getPlayeraByCat_ordDatnaix(String cat) {
+        if (cat.equals("") || cat == null) {
+            throw new EquipDataInterfaceException("Category Can't Be Null or Empty");
+        }
+
+        String query = "select * from player p "
+                + "join playerteam pl on p.id = pl.player "
+                + "join team t on pl.team = t.id "
+                + "where t.category_name = ? "
+                + "order by p.birth_year";
+        try {
+            playersbyCat = con.prepareStatement(query);
+            playersbyCat.setString(1, cat);
+
+            ResultSet rs = playersbyCat.executeQuery();
+            return getPlayers(rs);
+
+        } catch (SQLException ex) {
+            throw new EquipDataInterfaceException("Error Trying To Get Players From Category " + cat, ex);
+        }
+    }
+
+    @Override
     public List<Player> getPlayerByName(String Name) {
         if (Name.equals("") || Name == null) {
             throw new EquipDataInterfaceException("Name Can't Be Null or Empty");
@@ -523,7 +570,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             throw new EquipDataInterfaceException("Surname Can't Be Null or Empty");
         }
 
-        String query = "SELECT * FROM PLAYER WHERE UPPER(SURNAME) = UPPER(?) ORDER BY NAME ASC";
+        String query = "SELECT * FROM PLAYER WHERE UPPER(SURNAME) = UPPER(?) ORDER BY SURNAME ASC";
 
         try {
             playerbyname = con.prepareStatement(query);
@@ -568,7 +615,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
 
             addnewplayps.setString(5, player.getLegal_id());
             addnewplayps.setString(6, player.getIban());
-            addnewplayps.setString(7, player.getAddress());
+            addnewplayps.setString(7, player.getDireccion());
 
             Blob imageBlob = player.getImage();
             if (imageBlob != null) {
@@ -580,9 +627,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
                 addnewplayps.setBlob(8, oracleBlob);
             }
 
-            utilDate = player.getMedical_rev_fin();
-            sqlDate = new java.sql.Date(utilDate.getTime());
-            addnewplayps.setDate(9, sqlDate);
+            addnewplayps.setInt(9, player.getMedical_rev_fin());
 
             int result = addnewplayps.executeUpdate();
             if (result > 1) {
@@ -715,7 +760,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
 
             PreparedStatement stm = con.prepareStatement(query);
             System.out.println(type);
-            
+
             stm.setNString(1, type);
             rs = stm.executeQuery();
             return getTeams(rs);
@@ -858,6 +903,52 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
     @Override
     public List<Team> getSeasonTeams(String season_n) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public List<Player> getPlayers() {
+        String query = "select * from player";
+
+        try {
+            Statement stm = con.createStatement();
+            ResultSet rs = stm.executeQuery(query);
+
+            return getPlayers(rs);
+
+        } catch (SQLException ex) {
+            throw new EquipDataInterfaceException("Unable To Create Statement", ex);
+        }
+
+    }
+
+    @Override
+    public List<Player> getPlayers_ordCognom() {
+        String query = "select * from player order by surname";
+
+        try {
+            Statement stm = con.createStatement();
+            ResultSet rs = stm.executeQuery(query);
+
+            return getPlayers(rs);
+
+        } catch (SQLException ex) {
+            throw new EquipDataInterfaceException("Unable To Create Statement", ex);
+        }
+    }
+
+    @Override
+    public List<Player> getPlayers_ordDatnaix() {
+        String query = "select * from player order by birth_year";
+
+        try {
+            Statement stm = con.createStatement();
+            ResultSet rs = stm.executeQuery(query);
+
+            return getPlayers(rs);
+
+        } catch (SQLException ex) {
+            throw new EquipDataInterfaceException("Unable To Create Statement", ex);
+        }
     }
 
 }

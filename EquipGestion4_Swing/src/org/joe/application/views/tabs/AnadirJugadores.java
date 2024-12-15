@@ -4,58 +4,71 @@
  */
 package org.joe.application.views.tabs;
 
+import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.extras.FlatSVGIcon;
+import com.formdev.flatlaf.icons.FlatFileViewComputerIcon;
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
+import org.joe.application.constants.ManagemetConstants;
 import raven.datetime.component.date.DatePicker;
 
 /**
  *
  * @author jonah
  */
-public class AnadirJugadores extends JPanel{
-    
-   JLabel nif_lbl;
-   JTextField nif_tf;
-   JLabel nombre_lbl;
-   JTextField nombre_tf;
-   JLabel addr_lbl;
-   JTextField add_tf;
-   JLabel ciu_lbl;
-   JTextField ciu_tf;
-   JLabel codipos_lbl;
-   JTextField codipos_tf;
-   JLabel pais_lbl;
-   JTextField pais_tf;
-   JLabel appellido_lbl;
-   JTextField appellido_tf;
-   JLabel sexe_lbl;
-   JRadioButton hombre_rb;
-   JRadioButton mujer_rb;
-   JLabel Iban_lbl;
-   JTextField iban_tf;
-   JLabel categ_lbl;
-    JComboBox<String> categoria_cb;
-   JLabel datnnaix_lbl;
+public class AnadirJugadores extends JPanel {
+
+    JLabel nif_lbl;
+    JTextField nif_tf;
+    JLabel nombre_lbl;
+    JTextField nombre_tf;
+    JLabel addr_lbl;
+    JTextField add_tf;
+    JLabel ciu_lbl;
+    JTextField ciu_tf;
+    JLabel codipos_lbl;
+    JTextField codipos_tf;
+    JLabel pais_lbl;
+    JTextField pais_tf;
+    JLabel appellido_lbl;
+    JTextField appellido_tf;
+    JLabel sexe_lbl;
+    JRadioButton hombre_rb;
+    JRadioButton mujer_rb;
+    JLabel Iban_lbl;
+    JTextField iban_tf;
+    JLabel categ_lbl;
+    JLabel profileJLabel;
+    JLabel revisionmedicaJLabel;
+    JRadioButton siRadioButton;
+    JRadioButton noJRadioButton;
+    ButtonGroup revmedbtngrp;
+
+    JLabel datnnaix_lbl;
     DatePicker datePicker;
-    JFormattedTextField dateeditor; 
-    
-    
-    
-    public AnadirJugadores(){
+    JFormattedTextField dateeditor;
+    ButtonGroup sexebutons_btn;
+
+    JButton addplayer;
+
+    public AnadirJugadores() {
         setLayout(null);
-        setSize(1589, 970);
+
         init_Components();
-        
+
         setupcomponents();
         addComponents();
     }
-    
-    private void init_Components(){
-        nif_lbl =  new JLabel("Nif");
+
+    private void init_Components() {
+        nif_lbl = new JLabel("Nif");
         nif_tf = new JTextField();
         nombre_lbl = new JLabel("Nombre");
         nombre_tf = new JTextField();
@@ -75,14 +88,28 @@ public class AnadirJugadores extends JPanel{
         Iban_lbl = new JLabel("Iban");
         iban_tf = new JTextField();
         categ_lbl = new JLabel("Categoria");
-        categoria_cb = new JComboBox<>();
+        sexebutons_btn = new ButtonGroup();
+        revisionmedicaJLabel = new JLabel("Revisión Medica");
+        siRadioButton = new JRadioButton("Sí");
+        noJRadioButton = new JRadioButton("No");
+        revmedbtngrp = new ButtonGroup();
+
         datnnaix_lbl = new JLabel("Data De Naixement");
         datePicker = new DatePicker();
         dateeditor = new JFormattedTextField();
+        addplayer = new JButton("Anadir");
+        addplayer.setIcon(new FlatSVGIcon(ManagemetConstants.sideicon_path + "icon_addjug.svg", 0.7f));
+        profileJLabel = new JLabel();
+        ImageIcon profileIcon = new ImageIcon(getClass().getClassLoader().getResource("org/joe/application/resources/img/User.png"));
+        if (profileIcon.getIconWidth() == -1) {
+            System.out.println("Image not found!");
+        }
+        profileJLabel.setIcon(profileIcon);
+
     }
-    
-    private void addComponents(){
-        
+
+    private void addComponents() {
+
         this.add(nif_lbl);
         this.add(nif_tf);
         this.add(nombre_lbl);
@@ -100,38 +127,74 @@ public class AnadirJugadores extends JPanel{
         this.add(sexe_lbl);
         this.add(hombre_rb);
         this.add(mujer_rb);
+        sexebutons_btn.add(mujer_rb);
+        sexebutons_btn.add(hombre_rb);
         this.add(Iban_lbl);
         this.add(iban_tf);
         this.add(categ_lbl);
-        this.add(categoria_cb);
+
         this.add(datnnaix_lbl);
         this.add(sexe_lbl);
+        this.add(dateeditor);
+        this.add(profileJLabel);
+        this.add(addplayer);
+
+        this.add(revisionmedicaJLabel);
+        this.add(siRadioButton);
+        this.add(noJRadioButton);
+        revmedbtngrp.add(siRadioButton);
+        revmedbtngrp.add(noJRadioButton);
     }
-    
-    private void setupcomponents(){
-        
-        nif_lbl.setBounds(73, 77, 24,17);
-        nif_tf.setBounds(73, 107, 509, 74);
-        
-        nombre_lbl.setBounds(73, 212, 57,17);
-        nombre_tf.setBounds(73, 242, 509, 74);
-        
-        addr_lbl.setBounds(73, 347, 73, 17);
-        add_tf.setBounds(73, 377, 509, 74);
-        
-        ciu_lbl.setBounds(73, 482, 73, 17);
-        ciu_tf.setBounds(73,512,249,74);
-        
-        codipos_lbl.setBounds(332, 482, 101, 17);
-        codipos_tf.setBounds(332, 512, 249, 74);
-        
-        pais_lbl.setBounds(73, 617, 73, 17);
-        pais_tf.setBounds(73,647,509,74);
-        
-        appellido_lbl.setBounds(817, 212, 59, 17);
-        appellido_tf.setBounds(817, 242, 249, 74);
-        
-        Iban_lbl.setBounds(817, 347, 24, 17);
-        iban_tf.setBounds(817, 377, 509, 74);
+
+    private void setupcomponents() {
+
+        nif_lbl.setBounds(25, 20, 24, 17);
+        nif_tf.setBounds(25, 50, 230, 25);
+        nif_tf.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
+
+        nombre_lbl.setBounds(25, 125, 57, 17);
+        nombre_tf.setBounds(25, 155, 230, 25);
+        nombre_tf.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
+
+        addr_lbl.setBounds(25, 230, 73, 17);
+        add_tf.setBounds(25, 260, 230, 25);
+        add_tf.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
+
+        ciu_lbl.setBounds(25, 335, 73, 17);
+        ciu_tf.setBounds(25, 365, 230, 25);
+        ciu_tf.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
+
+        codipos_lbl.setBounds(305, 335, 101, 17);
+        codipos_tf.setBounds(305, 365, 230, 25);
+        codipos_tf.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
+
+        pais_lbl.setBounds(25, 440, 73, 17);
+        pais_tf.setBounds(25, 470, 230, 25);
+        pais_tf.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
+
+        appellido_lbl.setBounds(305, 125, 59, 17);
+        appellido_tf.setBounds(305, 155, 230, 25);
+        appellido_tf.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
+
+        Iban_lbl.setBounds(305, 230, 24, 17);
+        iban_tf.setBounds(305, 260, 230, 25);
+        iban_tf.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
+
+        datnnaix_lbl.setBounds(305, 440, 130, 17);
+        dateeditor.setBounds(305, 470, 230, 25);
+        datePicker.setEditor(dateeditor);
+        dateeditor.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
+
+        revisionmedicaJLabel.setBounds(630, 440, 130, 17);
+        siRadioButton.setBounds(600, 470, 100, 20);
+        noJRadioButton.setBounds(700, 470, 100, 20);
+
+        sexe_lbl.setBounds(305, 20, 50, 17);
+        hombre_rb.setBounds(305, 50, 100, 20);
+        mujer_rb.setBounds(450, 50, 100, 20);
+
+        profileJLabel.setBounds(700, 50, 280, 280);
+
+        addplayer.setBounds(350, 530, 160, 40);
     }
 }

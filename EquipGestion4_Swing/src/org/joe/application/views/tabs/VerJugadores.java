@@ -27,66 +27,148 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import com.formdev.flatlaf.FlatClientProperties;
+import java.awt.event.ActionListener;
+import org.joe.application.views.HintTextField;
+import raven.datetime.component.date.DatePicker;
 
 public class VerJugadores extends JPanel {
 
-    JPanel btn_filterJPanel;
-    JToggleButton namefilt_TB;
-    JToggleButton niffilt_TB;
-    JToggleButton datnaixfilt_TB;
-    JToggleButton catfilt_TB;
-    JToggleButton sexfilt_TB;
-    JTextField search_TF;
-    JComboBox<String> searchord_CB;
     JTable playerDet_Table;
+    JTextField namefilter;
+    JLabel nameJLabel;
+    JTextField niffilter;
+    JLabel niJLabel;
+    DatePicker anonacfilter;
+    JLabel anoJLabel;
+    JFormattedTextField anonaceditorfilter;
+    JComboBox<String> catComboBox;
+    JLabel catJLabel;
+    JComboBox<String> ordenarComboBox;
+    JLabel ordenarJLabel;
+    JButton refresh;
 
     public VerJugadores() {
 
         setLayout(null);
-        setSize(1589, 970);
-        FlowLayout flowLayout = new FlowLayout(FlowLayout.CENTER, 10, 10);
 
-        // Filter Buttons Panel
-        btn_filterJPanel = new JPanel(flowLayout);
-        namefilt_TB = new JToggleButton("Nom", true);
-        niffilt_TB = new JToggleButton("Nif");
-        datnaixfilt_TB = new JToggleButton("Data Naixement");
-        catfilt_TB = new JToggleButton("Categoria");
-        sexfilt_TB = new JToggleButton("Sexe");
-        search_TF = new JTextField();
-        searchord_CB = new JComboBox<>();
-        playerDet_Table = new JTable();
+        initialiseComponents();
 
-        // Define column names and set up table model
-        String[] plytab_ColNames = {"NIF", "NOMBRE", "EDAD", "SEXE", "CATEGORIA", "REV FIN", "DIRECCION"};
-        DefaultTableModel tableModel = new DefaultTableModel(plytab_ColNames, 0);
-        playerDet_Table.setModel(tableModel);
+    }
 
-        // Text Field Properties
-        search_TF.setBounds(520, 77, 512, 48);
-        search_TF.putClientProperty(FlatClientProperties.STYLE, "arc:12;");
+    private void initialiseComponents() {
+        namefilter = new JTextField();
+        niffilter = new JTextField();
+        anonacfilter = new DatePicker();
+        anonaceditorfilter = new JFormattedTextField();
+        catComboBox = new JComboBox<>();
+        ordenarComboBox = new JComboBox<>();
+        refresh = new JButton("Refresh");
 
-        // ComboBox Properties
-        searchord_CB.setBounds(1050, 77, 176, 48);
+        nameJLabel = new JLabel("Cognom");
+        niJLabel = new JLabel("Id Legal");
+        anoJLabel = new JLabel("Ano Naixement");
+        catJLabel = new JLabel("Categoria");
+        ordenarJLabel = new JLabel("Ordenar por");
 
-        // Table wrapped in JScrollPane
-        JScrollPane tableScrollPane = new JScrollPane(playerDet_Table);
-        tableScrollPane.setBounds(73, 140, 1440, 720);
+        namefilter.setBounds(20, 17, 140, 30);
+        namefilter.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
+        niffilter.setBounds(170, 17, 140, 30);
+        niffilter.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
+        anonaceditorfilter.setBounds(320, 17, 140, 30);
+        anonacfilter.setEditor(anonaceditorfilter);
+        anonaceditorfilter.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
+        catComboBox.setBounds(470, 17, 140, 30);
+        ordenarComboBox.setBounds(620, 17, 140, 30);
+        refresh.setBounds(860, 17, 70, 30);
+        refresh.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
 
-        // Filter Buttons Panel Setup
-        btn_filterJPanel.setBounds(73, 77, 432, 44);
-        btn_filterJPanel.setBackground(new Color(221, 221, 221));
-        btn_filterJPanel.putClientProperty(FlatClientProperties.STYLE, "arc:12;");
-        btn_filterJPanel.add(namefilt_TB);
-        btn_filterJPanel.add(niffilt_TB);
-        btn_filterJPanel.add(datnaixfilt_TB);
-        btn_filterJPanel.add(catfilt_TB);
-        btn_filterJPanel.add(sexfilt_TB);
+        nameJLabel.setBounds(20, 50, 100, 30);
+        niJLabel.setBounds(170, 50, 100, 30);
+        anoJLabel.setBounds(320, 50, 100, 30);
+        catJLabel.setBounds(470, 50, 100, 30);
+        ordenarJLabel.setBounds(620, 50, 100, 30);
 
-        // Add components to the panel
-        add(btn_filterJPanel);
-        add(search_TF);
-        add(searchord_CB);
-        add(tableScrollPane); // Add JScrollPane instead of JTable directly
+        String[] ordenarlist = {"", "Cognom", "Data Naixement"};
+        for (String item : ordenarlist) {
+            ordenarComboBox.addItem(item);
+        }
+
+        String[] columnNames = {"NIF", "Nom", "Apellido", "Edat", "Sexe", "Categoria", "Localidad", "Medical Revision"};
+        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0) {
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+
+                if (columnIndex == 7) {
+                    return Boolean.class;
+                }
+                return String.class;
+            }
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+
+                return false;
+            }
+        };
+
+        playerDet_Table = new JTable(tableModel);
+        playerDet_Table = new JTable(tableModel);
+
+        playerDet_Table.setRowHeight(25);
+        playerDet_Table.setFillsViewportHeight(true);
+
+        JScrollPane scrollPane = new JScrollPane(playerDet_Table);
+        scrollPane.setBounds(20, 90, 900, 500);
+
+        this.add(scrollPane);
+
+        this.add(namefilter);
+        this.add(niffilter);
+        this.add(anonaceditorfilter);
+        this.add(catComboBox);
+        this.add(ordenarComboBox);
+        this.add(refresh);
+
+        this.add(nameJLabel);
+        this.add(niJLabel);
+        this.add(anoJLabel);
+        this.add(catJLabel);
+        this.add(ordenarJLabel);
+    }
+
+    public JTable getPlayerDet_Table() {
+        return playerDet_Table;
+    }
+
+    public JButton getRefresh() {
+        return refresh;
+    }
+
+    public JTextField getNamefilter() {
+        return namefilter;
+    }
+
+    public JTextField getNiffilter() {
+        return niffilter;
+    }
+
+    public DatePicker getAnonacfilter() {
+        return anonacfilter;
+    }
+
+    public JFormattedTextField getAnonaceditorfilter() {
+        return anonaceditorfilter;
+    }
+
+    public JComboBox<String> getCatComboBox() {
+        return catComboBox;
+    }
+
+    public JComboBox<String> getOrdenarComboBox() {
+        return ordenarComboBox;
+    }
+
+    public void refreshbutton(ActionListener listener) {
+        refresh.addActionListener(listener);
     }
 }
