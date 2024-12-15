@@ -6,7 +6,9 @@ package org.joe.application.controllers;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.JOptionPane;
 import org.joe.application.views.PlayerManagementScreen;
+import org.joe.gestion.model.data.Player;
 import org.joe.gestion.model.persistence.EquipDataInterface;
 
 /**
@@ -25,7 +27,7 @@ public class PlayerManagementController implements ActionListener {
         this.edi = edi;
         playerManagementScreen = new PlayerManagementScreen();
         verJugadoresController = new VerJugadoresController(edi);
-        anadirJugadoresController = new AnadirJugadoresController();
+        anadirJugadoresController = new AnadirJugadoresController(edi);
         editarJugadoresController = new EditarJugadoresController();
 
         getPlayerManagementScreen().getCenterJPanel().addTab("Ver Jugadores", verJugadoresController.getVerJugadores());
@@ -36,6 +38,10 @@ public class PlayerManagementController implements ActionListener {
         playerManagementScreen.deleteJugadores_OnCLick(this);
         playerManagementScreen.anadirJugadores_OnClick(this);
         playerManagementScreen.editarJugadores_OnClick(this);
+    }
+
+    public PlayerManagementScreen getPlayerManagementScreen() {
+        return playerManagementScreen;
     }
 
     @Override
@@ -52,10 +58,37 @@ public class PlayerManagementController implements ActionListener {
             playerManagementScreen.getCenterJPanel().setSelectedIndex(2);
         }
 
+        if (e.getSource() == playerManagementScreen.getDelply_BTN()) {
+            int selectedplayer = verJugadoresController.getVerJugadores().getPlayerDet_Table().getSelectedRow();
+            if (selectedplayer == -1) {
+                JOptionPane.showMessageDialog(null, "Seleccionar un jugador de la tabla", "Error",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+            /*else if (selectedplayer > 1) {
+                JOptionPane.showMessageDialog(null, "Puedes eliminar solo un jugador", "Error",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }*/
+            Player player = verJugadoresController.getCurrrentplayerlist().get(selectedplayer);
+
+            try {
+                edi.eliminarJugador(player.getLegal_id()); // Assuming this deletes the player
+                JOptionPane.showMessageDialog(null,
+                        "Player " + player.getName() + " deleted successfully",
+                        "Success",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+                verJugadoresController.getVerJugadores().getRefresh().doClick();
+            } catch (Exception ex) {
+                errorDialogue(ex.getMessage());
+            }
+
+        }
+
     }
 
-    public PlayerManagementScreen getPlayerManagementScreen() {
-        return playerManagementScreen;
-    }
+    private void errorDialogue(String message) {
 
+        JOptionPane.showMessageDialog(getPlayerManagementScreen(), message, "Error De Campo", JOptionPane.INFORMATION_MESSAGE);
+
+    }
 }

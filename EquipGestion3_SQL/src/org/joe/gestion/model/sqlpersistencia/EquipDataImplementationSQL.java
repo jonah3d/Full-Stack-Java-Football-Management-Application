@@ -688,8 +688,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
         }
 
         String newplayerQuery = "Insert into Player (name,surname,sex,birth_year,"
-                + "legal_id,iban,address,photo,medical_rev_fin) values "
-                + "(?,?,?,?,?,?,?,?,?)";
+                + "legal_id,iban,direcion,codigo_postal,localidad,provincia,pais,photo,medical_rev_fin) values "
+                + "(?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         try {
             addnewplayps = con.prepareStatement(newplayerQuery);
@@ -711,6 +711,10 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             addnewplayps.setString(5, player.getLegal_id());
             addnewplayps.setString(6, player.getIban());
             addnewplayps.setString(7, player.getDireccion());
+            addnewplayps.setString(8, player.getCodigo_postal());
+            addnewplayps.setString(9, player.getLocalidad());
+            addnewplayps.setString(10, player.getProvincia());
+            addnewplayps.setString(11, player.getPais());
 
             Blob imageBlob = player.getImage();
             if (imageBlob != null) {
@@ -719,10 +723,10 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
                 OracleConnection oracleCon = (OracleConnection) con;
                 BLOB oracleBlob = BLOB.createTemporary(oracleCon, true, BLOB.DURATION_SESSION);
                 oracleBlob.setBytes(1, imageBytes);
-                addnewplayps.setBlob(8, oracleBlob);
+                addnewplayps.setBlob(12, oracleBlob);
             }
 
-            addnewplayps.setInt(9, player.getMedical_rev_fin());
+            addnewplayps.setInt(13, player.getMedical_rev_fin());
 
             int result = addnewplayps.executeUpdate();
             if (result > 1) {

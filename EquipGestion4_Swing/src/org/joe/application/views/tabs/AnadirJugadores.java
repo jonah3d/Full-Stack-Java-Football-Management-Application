@@ -131,12 +131,10 @@ public class AnadirJugadores extends JPanel {
         addplayer = new JButton("Anadir");
         addplayer.setIcon(new FlatSVGIcon(ManagemetConstants.sideicon_path + "icon_addjug.svg", 0.7f));
         profileJLabel = new JLabel();
-        /*ImageIcon profileIcon = new ImageIcon(getClass().getClassLoader().getResource("org/joe/application/resources/img/User.png"));
-        if (profileIcon.getIconWidth() == -1) {
-            System.out.println("Image not found!");
-        }
-        profileJLabel.setIcon(profileIcon);*/
 
+        provincialabel = new JLabel("Provincia");
+        provincia_tf = new JTextField();
+        provinciaerror = new JLabel("Error");
     }
 
     private void addComponents() {
@@ -189,6 +187,10 @@ public class AnadirJugadores extends JPanel {
         this.add(revisionmederror);
         this.add(dateerror);
 
+        this.add(provincia_tf);
+        this.add(provinciaerror);
+        this.add(provincialabel);
+
     }
 
     private void setupcomponents() {
@@ -212,6 +214,11 @@ public class AnadirJugadores extends JPanel {
         codipos_lbl.setBounds(305, 335, 101, 17);
         codipos_tf.setBounds(305, 365, 230, 25);
         codipos_tf.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
+
+        provincialabel.setBounds(630, 335, 101, 17);
+        provincia_tf.setBounds(630, 365, 230, 25);
+        provincia_tf.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
+        provinciaerror.setBounds(630, 395, 200, 17);
 
         pais_lbl.setBounds(25, 440, 73, 17);
         pais_tf.setBounds(25, 470, 230, 25);
@@ -280,7 +287,21 @@ public class AnadirJugadores extends JPanel {
         revisionmederror.setVisible(false);
         dateerror.setForeground(Color.red);
         dateerror.setVisible(false);
+        provinciaerror.setVisible(false);
+        provinciaerror.setForeground(Color.red);
 
+    }
+
+    public JLabel getProvincialabel() {
+        return provincialabel;
+    }
+
+    public JTextField getProvincia_tf() {
+        return provincia_tf;
+    }
+
+    public JLabel getProvinciaerror() {
+        return provinciaerror;
     }
 
     public JButton getAddplayer() {

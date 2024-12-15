@@ -4,19 +4,29 @@
  */
 package org.joe.application.controllers;
 
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.Icon;
+import java.sql.Blob;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import org.joe.application.views.tabs.AnadirJugadores;
+import org.joe.gestion.model.data.Player;
 import org.joe.gestion.model.persistence.EquipDataInterfaceException;
+import javax.sql.rowset.serial.SerialBlob;
+import org.joe.gestion.model.persistence.EquipDataInterface;
 
 /**
  *
@@ -28,8 +38,10 @@ public class AnadirJugadoresController implements ActionListener {
     private final String emptycal = "--/--/----";
     private final ImageIcon defaultIcon;
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    EquipDataInterface edi;
 
-    public AnadirJugadoresController() {
+    public AnadirJugadoresController(EquipDataInterface edi) {
+        this.edi = edi;
 
         this.AnadirJugadores = new AnadirJugadores();
 
@@ -51,8 +63,9 @@ public class AnadirJugadoresController implements ActionListener {
 
             if (isvalid) {
                 addPlayer();
-                JOptionPane.showMessageDialog(AnadirJugadores, "Validated Successfully", "Success",
+                JOptionPane.showMessageDialog(AnadirJugadores, "Player Added Successfully", "Success",
                         JOptionPane.INFORMATION_MESSAGE);
+                clearField();
             }
         }
     }
@@ -63,7 +76,7 @@ public class AnadirJugadoresController implements ActionListener {
 
     private void errorDialogue(String message) {
 
-        JOptionPane.showMessageDialog(AnadirJugadores, message, "Error De Campo", 0);
+        JOptionPane.showMessageDialog(AnadirJugadores, message, "Error De Campo", JOptionPane.INFORMATION_MESSAGE);
 
     }
 
@@ -163,6 +176,19 @@ public class AnadirJugadoresController implements ActionListener {
             isValid = false;
         } else {
             AnadirJugadores.getPaiserror().setVisible(false);
+        }
+
+        //SETTING UP PROVINCIA
+        if (AnadirJugadores.getProvincia_tf().getText().isBlank()) {
+            AnadirJugadores.getProvinciaerror().setVisible(true);
+            AnadirJugadores.getProvinciaerror().setText("Provincia no puede ser vacío");
+            isValid = false;
+        } else if (AnadirJugadores.getProvincia_tf().getText().trim().length() < 2) {
+            AnadirJugadores.getProvinciaerror().setVisible(true);
+            AnadirJugadores.getProvinciaerror().setText("Entrar una provincia valida");
+            isValid = false;
+        } else {
+            AnadirJugadores.getProvinciaerror().setVisible(false);
         }
 
         //Setting Up Codigo postal
@@ -265,8 +291,9 @@ public class AnadirJugadoresController implements ActionListener {
             sexe = "D";
         }
         String birthday = AnadirJugadores.getDateeditor().getText().trim();
+        Date datanaix = null;
         try {
-            Date datanaix = sdf.parse(birthday);
+            datanaix = sdf.parse(birthday);
         } catch (ParseException ex) {
             System.out.println("Error Pasrsing Date into player");
         }
@@ -282,18 +309,80 @@ public class AnadirJugadoresController implements ActionListener {
         } else if (AnadirJugadores.getNoJRadioButton().isSelected()) {
             medical = 0;
         }
+        String provincia = AnadirJugadores.getProvincia_tf().getText().trim();
 
-        System.out.println(nif);
-        System.out.println(nombre);
-        System.out.println(apellido);
-        System.out.println(sexe);
-        System.out.println(birthday);
-        System.out.println(iban);
-        System.out.println(direccion);
-        System.out.println(codipostal);
-        System.out.println(localidad);
-        System.out.println(pais);
-        System.out.println(medical);
+        Icon icon = AnadirJugadores.getProfileJLabel().getIcon();
+        Blob image = null;
+
+        if (icon != null && icon instanceof ImageIcon) {
+
+            image = convertIconToBlob((ImageIcon) icon);
+
+        } else {
+            errorDialogue("Ningun Imagen O Tipo No Suportado");
+        }
+
+        Player player = new Player(nombre, apellido, sexe, datanaix, nif, iban,
+                direccion, codipostal, localidad, provincia, pais, image, medical);
+        //player.mostrarJugDetalle();
+
+        try {
+            edi.addNewPlayer(player);
+        } catch (EquipDataInterfaceException e) {
+            JOptionPane.showMessageDialog(null,
+                    e.getMessage(),
+                    "Error Inserting Player",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
 
     }
+
+    private Blob convertIconToBlob(ImageIcon icon) {
+        // Convert ImageIcon to BufferedImage
+        Image image = icon.getImage();
+        BufferedImage bufferedImage = new BufferedImage(
+                image.getWidth(null),
+                image.getHeight(null),
+                BufferedImage.TYPE_INT_ARGB
+        );
+        bufferedImage.getGraphics().drawImage(image, 0, 0, null);
+        SerialBlob serialBlob = null;
+        try {
+            // Write BufferedImage to ByteArrayOutputStream
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(bufferedImage, "png", baos);
+            byte[] imageBytes = baos.toByteArray();
+
+            serialBlob = new SerialBlob(imageBytes);
+            return serialBlob;
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null,
+                    ex.getMessage(),
+                    "Error De Conexion",
+                    JOptionPane.ERROR_MESSAGE
+            );
+
+        }
+        return serialBlob;
+    }
+
+    private void clearField() {
+        AnadirJugadores.getNif_tf().setText("");
+        AnadirJugadores.getNombre_tf().setText("");
+        AnadirJugadores.getAppellido_tf().setText("");
+        AnadirJugadores.getHombre_rb().setSelected(false);
+        AnadirJugadores.getMujer_rb().setSelected(false);
+        AnadirJugadores.getDateeditor().setText(emptycal);
+        AnadirJugadores.getIban_tf().setText("");
+        AnadirJugadores.getAdd_tf().setText("");
+        AnadirJugadores.getCodipos_tf().setText("");
+        AnadirJugadores.getCiu_tf().setText("");
+        AnadirJugadores.getPais_tf().setText("");
+        AnadirJugadores.getSiRadioButton().setSelected(false);
+        AnadirJugadores.getNoJRadioButton().setSelected(false);
+        AnadirJugadores.getProvincia_tf().setText("");
+        AnadirJugadores.getProfileJLabel().setIcon(defaultIcon);
+    }
+
 }

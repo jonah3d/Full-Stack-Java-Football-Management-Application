@@ -11,6 +11,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -33,11 +34,14 @@ public class VerJugadoresController implements ActionListener {
     private VerJugadores verJugadores;
     private EquipDataInterface edi;
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    private List<Player> currrentplayerlist;
 
     public VerJugadoresController(EquipDataInterface edi) {
         this.edi = edi;
         this.verJugadores = new VerJugadores();
         verJugadores.refreshbutton(this);
+
+        currrentplayerlist = new ArrayList<>();
 
         verJugadores.getCatComboBox().addItem("");
         for (Category item : edi.getCategorys()) {
@@ -173,6 +177,8 @@ public class VerJugadoresController implements ActionListener {
     }
 
     private void populateTable(List<Player> players) {
+        this.currrentplayerlist = players;
+
         DefaultTableModel tableModel = (DefaultTableModel) verJugadores.getPlayerDet_Table().getModel();
         tableModel.setRowCount(0);
 
@@ -221,4 +227,9 @@ public class VerJugadoresController implements ActionListener {
     private String normalize(String input) {
         return Normalizer.normalize(input, Normalizer.Form.NFC);
     }
+
+    public List<Player> getCurrrentplayerlist() {
+        return currrentplayerlist;
+    }
+
 }

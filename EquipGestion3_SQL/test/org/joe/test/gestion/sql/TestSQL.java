@@ -34,23 +34,27 @@ public class TestSQL {
 
     public static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-    public static void ADDNEWPLAYER() {
+    public static void addNewPlayer() {
         EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
         Player p1 = new Player();
-        p1.setName("Santiago");
-        p1.setSurname("lopez");
+        p1.setName("Jonathan");
+        p1.setSurname("Moreno");
         p1.setSex("H");
         try {
             p1.setBirth_year(sdf.parse("2001-09-05"));
         } catch (ParseException ex) {
             System.out.println(ex.getMessage());
         }
-        p1.setLegal_id("ID895");
-        p1.setIban("ES76 1234 5555 9520 2345 6820");
+        p1.setLegal_id("X620841H");
+        p1.setIban("ES7612345555952023456820");
         p1.setDireccion("Travessia del valles 11");
+        p1.setCodigo_postal("04700");
+        p1.setProvincia("Almeria");
+        p1.setPais("España");
+        p1.setLocalidad("Roquetas De Mar");
 
         p1.setMedical_rev_fin(1);
 
@@ -141,10 +145,10 @@ public class TestSQL {
         }
     }
 
-    public static void DELETEPLAYER() {
+    public static void deletePlayer() {
         EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
 
-        implementationSQL.eliminarJugador("ID01");
+        implementationSQL.eliminarJugador("X620841H");
     }
 
     public static void DELETETEAM() {
@@ -340,12 +344,12 @@ public class TestSQL {
 
     public static void main(String[] args) {
 
-        //ADDNEWPLAYER();
+        // addNewPlayer();
         //CREATEUSER();
         //VALIDATEUSER();
         //RESTOREPASS();
         //getPlayersByLegalId();
-        // DELETEPLAYER();
+        deletePlayer();
         //PLAYSBYYEAR();
         //GETPLAYERSBYNAME();
         //getPlayerBySurname();
