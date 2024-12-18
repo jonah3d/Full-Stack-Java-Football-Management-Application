@@ -62,7 +62,7 @@ public class ManagementFrameController implements ActionListener {
         JFrame seasonFrame = new JFrame("Temporada");
         seasonFrame.setLayout(null); // Use absolute layout
 
-        JLabel name = new JLabel("Nombre Temporada (yyyy/yyyy):");
+        JLabel name = new JLabel("Nombre Temporada (yy/yy):");
         JLabel season = new JLabel("Fecha de Inicio de Temporada:");
         JTextField nameTF = new JTextField();
         JFormattedTextField seasonTF = new JFormattedTextField();

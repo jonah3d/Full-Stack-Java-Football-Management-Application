@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import org.joe.gestion.model.data.Category;
 import org.joe.gestion.model.data.Player;
+import org.joe.gestion.model.data.Season;
 import org.joe.gestion.model.data.Team;
 
 /**
@@ -78,6 +79,8 @@ public interface EquipDataInterface {
     public void removeTeamFromSeason(String t_name);
 
     public List<Team> getSeasonTeams(String season_n);
+
+    public List<Season> getSeasons();
 
     //PlayerTeam
     public List<Player> getPlayersByCat(String cat);

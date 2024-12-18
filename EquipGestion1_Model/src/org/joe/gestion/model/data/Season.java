@@ -1,10 +1,11 @@
-
 package org.joe.gestion.model.data;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
-
 public class Season {
+
+    private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     String name;
     private Date season;
 
@@ -28,8 +29,10 @@ public class Season {
     public void setName(String name) {
         this.name = name;
     }
-    
-    
-    
-    
+
+    public void mostrarDetalle() {
+        System.out.println("NOM: " + getName());
+        System.out.println("Data: " + sdf.format(getSeason()));
+    }
+
 }

@@ -23,6 +23,7 @@ import oracle.jdbc.OracleConnection;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.joe.gestion.model.data.Category;
 import org.joe.gestion.model.data.Player;
+import org.joe.gestion.model.data.Season;
 import org.joe.gestion.model.data.Team;
 import org.joe.gestion.model.persistence.EquipDataInterface;
 import org.joe.gestion.model.persistence.EquipDataInterfaceException;
@@ -1102,6 +1103,31 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
         } catch (SQLException ex) {
             throw new EquipDataInterfaceException("Unable To Create Statement", ex);
         }
+    }
+
+    public List<Season> getSeasons() {
+        String query = "Select * from season order by season_year DESC";
+        List<Season> seasons = new ArrayList<>();
+        try {
+            Statement stm = con.createStatement();
+            ResultSet rs = stm.executeQuery(query);
+
+            while (rs.next()) {
+                String seasonname = rs.getString("season_name");
+                Date seasondate = rs.getDate("season_year");
+                String seasontxtform = sdf.format(seasondate);
+
+                if (seasonname == null) {
+                    seasonname = seasontxtform;
+                }
+                Season season = new Season(seasonname, seasondate);
+                seasons.add(season);
+            }
+
+        } catch (SQLException ex) {
+            throw new EquipDataInterfaceException("Unable To Create Statement", ex);
+        }
+        return seasons;
     }
 
     @Override

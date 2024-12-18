@@ -24,6 +24,7 @@ import org.joe.gestion.model.persistence.EquipDataInterfaceException;
 import org.joe.gestion.model.sqlpersistencia.EquipDataImplementationSQL;
 import javax.sql.rowset.serial.SerialBlob;
 import org.joe.gestion.model.data.Category;
+import org.joe.gestion.model.data.Season;
 import org.joe.gestion.model.data.Team;
 
 /**
@@ -385,6 +386,17 @@ public class TestSQL {
         }
     }
 
+    public static void getSeasons() {
+        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+        List<Season> seasonslist = new ArrayList<>();
+
+        seasonslist = implementationSQL.getSeasons();
+        for (Season season : seasonslist) {
+            System.out.println("\n=========================\n");
+            season.mostrarDetalle();
+        }
+    }
+
     public static void getPlayerByLegalId() {
         EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
         Player player = implementationSQL.getPlayerByLegalId("9999901J");
@@ -423,7 +435,8 @@ public class TestSQL {
         } catch (ParseException ex) {
             System.out.println(ex);
         }*/
-        editPlayer();
+        // editPlayer();
+        getSeasons();
     }
 
 }

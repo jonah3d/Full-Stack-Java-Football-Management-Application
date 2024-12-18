@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import org.joe.application.views.tabs.VerEquipos;
 import org.joe.gestion.model.data.Category;
+import org.joe.gestion.model.data.Season;
 import org.joe.gestion.model.persistence.EquipDataInterface;
 
 /**
@@ -26,6 +27,10 @@ public class VerEquiposController implements ActionListener {
         verEquipos.getCatComboBox().addItem("");
         for (Category item : edi.getCategorys()) {
             verEquipos.getCatComboBox().addItem(item.getName());
+        }
+
+        for (Season sea : edi.getSeasons()) {
+            verEquipos.getTempComboBox().addItem(sea.getName());
         }
     }
 
