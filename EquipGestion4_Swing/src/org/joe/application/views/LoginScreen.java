@@ -54,7 +54,7 @@ public class LoginScreen {
 
         //Operacion De Componentes
         loginframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        loginframe.setSize(1920, 1080);
+        loginframe.setSize(1280, 720);
 
         contentpanel.setPreferredSize(new Dimension(1920, 1080));
         //contentpanel.setBackground(new Color(26,26,29));

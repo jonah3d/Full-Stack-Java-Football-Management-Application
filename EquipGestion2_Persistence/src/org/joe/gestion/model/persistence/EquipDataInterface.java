@@ -27,6 +27,8 @@ public interface EquipDataInterface {
     //Player Management
     public List<Player> getPlayersByLegalId(String legalID);
 
+    public Player getPlayerByLegalId(String legalId);
+
     public List<Player> getPlayerByBirthYear(Date date);
 
     public List<Player> getPlayerByBirthYear_ordCognom(Date date);
@@ -84,5 +86,5 @@ public interface EquipDataInterface {
 
     public List<Player> getPlayeraByCat_ordDatnaix(String cat);
 
-    public void editarJugador(String legalID);
+    public void editarJugador(Player player);
 }

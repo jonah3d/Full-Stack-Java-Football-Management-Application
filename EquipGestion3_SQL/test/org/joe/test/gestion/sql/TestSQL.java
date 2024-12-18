@@ -78,6 +78,49 @@ public class TestSQL {
         implementationSQL.addNewPlayer(p1);
     }
 
+    public static Player newPlayer() {
+        Player p1 = new Player();
+        p1.setName("Jonathan");
+        p1.setSurname("Moreno");
+        p1.setSex("H");
+        try {
+            p1.setBirth_year(sdf.parse("2001-09-05"));
+        } catch (ParseException ex) {
+            System.out.println(ex.getMessage());
+        }
+        p1.setLegal_id("X620841H");
+        p1.setIban("ES7612345555952023456820");
+        p1.setDireccion("Travessia del valles 11");
+        p1.setCodigo_postal("04700");
+        p1.setProvincia("Almeria");
+        p1.setPais("España");
+        p1.setLocalidad("Roquetas De Mar");
+
+        p1.setMedical_rev_fin(1);
+
+        try {
+            FileInputStream fis = new FileInputStream(new File("testfoto.png"));
+
+            Blob blob = createBlobFromInputStream(fis);
+
+            p1.setImage(blob);
+        } catch (FileNotFoundException ex) {
+            System.out.println(ex.getMessage());
+            throw new EquipDataInterfaceException("unable to load image");
+        } catch (SQLException ex) {
+            Logger.getLogger(TestSQL.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(TestSQL.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return p1;
+    }
+
+    public static void editPlayer() {
+        EquipDataImplementationSQL isql = new EquipDataImplementationSQL();
+        isql.editarJugador(newPlayer());
+
+    }
+
     private static Blob createBlobFromInputStream(InputStream is) throws SQLException, IOException {
         byte[] bytes = is.readAllBytes();
         return new SerialBlob(bytes);
@@ -342,6 +385,12 @@ public class TestSQL {
         }
     }
 
+    public static void getPlayerByLegalId() {
+        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+        Player player = implementationSQL.getPlayerByLegalId("9999901J");
+        player.mostrarJugDetalle();
+    }
+
     public static void main(String[] args) {
 
         // addNewPlayer();
@@ -349,7 +398,8 @@ public class TestSQL {
         //VALIDATEUSER();
         //RESTOREPASS();
         //getPlayersByLegalId();
-        deletePlayer();
+        //getPlayerByLegalId();
+        //deletePlayer();
         //PLAYSBYYEAR();
         //GETPLAYERSBYNAME();
         //getPlayerBySurname();
@@ -373,6 +423,7 @@ public class TestSQL {
         } catch (ParseException ex) {
             System.out.println(ex);
         }*/
+        editPlayer();
     }
 
 }

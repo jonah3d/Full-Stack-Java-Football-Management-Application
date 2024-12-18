@@ -339,7 +339,7 @@ public class AnadirJugadoresController implements ActionListener {
     }
 
     private Blob convertIconToBlob(ImageIcon icon) {
-        // Convert ImageIcon to BufferedImage
+
         Image image = icon.getImage();
         BufferedImage bufferedImage = new BufferedImage(
                 image.getWidth(null),

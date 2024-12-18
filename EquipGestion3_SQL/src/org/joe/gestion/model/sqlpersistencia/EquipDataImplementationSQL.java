@@ -448,6 +448,30 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
     }
 
     @Override
+    public Player getPlayerByLegalId(String legalId) {
+
+        if (legalId == null || legalId.isEmpty()) {
+            throw new EquipDataInterfaceException("The legal ID provided is null or empty");
+        }
+
+        String query = "SELECT * FROM player WHERE legal_id = ?";
+
+        try {
+            getplaybyid = con.prepareStatement(query);
+            getplaybyid.setString(1, legalId);
+
+            ResultSet rs = getplaybyid.executeQuery();
+
+            return getPlayer(rs);
+
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            throw new EquipDataInterfaceException("Unable to retrieve player by legal ID");
+        }
+
+    }
+
+    @Override
     public List<Player> getPlayersByCat(String cat) {
         if (cat.equals("") || cat == null) {
             throw new EquipDataInterfaceException("Category Can't Be Null or Empty");
@@ -729,8 +753,9 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             addnewplayps.setInt(13, player.getMedical_rev_fin());
 
             int result = addnewplayps.executeUpdate();
-            if (result > 1) {
+            if (result == 1) {
                 System.out.println("Player Added Successfully");
+
             }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
@@ -766,15 +791,56 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
     }
 
     @Override
-    public void editarJugador(String legalID) {
+    public void editarJugador(Player player) {
+        String legalID = player.getLegal_id();
         if (legalID == null) {
             throw new EquipDataInterfaceException("The ID Field Can't Be Null");
         }
 
-        String query = "UPDATE PLAYER";
+        // player = getPlayerByLegalId(legalID);
+        String query = "UPDATE PLAYER "
+                + "SET NAME = ?, SURNAME = ?, SEX = ?, BIRTH_YEAR = ?, LEGAL_ID = ?,"
+                + "IBAN = ?, DIRECION = ?, CODIGO_POSTAL = ?, LOCALIDAD = ?, PROVINCIA = ?,"
+                + "PAIS = ?,PHOTO = ?, MEDICAL_REV_FIN = ? WHERE LEGAL_ID = ?";
 
         try {
             editplayer = con.prepareStatement(query);
+            editplayer.setString(1, player.getName());
+            editplayer.setString(2, player.getSurname());
+            editplayer.setString(3, String.valueOf(player.getSex()));
+
+            java.util.Date utilDate = player.getBirth_year();
+            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+            editplayer.setDate(4, sqlDate);
+
+            editplayer.setString(5, player.getLegal_id());
+            editplayer.setString(6, player.getIban());
+            editplayer.setString(7, player.getDireccion());
+            editplayer.setString(8, player.getCodigo_postal());
+            editplayer.setString(9, player.getLocalidad());
+            editplayer.setString(10, player.getProvincia());
+            editplayer.setString(11, player.getPais());
+
+            Blob imageBlob = player.getImage();
+            if (imageBlob != null) {
+                byte[] imageBytes = imageBlob.getBytes(1, (int) imageBlob.length());
+
+                OracleConnection oracleCon = (OracleConnection) con;
+                BLOB oracleBlob = BLOB.createTemporary(oracleCon, true, BLOB.DURATION_SESSION);
+                oracleBlob.setBytes(1, imageBytes);
+                editplayer.setBlob(12, oracleBlob);
+            }
+
+            editplayer.setInt(13, player.getMedical_rev_fin());
+            editplayer.setString(14, legalID);
+
+            int result = editplayer.executeUpdate();
+            if (result == 1) {
+                System.out.println("Player Updated Successfully");
+
+            } else {
+                System.out.println("Could not update player");
+            }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             throw new EquipDataInterfaceException("Error Trying Update Player");

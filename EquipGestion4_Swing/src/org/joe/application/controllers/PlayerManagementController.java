@@ -28,7 +28,7 @@ public class PlayerManagementController implements ActionListener {
         playerManagementScreen = new PlayerManagementScreen();
         verJugadoresController = new VerJugadoresController(edi);
         anadirJugadoresController = new AnadirJugadoresController(edi);
-        editarJugadoresController = new EditarJugadoresController();
+        editarJugadoresController = new EditarJugadoresController(edi);
 
         getPlayerManagementScreen().getCenterJPanel().addTab("Ver Jugadores", verJugadoresController.getVerJugadores());
         getPlayerManagementScreen().getCenterJPanel().addTab("Anadir Jugadores", anadirJugadoresController.getAnadirJugadores());
@@ -56,6 +56,14 @@ public class PlayerManagementController implements ActionListener {
 
         if (e.getSource() == playerManagementScreen.getEdply_BTN()) {
             playerManagementScreen.getCenterJPanel().setSelectedIndex(2);
+
+            int selectedplayer = verJugadoresController.getVerJugadores().getPlayerDet_Table().getSelectedRow();
+            if (selectedplayer == -1) {
+                JOptionPane.showMessageDialog(null, "Seleccionar un jugador de la tabla", "Error",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+            Player player = verJugadoresController.getCurrrentplayerlist().get(selectedplayer);
+            editarJugadoresController.getSelectedPlayer(player);
         }
 
         if (e.getSource() == playerManagementScreen.getDelply_BTN()) {
@@ -71,7 +79,7 @@ public class PlayerManagementController implements ActionListener {
             Player player = verJugadoresController.getCurrrentplayerlist().get(selectedplayer);
 
             try {
-                edi.eliminarJugador(player.getLegal_id()); // Assuming this deletes the player
+                edi.eliminarJugador(player.getLegal_id());
                 JOptionPane.showMessageDialog(null,
                         "Player " + player.getName() + " deleted successfully",
                         "Success",
