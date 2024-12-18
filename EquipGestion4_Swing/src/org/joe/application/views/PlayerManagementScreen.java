@@ -57,12 +57,6 @@ public class PlayerManagementScreen extends JPanel {
         centerJPanel.setBackground(Color.magenta);
         centerJPanel.setBounds(244, -33, 1022, 671);
 
-        //VerJugadores verjugTab = new VerJugadores();
-        //AnadirJugadores anadirJugadores = new AnadirJugadores();
-        //EditarJugadores editarJugadores = new EditarJugadores();
-        //centerJPanel.addTab("Team 1", verjugTab);
-        //centerJPanel.addTab("Team 2", anadirJugadores);
-        //centerJPanel.addTab("Team 3", editarJugadores);
         seeply_BTN.setBounds(17, 100, 200, 43);
         seeply_BTN.putClientProperty(FlatClientProperties.BUTTON_TYPE, "borderless");
         seeply_BTN.setIcon(new FlatSVGIcon(ManagemetConstants.sideicon_path + "icon_verjug.svg", 0.7f));

@@ -13,10 +13,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import org.joe.application.constants.ManagemetConstants;
 import org.joe.application.controllers.PlayerManagementController;
+import org.joe.application.controllers.TeamManagementController;
 import org.joe.gestion.model.persistence.EquipDataInterface;
 
 /**
@@ -27,9 +29,11 @@ public class Management extends JFrame {
 
     JMenuBar menuBar;
     JMenu fileMenu;
+    JMenu season;
     JMenu dataMenu;
     JMenu aboutMenu;
     JMenu helpMenu;
+    JMenuItem createseason;
     JPanel mngmtypePanel;
     JButton playermngmtBTN;
     JButton teammngmtBTN;
@@ -47,10 +51,12 @@ public class Management extends JFrame {
         setLayout(null);
 
         menuBar = new JMenuBar();
-        fileMenu = new JMenu("File");
+        fileMenu = new JMenu("Archivo");
         dataMenu = new JMenu("Data");
-        helpMenu = new JMenu("Help");
-        aboutMenu = new JMenu("About");
+        helpMenu = new JMenu("Ayuda");
+        aboutMenu = new JMenu("Sobre");
+        season = new JMenu("Temporada");
+        createseason = new JMenuItem("Crear Temporada");
         playermngmtBTN = new JButton("Player Management");
         teammngmtBTN = new JButton("Team Management");
         managementTyTabbedPane = new JTabbedPane(JTabbedPane.NORTH);
@@ -73,12 +79,15 @@ public class Management extends JFrame {
         panel2.add(new JLabel("This is Panel 2"));
 
         PlayerManagementController pms = new PlayerManagementController(edi);
+        TeamManagementController tms = new TeamManagementController(edi);
 
         managementTyTabbedPane.setBounds(0, 10, 1280, 671);
         managementTyTabbedPane.add("Panel1", pms.getPlayerManagementScreen());
-        managementTyTabbedPane.add("Panel2", panel2);
+        managementTyTabbedPane.add("Panel2", tms.getTeamManagementScreen());
         menuBar.add(fileMenu);
         menuBar.add(dataMenu);
+        menuBar.add(season);
+        season.add(createseason);
         menuBar.add(helpMenu);
         menuBar.add(aboutMenu);
 
@@ -103,6 +112,10 @@ public class Management extends JFrame {
         playermngmtBTN.addActionListener(listener);
     }
 
+    public void CreateTemp_OnClick(ActionListener listener) {
+        createseason.addActionListener(listener);
+    }
+
     public JButton getPlayermngmtBTN() {
         return playermngmtBTN;
     }
@@ -113,6 +126,38 @@ public class Management extends JFrame {
 
     public JTabbedPane getManagementTyTabbedPane() {
         return managementTyTabbedPane;
+    }
+
+    public JMenu getFileMenu() {
+        return fileMenu;
+    }
+
+    public JMenu getSeason() {
+        return season;
+    }
+
+    public JMenu getDataMenu() {
+        return dataMenu;
+    }
+
+    public JMenu getAboutMenu() {
+        return aboutMenu;
+    }
+
+    public JMenu getHelpMenu() {
+        return helpMenu;
+    }
+
+    public JMenuItem getCreateseason() {
+        return createseason;
+    }
+
+    public JPanel getMngmtypePanel() {
+        return mngmtypePanel;
+    }
+
+    public EquipDataInterface getEdi() {
+        return edi;
     }
 
 }

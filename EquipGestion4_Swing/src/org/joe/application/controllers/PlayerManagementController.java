@@ -30,9 +30,9 @@ public class PlayerManagementController implements ActionListener {
         anadirJugadoresController = new AnadirJugadoresController(edi);
         editarJugadoresController = new EditarJugadoresController(edi);
 
-        getPlayerManagementScreen().getCenterJPanel().addTab("Ver Jugadores", verJugadoresController.getVerJugadores());
-        getPlayerManagementScreen().getCenterJPanel().addTab("Anadir Jugadores", anadirJugadoresController.getAnadirJugadores());
-        getPlayerManagementScreen().getCenterJPanel().addTab("Editar Jugadores", editarJugadoresController.getEditarJugadores());
+        playerManagementScreen.getCenterJPanel().addTab("Ver Jugadores", verJugadoresController.getVerJugadores());
+        playerManagementScreen.getCenterJPanel().addTab("Anadir Jugadores", anadirJugadoresController.getAnadirJugadores());
+        playerManagementScreen.getCenterJPanel().addTab("Editar Jugadores", editarJugadoresController.getEditarJugadores());
 
         playerManagementScreen.verJugadores_OnClick(this);
         playerManagementScreen.deleteJugadores_OnCLick(this);

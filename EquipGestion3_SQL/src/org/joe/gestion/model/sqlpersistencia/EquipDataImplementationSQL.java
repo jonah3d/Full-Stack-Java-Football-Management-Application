@@ -1040,12 +1040,15 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             throw new EquipDataInterfaceException("Season date can't be null.");
         }
 
-        String query = "INSERT INTO SEASON (season_year) VALUES (?)";
+        String query = "INSERT INTO SEASON (season_name,season_year) VALUES (?,?)";
 
         try {
+            java.util.Date utildate = date;
+            java.sql.Date sqldate = new java.sql.Date(utildate.getTime());
 
             newSeasonDate = con.prepareStatement(query);
-            newSeasonDate.setDate(1, (java.sql.Date) date);
+            newSeasonDate.setString(1, season_n);
+            newSeasonDate.setDate(2, sqldate);
 
             newSeasonDate.executeUpdate();
             System.out.println("New season " + season_n + " added successfully with date " + date);

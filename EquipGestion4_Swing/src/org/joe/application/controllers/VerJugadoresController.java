@@ -10,6 +10,7 @@ import java.text.Normalizer;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
@@ -197,31 +198,38 @@ public class VerJugadoresController implements ActionListener {
         }
     }
 
-    private int calculateAge(Date birthYear) {
-        if (birthYear == null) {
+    private int calculateAge(Date birthDate) {
+        if (birthDate == null) {
             return 0;
         }
-        Date now = new Date();
-        int age = now.getYear() - birthYear.getYear();
 
-        return age;
+        LocalDate birthLocalDate;
+        if (birthDate instanceof java.sql.Date) {
+            birthLocalDate = ((java.sql.Date) birthDate).toLocalDate();
+        } else {
+            birthLocalDate = birthDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        }
+
+        LocalDate referenceDate = LocalDate.of(2024, 9, 1);
+
+        return Period.between(birthLocalDate, referenceDate).getYears();
     }
 
     private String calculateCat(int age) {
         if (age >= 7 && age <= 8) {
             return "Benjamí";
-        } else if (age >8 & age <= 11) {
+        } else if (age >= 9 && age <= 10) {
             return "Aleví";
-        } else if (age > 12 & age < 13) {
+        } else if (age >= 12 && age <= 13) {
             return "Infantil";
-        } else if (age > 14 & age < 15) {
+        } else if (age >= 14 && age <= 15) {
             return "Cadet";
-        } else if (age >= 16 & age <= 17) {
+        } else if (age >= 16 && age <= 17) {
             return "Juvenil";
-        } else if (age >= 18 & age < 21) {
+        } else if (age >= 18 && age <= 21) {
             return "Senior";
         }
-        return null;
+        return null; // Return null if no category matches
     }
 
     private String normalize(String input) {
