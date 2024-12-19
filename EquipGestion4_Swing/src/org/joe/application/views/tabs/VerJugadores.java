@@ -112,7 +112,7 @@ public class VerJugadores extends JPanel {
         };
 
         playerDet_Table = new JTable(tableModel);
-        playerDet_Table = new JTable(tableModel);
+        //playerDet_Table = new JTable(tableModel);
 
         playerDet_Table.setRowHeight(25);
         playerDet_Table.setFillsViewportHeight(true);

@@ -286,15 +286,24 @@ public class TestSQL {
         }
     }
 
-    public static void PLAYERSTEAM() {
-
+//    public static void getTeamPlayers() {
+//
+//        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+//        List<Player> playerlist = new ArrayList<>();
+//
+//        playerlist = implementationSQL.getTeamPlayers("FcCanPalladesMIX");
+//        for (Player play : playerlist) {
+//            System.out.println("\n=========================\n");
+//            play.mostrarJugDetalle();
+//        }
+//    }
+    public static void getAllTeams() {
         EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
-        List<Player> playerlist = new ArrayList<>();
+        List<Team> teamlist = new ArrayList<>();
 
-        playerlist = implementationSQL.getTeamPlayers("FcCanPalladesMIX");
-        for (Player play : playerlist) {
-            System.out.println("\n=========================\n");
-            play.mostrarJugDetalle();
+        teamlist = implementationSQL.getAllTeams();
+        for (Team team : teamlist) {
+            team.mostrarDetalle();
         }
     }
 
@@ -375,6 +384,20 @@ public class TestSQL {
         }
     }
 
+    public static void getTeamsSeaon() {
+        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+        List<Team> teamlist = new ArrayList<>();
+        try {
+            teamlist = implementationSQL.getTeamsBySeason(sdf.parse("2024-09-01"));
+        } catch (ParseException ex) {
+            Logger.getLogger(TestSQL.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        for (Team team : teamlist) {
+            System.out.println("\n=========================\n");
+            team.mostrarDetalle();
+        }
+    }
+
     public static void getPlayersByBirtYear_OrdbySurname() throws ParseException {
         EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
         List<Player> playerlist = new ArrayList<>();
@@ -403,6 +426,17 @@ public class TestSQL {
         player.mostrarJugDetalle();
     }
 
+    public static void getTeamMembercount() {
+        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+        int count = implementationSQL.getTeamMemCount("FcRoquetasMASC");
+        System.out.println("COUNT: " + count);
+    }
+
+    public static void removeTeam() {
+        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+        implementationSQL.removeTeamFromSeason("Fc Monalco");
+    }
+
     public static void main(String[] args) {
 
         // addNewPlayer();
@@ -422,7 +456,7 @@ public class TestSQL {
         //DELETETEAM();
         //GETTEAMSBYCAT();
         //getTeamsByType();
-        //PLAYERSTEAM();
+        //getTeamPlayers();
         //getPlayers();
         //getPlayers_ordbycognom();
         //getPlayers_ordbybirthyear();
@@ -436,7 +470,11 @@ public class TestSQL {
             System.out.println(ex);
         }*/
         // editPlayer();
-        getSeasons();
+        //getSeasons();
+        //getTeamsSeaon();
+        // getTeamMembercount();
+        //removeTeam();
+        //getAllTeams();
     }
 
 }

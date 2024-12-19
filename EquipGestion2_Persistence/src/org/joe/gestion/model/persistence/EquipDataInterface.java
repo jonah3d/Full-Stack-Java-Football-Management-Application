@@ -61,10 +61,15 @@ public interface EquipDataInterface {
 
     public List<Team> getTeamsByType(String type);
 
+    public List<Team> getTeamsBySeason(Date season);
+
+    public List<Team> getAllTeams();
+
+    public int getTeamMemCount(String team);
+
     public void addNewTeam(String name, String teamtype, String cat_name, Date seasondate);
 
-    public List<Player> getTeamPlayers(String teamName);
-
+    // public List<Player> getTeamPlayers(String teamName);
     public void addPlayerToTeam(String LegalID);
 
     public void deletePlayerFromTeam(String legalID);

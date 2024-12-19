@@ -6,7 +6,9 @@ package org.joe.application.controllers;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.JOptionPane;
 import org.joe.application.views.TeamManagementScreen;
+import org.joe.gestion.model.data.Team;
 import org.joe.gestion.model.persistence.EquipDataInterface;
 
 /**
@@ -51,10 +53,66 @@ public class TeamManagementController implements ActionListener {
             teamManagementScreen.getCenterJPanel().setSelectedIndex(2);
         }
 
+        if (e.getSource() == teamManagementScreen.getElimEquip_Btn()) {
+            int selectedteam = verEquiposController.getVerEquipos().getTeamDetails_JTable().getSelectedRow();
+
+            if (selectedteam == -1) {
+                JOptionPane.showMessageDialog(null, "Seleccionar un equipo de la tabla", "Error", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+
+            Team team = verEquiposController.getCurrentTeams().get(selectedteam);
+
+            try {
+                int count = edi.getTeamMemCount(team.getName());
+
+                if (count == 0) {
+
+                    edi.removeTeamFromSeason(team.getName());
+                    JOptionPane.showMessageDialog(null,
+                            "Team " + team.getName() + " deleted successfully",
+                            "Success",
+                            JOptionPane.INFORMATION_MESSAGE);
+
+                } else if (count >= 1) {
+
+                    int confirmation = JOptionPane.showConfirmDialog(null,
+                            "The team has members. Are you sure you want to delete it?",
+                            "Confirm Deletion",
+                            JOptionPane.OK_CANCEL_OPTION,
+                            JOptionPane.WARNING_MESSAGE);
+
+                    if (confirmation == JOptionPane.OK_OPTION) {
+
+                        edi.removeTeamFromSeason(team.getName());
+                        JOptionPane.showMessageDialog(null,
+                                "Team " + team.getName() + " deleted successfully",
+                                "Success",
+                                JOptionPane.INFORMATION_MESSAGE);
+
+                    } else {
+
+                        JOptionPane.showMessageDialog(null,
+                                "Team deletion operation canceled.",
+                                "Canceled",
+                                JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }
+
+            } catch (Exception ex) {
+                errorDialogue(ex.getMessage());
+            }
+        }
+
     }
 
     public TeamManagementScreen getTeamManagementScreen() {
         return teamManagementScreen;
     }
 
+    private void errorDialogue(String message) {
+
+        JOptionPane.showMessageDialog(getTeamManagementScreen(), message, "Error De Campo", JOptionPane.INFORMATION_MESSAGE);
+
+    }
 }

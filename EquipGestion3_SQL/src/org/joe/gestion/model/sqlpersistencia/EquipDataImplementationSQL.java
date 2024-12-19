@@ -52,6 +52,9 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
     PreparedStatement delteam;
     PreparedStatement newSeasonDate;
     PreparedStatement playersbyCat;
+    PreparedStatement teamseason;
+    PreparedStatement getteammemcount;
+    PreparedStatement removeteam;
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     public EquipDataImplementationSQL() {
@@ -254,8 +257,13 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
                 if (rs.wasNull()) {
                     photo = null;
                 }
-
+//
+//                String category = rs.getString("category_name");
+//                if (rs.wasNull()) {
+//                    category = "";
+//                }
                 Player play = new Player(name, surname, sexe, datebirth, legalId, iban, direccion, codigopostal, localidad, provincia, pais, photo, medicalfin);
+                // play.setCategory(category);
                 players.add(play);
 
             }
@@ -914,6 +922,65 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
     }
 
     @Override
+    public int getTeamMemCount(String team) {
+        int count = 0;
+
+        if (team.equals("") || team == null) {
+            throw new EquipDataInterfaceException("Team Can't Be Null or Empty");
+        }
+
+        String query = "SELECT COUNT(*) AS PLAYERCOUNT FROM PLAYER P"
+                + " JOIN PLAYERTEAM PT ON P.ID = PT.PLAYER"
+                + " JOIN TEAM T ON PT.TEAM = T.ID"
+                + " WHERE T.NAME = ?";
+
+        try {
+            getteammemcount = con.prepareStatement(query);
+            getteammemcount.setString(1, team);
+
+            ResultSet rs = getteammemcount.executeQuery();
+            if (rs.next()) {
+                count = rs.getInt("PLAYERCOUNT");
+            } else {
+                throw new EquipDataInterfaceException("Query Returned With Null");
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            throw new EquipDataInterfaceException("Error Trying To Retrieve COUNT of players of " + team);
+        }
+
+        return count;
+    }
+
+    public List<Team> getTeamsBySeason(Date season) {
+        if (season == null) {
+            throw new EquipDataInterfaceException("Season Can't Be Null or Empty");
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(season);
+        int year = calendar.get(Calendar.YEAR);
+
+        String query = "SELECT * "
+                + "FROM team "
+                + "WHERE EXTRACT(YEAR FROM season_year) = ?";
+
+        ResultSet rs = null;
+
+        try {
+            teamseason = con.prepareStatement(query);
+            teamseason.setInt(1, year);
+
+            rs = teamseason.executeQuery();
+            return getTeams(rs);
+
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            throw new EquipDataInterfaceException("Error Getting Teams By Season " + season);
+        }
+    }
+
+    @Override
     public List<Team> getTeamsByType(String type) {
 
         if (type == null || type.length() > 1) {
@@ -935,6 +1002,21 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             System.out.println(ex.getMessage());
             throw new EquipDataInterfaceException("Error Getting Teams By Type " + type);
         }
+    }
+
+    public List<Team> getAllTeams() {
+        String query = "Select * from team";
+        ResultSet rs = null;
+        try {
+            Statement stm = con.createStatement();
+            rs = stm.executeQuery(query);
+
+            return getTeams(rs);
+
+        } catch (SQLException ex) {
+            throw new EquipDataInterfaceException("Error All Teams Teams");
+        }
+
     }
 
     @Override
@@ -969,31 +1051,31 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
         }
 
     }
-
-    @Override
-    public List<Player> getTeamPlayers(String teamName) {
-        if (teamName == null) {
-            throw new EquipDataInterfaceException("team name Can't Be Null or Empty");
-        }
-        String query = "SELECT p.* "
-                + "FROM PLAYERTEAM pt "
-                + "JOIN PLAYER p ON pt.player = p.id "
-                + "JOIN TEAM t ON pt.team = t.id "
-                + "WHERE t.name = ?";
-
-        try {
-            teamPlyers = con.prepareStatement(query);
-            teamPlyers.setString(1, teamName);
-            ResultSet rs = teamPlyers.executeQuery();
-
-            return getPlayers(rs);
-
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            throw new EquipDataInterfaceException("Error Getting Players Of Team " + teamName);
-        }
-
-    }
+//
+//    @Override
+//    public List<Player> getTeamPlayers(String teamName) {
+//        if (teamName == null) {
+//            throw new EquipDataInterfaceException("team name Can't Be Null or Empty");
+//        }
+//        String query = "SELECT p.*,t.category_name "
+//                + "FROM PLAYERTEAM pt "
+//                + "JOIN PLAYER p ON pt.player = p.id "
+//                + "JOIN TEAM t ON pt.team = t.id "
+//                + "WHERE t.name = ?";
+//
+//        try {
+//            teamPlyers = con.prepareStatement(query);
+//            teamPlyers.setString(1, teamName);
+//            ResultSet rs = teamPlyers.executeQuery();
+//
+//            return getPlayers(rs);
+//
+//        } catch (SQLException ex) {
+//            System.out.println(ex.getMessage());
+//            throw new EquipDataInterfaceException("Error Getting Players Of Team " + teamName);
+//        }
+//
+//    }
 
     @Override
     public void addPlayerToTeam(String LegalID) {
@@ -1066,7 +1148,27 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
 
     @Override
     public void removeTeamFromSeason(String t_name) {
+        if (t_name == null || t_name.isEmpty()) {
+            throw new EquipDataInterfaceException("Team name can't be null or empty.");
+        }
 
+        String query = "Delete from team where name = ?";
+
+        try {
+
+            removeteam = con.prepareCall(query);
+            removeteam.setString(1, t_name);
+            ResultSet rs = removeteam.executeQuery();
+            if (rs.next()) {
+                System.out.println("Team " + t_name + " Removed Successfuly");
+            } else {
+                System.out.println("Team " + t_name + " Wasn't Removed");
+            }
+
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            throw new EquipDataInterfaceException("Error removing team " + t_name);
+        }
     }
 
     @Override
