@@ -286,17 +286,17 @@ public class TestSQL {
         }
     }
 
-//    public static void getTeamPlayers() {
-//
-//        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
-//        List<Player> playerlist = new ArrayList<>();
-//
-//        playerlist = implementationSQL.getTeamPlayers("FcCanPalladesMIX");
-//        for (Player play : playerlist) {
-//            System.out.println("\n=========================\n");
-//            play.mostrarJugDetalle();
-//        }
-//    }
+    public static void getTeamPlayers() {
+
+        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+        List<Player> playerlist = new ArrayList<>();
+
+        playerlist = implementationSQL.getTeamPlayers("FcCanPalladesMIX");
+        for (Player play : playerlist) {
+            System.out.println("\n=========================\n");
+            play.mostrarJugDetalle();
+        }
+    }
     public static void getAllTeams() {
         EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
         List<Team> teamlist = new ArrayList<>();
@@ -456,7 +456,7 @@ public class TestSQL {
         //DELETETEAM();
         //GETTEAMSBYCAT();
         //getTeamsByType();
-        //getTeamPlayers();
+        getTeamPlayers();
         //getPlayers();
         //getPlayers_ordbycognom();
         //getPlayers_ordbybirthyear();

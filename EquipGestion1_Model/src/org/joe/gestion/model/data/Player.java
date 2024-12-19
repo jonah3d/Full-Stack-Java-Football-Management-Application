@@ -26,7 +26,7 @@ public class Player {
     protected Blob image;
     protected Integer medical_rev_fin;
 
-    //protected String category;
+    protected String category;
     public Player() {
     }
 
@@ -224,14 +224,14 @@ public class Player {
         System.out.println("Ubicación: " + getDireccion());
         System.out.println("Photo: " + getImage());
         System.out.println("Medical Revision Fin: " + getMedical_rev_fin());
-        //System.out.println("Category " + getCategory());
+        System.out.println("Category " + getCategory());
     }
 
-//    public String getCategory() {
-//        return category;
-//    }
-//
-//    public void setCategory(String category) {
-//        this.category = category;
-//    }
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
 }

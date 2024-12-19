@@ -29,16 +29,16 @@ public class VerJugEquiposController implements ActionListener {
 
         populateTeamTable(edi.getAllTeams());
 
-//        verJuEquipos.getTeamTable().addMouseListener(new MouseAdapter() {
-//            @Override
-//            public void mouseClicked(MouseEvent e) {
-//                int selectedTeamIndex = verJuEquipos.getTeamTable().getSelectedRow();
-//                if (selectedTeamIndex != -1) {
-//                    Team selectedTeam = currentTeamlist.get(selectedTeamIndex);
-//                    populatePlayerTable(edi.getTeamPlayers(selectedTeam.getName()));
-//                }
-//            }
-//        });
+        verJuEquipos.getTeamTable().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int selectedTeamIndex = verJuEquipos.getTeamTable().getSelectedRow();
+                if (selectedTeamIndex != -1) {
+                    Team selectedTeam = currentTeamlist.get(selectedTeamIndex);
+                    populatePlayerTable(edi.getTeamPlayers(selectedTeam.getName()));
+                }
+            }
+        });
     }
 
     @Override

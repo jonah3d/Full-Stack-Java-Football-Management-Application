@@ -27,6 +27,7 @@ public interface EquipDataInterface {
 
     //Player Management
     public List<Player> getPlayersByLegalId(String legalID);
+    public List<Player> getPlayerFilter();
 
     public Player getPlayerByLegalId(String legalId);
 
@@ -69,7 +70,7 @@ public interface EquipDataInterface {
 
     public void addNewTeam(String name, String teamtype, String cat_name, Date seasondate);
 
-    // public List<Player> getTeamPlayers(String teamName);
+    public List<Player> getTeamPlayers(String teamName);
     public void addPlayerToTeam(String LegalID);
 
     public void deletePlayerFromTeam(String legalID);

@@ -257,13 +257,92 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
                 if (rs.wasNull()) {
                     photo = null;
                 }
-//
-//                String category = rs.getString("category_name");
-//                if (rs.wasNull()) {
-//                    category = "";
-//                }
+
                 Player play = new Player(name, surname, sexe, datebirth, legalId, iban, direccion, codigopostal, localidad, provincia, pais, photo, medicalfin);
-                // play.setCategory(category);
+
+                players.add(play);
+
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            throw new EquipDataInterfaceException("Unable To get Players");
+        }
+        return players;
+    }
+
+    private List<Player> getPlayersconCat(ResultSet rs) {
+
+        List<Player> players = new ArrayList<>();
+
+        try {
+            while (rs.next()) {
+                Integer playerid = rs.getInt("id");
+
+                String name = rs.getString("name");
+                if (rs.wasNull()) {
+                    name = "";
+                }
+
+                String surname = rs.getString("surname");
+                if (rs.wasNull()) {
+                    surname = "";
+                }
+
+                String legalId = rs.getString("legal_id");
+                if (rs.wasNull()) {
+                    legalId = "";
+                }
+                String sexe = rs.getString("sex");
+                if (rs.wasNull()) {
+                    sexe = "";
+                }
+                Date datebirth = rs.getDate("birth_year");
+                if (rs.wasNull()) {
+                    datebirth = null;
+                }
+
+                String iban = rs.getString("iban");
+                if (rs.wasNull()) {
+                    iban = "";
+                }
+
+                String direccion = rs.getString("direcion");
+                if (direccion == null) {
+                    direccion = "";
+                }
+                String codigopostal = rs.getString("codigo_postal");
+                if (codigopostal == null) {
+                    codigopostal = "";
+                }
+                String localidad = rs.getString("localidad");
+                if (localidad == null) {
+                    localidad = "";
+                }
+                String provincia = rs.getString("provincia");
+                if (provincia == null) {
+                    provincia = "";
+                }
+                String pais = rs.getString("pais");
+                if (pais == null) {
+                    pais = "";
+                }
+
+                Integer medicalfin = rs.getInt("medical_rev_fin");
+                if (rs.wasNull()) {
+                    medicalfin = null;
+                }
+
+                Blob photo = rs.getBlob("photo");
+                if (rs.wasNull()) {
+                    photo = null;
+                }
+
+                String category = rs.getString("category_name");
+                if (rs.wasNull()) {
+                    category = "";
+                }
+                Player play = new Player(name, surname, sexe, datebirth, legalId, iban, direccion, codigopostal, localidad, provincia, pais, photo, medicalfin);
+                play.setCategory(category);
                 players.add(play);
 
             }
@@ -1051,31 +1130,32 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
         }
 
     }
-//
-//    @Override
-//    public List<Player> getTeamPlayers(String teamName) {
-//        if (teamName == null) {
-//            throw new EquipDataInterfaceException("team name Can't Be Null or Empty");
-//        }
-//        String query = "SELECT p.*,t.category_name "
-//                + "FROM PLAYERTEAM pt "
-//                + "JOIN PLAYER p ON pt.player = p.id "
-//                + "JOIN TEAM t ON pt.team = t.id "
-//                + "WHERE t.name = ?";
-//
-//        try {
-//            teamPlyers = con.prepareStatement(query);
-//            teamPlyers.setString(1, teamName);
-//            ResultSet rs = teamPlyers.executeQuery();
-//
-//            return getPlayers(rs);
-//
-//        } catch (SQLException ex) {
-//            System.out.println(ex.getMessage());
-//            throw new EquipDataInterfaceException("Error Getting Players Of Team " + teamName);
-//        }
-//
-//    }
+
+    @Override
+    public List<Player> getTeamPlayers(String teamName) {
+        if (teamName == null) {
+            throw new EquipDataInterfaceException("team name Can't Be Null or Empty");
+        }
+        String query = "SELECT p.id,p.name,p.surname,p.sex,p.birth_year,p.legal_id,p.iban,p.direcion,p.codigo_postal,p.localidad,p.provincia,p.pais,photo,p.medical_rev_fin"
+                + " ,t.category_name "
+                + "FROM PLAYERTEAM pt "
+                + "JOIN PLAYER p ON pt.player = p.id "
+                + "JOIN TEAM t ON pt.team = t.id "
+                + "WHERE t.name = ?";
+
+        try {
+            teamPlyers = con.prepareStatement(query);
+            teamPlyers.setString(1, teamName);
+            ResultSet rs = teamPlyers.executeQuery();
+
+            return getPlayersconCat(rs);
+
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            throw new EquipDataInterfaceException("Error Getting Players Of Team " + teamName);
+        }
+
+    }
 
     @Override
     public void addPlayerToTeam(String LegalID) {
@@ -1179,6 +1259,25 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
     @Override
     public List<Player> getPlayers() {
         String query = "select * from player";
+
+        try {
+            Statement stm = con.createStatement();
+            ResultSet rs = stm.executeQuery(query);
+
+            return getPlayers(rs);
+
+        } catch (SQLException ex) {
+            throw new EquipDataInterfaceException("Unable To Create Statement", ex);
+        }
+
+    }
+
+    public List<Player> getPlayerFilter() {
+        String query = "SELECT * FROM player "
+                + "WHERE (? = '' OR surname = ?) "
+                + "AND (? = '' OR nif = ?) "
+                + "AND (? = '' OR birth_year = ?) "
+                + "ORDER BY ?;";
 
         try {
             Statement stm = con.createStatement();
