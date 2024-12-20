@@ -16,7 +16,9 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -105,7 +107,7 @@ public class VerJugadoresController implements ActionListener {
             } else if (nameFilter.isBlank() && nifFilter.isBlank() && !birthDate.equals(emptycal) && categoryFilter.isBlank() && ordenar.equals("Cognom")) {
                 try {
                     filteredPlayers = edi.getPlayerByBirthYear_ordCognom(sdf.parse(birthDate));
-                } catch (ParseException ex) {
+                } catch (Exception ex) {
 
                     JOptionPane.showMessageDialog(null,
                             ex.getMessage(),
@@ -170,8 +172,9 @@ public class VerJugadoresController implements ActionListener {
                 filteredPlayers = edi.getPlayeraByCat_ordDatnaix(categoryFilter);
             }
 
-            populateTable(edi.getPlayers());
+            populateTable(filteredPlayers);
         }
+
     }
 
     public VerJugadores getVerJugadores() {

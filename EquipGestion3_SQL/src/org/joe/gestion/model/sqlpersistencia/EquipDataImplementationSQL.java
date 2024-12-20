@@ -55,6 +55,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
     PreparedStatement teamseason;
     PreparedStatement getteammemcount;
     PreparedStatement removeteam;
+    PreparedStatement delfromplyteam;
+    PreparedStatement addplyteam;
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     public EquipDataImplementationSQL() {
@@ -181,7 +183,10 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
                     photo = null;
                 }
 
-                return new Player(name, surname, sexe, datebirth, legalId, iban, direccion, codigopostal, localidad, provincia, pais, photo, medicalfin);
+                Player player
+                        = new Player(name, surname, sexe, datebirth, legalId, iban, direccion, codigopostal, localidad, provincia, pais, photo, medicalfin);
+                player.setId(playerid);
+                return player;
             } else {
                 throw new EquipDataInterfaceException("Query returned with zero players");
             }
@@ -259,7 +264,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
                 }
 
                 Player play = new Player(name, surname, sexe, datebirth, legalId, iban, direccion, codigopostal, localidad, provincia, pais, photo, medicalfin);
-
+                play.setId(playerid);
                 players.add(play);
 
             }
@@ -343,6 +348,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
                 }
                 Player play = new Player(name, surname, sexe, datebirth, legalId, iban, direccion, codigopostal, localidad, provincia, pais, photo, medicalfin);
                 play.setCategory(category);
+                play.setId(playerid);
                 players.add(play);
 
             }
@@ -368,6 +374,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
                 teamCatName = teamCatName == null ? "" : teamCatName;
 
                 Team nteam = new Team(teamName, teamSeason, teamCatName, teamType);
+                nteam.setId(teamId);
                 teams.add(nteam);
             }
 
@@ -1158,13 +1165,64 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
     }
 
     @Override
-    public void addPlayerToTeam(String LegalID) {
+    public void addPlayerToTeam(Player player, Team team, boolean titularidad) {
+        if (player == null || team == null) {
+            throw new EquipDataInterfaceException("Player | Team  Can't Be Null or Empty");
+        }
+        String tit = "T";
+        if (titularidad == false) {
+            tit = "C";
+        }
+        String query = "Insert into playerteam (player,team,tit_con,season) values (?,?,?,?)";
 
+        java.util.Date utildate = team.getSeason_year();
+        java.sql.Date sqldate = new java.sql.Date(utildate.getTime());
+
+        try {
+            addplyteam = con.prepareStatement(query);
+            addplyteam.setInt(1, player.getId());
+            addplyteam.setInt(2, team.getId());
+            addplyteam.setString(3, tit);
+            addplyteam.setDate(4, sqldate);
+
+            int ans = addplyteam.executeUpdate();
+            if (ans == 1) {
+                System.out.println("Player Added Successfuly To Team");
+            } else if (ans != 1) {
+                System.out.println("Could Not Add Player To Team");
+            }
+
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            throw new EquipDataInterfaceException("Error Adding Player To Team " + team.getName());
+        }
     }
 
     @Override
-    public void deletePlayerFromTeam(String legalID) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void deletePlayerFromTeam(Player player, Team team) {
+        if (player == null) {
+            throw new EquipDataInterfaceException("Player Can't Be Null or Empty");
+        }
+
+        String query = "delete from playerteam where player = ? and team = ?";
+
+        try {
+            delfromplyteam = con.prepareStatement(query);
+            delfromplyteam.setInt(1, player.getId());
+            delfromplyteam.setInt(2, team.getId());
+
+            int ans = delfromplyteam.executeUpdate();
+            if (ans == 1) {
+                System.out.println("Player deleted from team successfully");
+            } else if (ans == 0) {
+                System.out.println("Can't Delete player From Specified Team");
+            }
+
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            throw new EquipDataInterfaceException("Error Deleting Player Of Team " + team.getName());
+        }
+
     }
 
     @Override
@@ -1259,25 +1317,6 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
     @Override
     public List<Player> getPlayers() {
         String query = "select * from player";
-
-        try {
-            Statement stm = con.createStatement();
-            ResultSet rs = stm.executeQuery(query);
-
-            return getPlayers(rs);
-
-        } catch (SQLException ex) {
-            throw new EquipDataInterfaceException("Unable To Create Statement", ex);
-        }
-
-    }
-
-    public List<Player> getPlayerFilter() {
-        String query = "SELECT * FROM player "
-                + "WHERE (? = '' OR surname = ?) "
-                + "AND (? = '' OR nif = ?) "
-                + "AND (? = '' OR birth_year = ?) "
-                + "ORDER BY ?;";
 
         try {
             Statement stm = con.createStatement();

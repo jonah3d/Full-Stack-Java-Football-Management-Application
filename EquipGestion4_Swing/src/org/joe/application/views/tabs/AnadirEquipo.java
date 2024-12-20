@@ -23,7 +23,7 @@ import raven.datetime.component.date.DatePicker;
  * @author jonah
  */
 public class AnadirEquipo extends JPanel {
-    
+
     JLabel name_lbl;
     JLabel nameerr;
     JLabel teamtype_lbl;
@@ -32,116 +32,113 @@ public class AnadirEquipo extends JPanel {
     JLabel cateeer;
     JLabel season_lbl;
     JLabel seaseer;
-    
+
     JTextField name_tf;
     JRadioButton hmRb;
     JRadioButton mjRb;
     JRadioButton mixRb;
     ButtonGroup tipogrp;
-    
+
     JComboBox<String> categoriaBox;
     JFormattedTextField seasonsBox;
     DatePicker datePicker;
-    
+
     JButton addButton;
 
     public AnadirEquipo() {
         setLayout(null);
         //setBackground(Color.BLUE);
-        
-          init_Components();
-    }
-    
-  private void init_Components() {
-    name_lbl = new JLabel("Nom");
-    teamtype_lbl = new JLabel("Tipo");
-    category_lbl = new JLabel("Categoria");
-    season_lbl = new JLabel("Data Inicial");
-    datePicker = new DatePicker();
-    
-    hmRb = new JRadioButton("Hombres");
-    mjRb = new JRadioButton("Mujer");
-    mixRb = new JRadioButton("Mixto");
-    tipogrp = new ButtonGroup();
-    categoriaBox = new JComboBox<>();
-    seasonsBox = new JFormattedTextField();
-    addButton = new JButton("Anadir Equipo");
-    
-    nameerr = new JLabel("Error");
-    cateeer = new JLabel("Error");
-    teameeer = new JLabel("Error");
-    seaseer = new JLabel("Error");
-    
-    name_tf = new JTextField();
-    
-    // Name field setup
-    name_lbl.setBounds(205, 120, 101, 25);
-    nameerr.setBounds(205, 185, 230, 17);  // Position error label beneath the name field
-    nameerr.setForeground(Color.red);
-    nameerr.setVisible(false);
-    name_lbl.setFont(new Font("Sans Serif", Font.PLAIN, 20));
-    name_tf.setBounds(205, 150, 230, 30);
-    name_tf.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
-    
-    // Team type setup
-    teamtype_lbl.setBounds(605, 120, 101, 25);
-    teamtype_lbl.setFont(new Font("Sans Serif", Font.PLAIN, 20));
-    teameeer.setBounds(605, 185, 230, 17);
-    teameeer.setVisible(false);
-    teameeer.setForeground(Color.red);
-    hmRb.setBounds(550, 150, 101, 25);
-    mjRb.setBounds(650, 150, 101, 25);
-    mixRb.setBounds(750, 150, 101, 25);
-    tipogrp.add(hmRb);
-    tipogrp.add(mjRb);
-    tipogrp.add(mixRb);
-    
-    // Category setup
-    category_lbl.setBounds(205, 205, 101, 25);
-    category_lbl.setFont(new Font("Sans Serif", Font.PLAIN, 20));
-    categoriaBox.setBounds(205, 250, 230, 30);
-    categoriaBox.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
-    cateeer.setBounds(205, 285, 230, 17);  // Position error label beneath the category combo box
-    cateeer.setForeground(Color.red);
-    cateeer.setVisible(false);
-    // Season setup
-    season_lbl.setBounds(605, 205, 101, 25);
-    season_lbl.setFont(new Font("Sans Serif", Font.PLAIN, 20));
-    seasonsBox.setBounds(605, 250, 230, 30);
-    seasonsBox.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
-    seaseer.setBounds(605, 285, 230, 17);  // Position error label beneath the season combo box
-    seaseer.setForeground(Color.red);
-    datePicker.setEditor(seasonsBox);
-    seaseer.setVisible(false);
-    // Add button setup
-    addButton.setBounds(400, 320, 180, 50);
-    addButton.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
-    
-    // Adding components to the panel
-    this.add(name_lbl);
-    this.add(teamtype_lbl);
-    this.add(category_lbl);
-    this.add(season_lbl);
-    this.add(name_tf);
-    this.add(hmRb);
-    this.add(mjRb);
-    this.add(mixRb);
-    this.add(categoriaBox);
-    this.add(seasonsBox);
-    this.add(addButton);
-    this.add(nameerr);
-    this.add(cateeer);
-    this.add(teameeer);
-    this.add(seaseer);
-}
 
+        init_Components();
+    }
+
+    private void init_Components() {
+        name_lbl = new JLabel("Nom");
+        teamtype_lbl = new JLabel("Tipo");
+        category_lbl = new JLabel("Categoria");
+        season_lbl = new JLabel("Data Inicial");
+        datePicker = new DatePicker();
+
+        hmRb = new JRadioButton("Hombres");
+        mjRb = new JRadioButton("Mujer");
+        mixRb = new JRadioButton("Mixto");
+        tipogrp = new ButtonGroup();
+        categoriaBox = new JComboBox<>();
+        seasonsBox = new JFormattedTextField();
+        addButton = new JButton("Anadir Equipo");
+
+        nameerr = new JLabel("Error");
+        cateeer = new JLabel("Error");
+        teameeer = new JLabel("Error");
+        seaseer = new JLabel("Error");
+
+        name_tf = new JTextField();
+
+        // Name field setup
+        name_lbl.setBounds(205, 120, 101, 25);
+        nameerr.setBounds(205, 185, 230, 17);  // Position error label beneath the name field
+        nameerr.setForeground(Color.red);
+        nameerr.setVisible(false);
+        name_lbl.setFont(new Font("Sans Serif", Font.PLAIN, 20));
+        name_tf.setBounds(205, 150, 230, 30);
+        name_tf.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
+
+        // Team type setup
+        teamtype_lbl.setBounds(605, 120, 101, 25);
+        teamtype_lbl.setFont(new Font("Sans Serif", Font.PLAIN, 20));
+        teameeer.setBounds(605, 185, 230, 17);
+        teameeer.setVisible(false);
+        teameeer.setForeground(Color.red);
+        hmRb.setBounds(550, 150, 101, 25);
+        mjRb.setBounds(650, 150, 101, 25);
+        mixRb.setBounds(750, 150, 101, 25);
+        tipogrp.add(hmRb);
+        tipogrp.add(mjRb);
+        tipogrp.add(mixRb);
+
+        // Category setup
+        category_lbl.setBounds(205, 205, 101, 25);
+        category_lbl.setFont(new Font("Sans Serif", Font.PLAIN, 20));
+        categoriaBox.setBounds(205, 250, 230, 30);
+        categoriaBox.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
+        cateeer.setBounds(205, 285, 230, 17);  // Position error label beneath the category combo box
+        cateeer.setForeground(Color.red);
+        cateeer.setVisible(false);
+        // Season setup
+        season_lbl.setBounds(605, 205, 101, 25);
+        season_lbl.setFont(new Font("Sans Serif", Font.PLAIN, 20));
+        seasonsBox.setBounds(550, 250, 230, 30);
+        seasonsBox.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
+        seaseer.setBounds(605, 285, 230, 17);  // Position error label beneath the season combo box
+        seaseer.setForeground(Color.red);
+        datePicker.setEditor(seasonsBox);
+        seaseer.setVisible(false);
+        // Add button setup
+        addButton.setBounds(400, 320, 180, 50);
+        addButton.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
+
+        // Adding components to the panel
+        this.add(name_lbl);
+        this.add(teamtype_lbl);
+        this.add(category_lbl);
+        this.add(season_lbl);
+        this.add(name_tf);
+        this.add(hmRb);
+        this.add(mjRb);
+        this.add(mixRb);
+        this.add(categoriaBox);
+        this.add(seasonsBox);
+        this.add(addButton);
+        this.add(nameerr);
+        this.add(cateeer);
+        this.add(teameeer);
+        this.add(seaseer);
+    }
 
     public JButton getAddButton() {
         return addButton;
     }
 
-     
-     
     public JLabel getName_lbl() {
         return name_lbl;
     }
@@ -185,8 +182,8 @@ public class AnadirEquipo extends JPanel {
     public JFormattedTextField getSeasonsBox() {
         return seasonsBox;
     }
-     
-    public void addEquipo_OnClick(ActionListener listener){
+
+    public void addEquipo_OnClick(ActionListener listener) {
         this.addButton.addActionListener(listener);
     }
 
@@ -209,5 +206,5 @@ public class AnadirEquipo extends JPanel {
     public DatePicker getDatePicker() {
         return datePicker;
     }
-     
+
 }

@@ -2,6 +2,7 @@ package org.joe.gestion.model.persistence;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import org.joe.gestion.model.data.Category;
 import org.joe.gestion.model.data.Player;
 import org.joe.gestion.model.data.Season;
@@ -27,7 +28,6 @@ public interface EquipDataInterface {
 
     //Player Management
     public List<Player> getPlayersByLegalId(String legalID);
-    public List<Player> getPlayerFilter();
 
     public Player getPlayerByLegalId(String legalId);
 
@@ -71,9 +71,10 @@ public interface EquipDataInterface {
     public void addNewTeam(String name, String teamtype, String cat_name, Date seasondate);
 
     public List<Player> getTeamPlayers(String teamName);
-    public void addPlayerToTeam(String LegalID);
 
-    public void deletePlayerFromTeam(String legalID);
+    public void addPlayerToTeam(Player player, Team team, boolean titularidad);
+
+    public void deletePlayerFromTeam(Player player, Team team);
 
     public void deleteTeam(String name);
 
