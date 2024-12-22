@@ -28,7 +28,7 @@ public class LoginConstants {
     public static final int Enbtn_Width = 96;
     public static final int Enbtn_Height = 48;
     public static final int Enbtn_X = 380 - loginActPanel_X;
-    public static final int Enbtn_Y = 450 - loginActPanel_Y;
+    public static final int Enbtn_Y = 480 - loginActPanel_Y;
 
     public static final int UsTF_Width = 560;
     public static final int UsTF_Height = 58;

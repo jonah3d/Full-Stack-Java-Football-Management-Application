@@ -85,6 +85,8 @@ public interface EquipDataInterface {
 
     public void removeTeamFromSeason(String t_name);
 
+    public void removeTeamWithPlayers(Team team);
+
     public List<Team> getSeasonTeams(String season_n);
 
     public List<Season> getSeasons();

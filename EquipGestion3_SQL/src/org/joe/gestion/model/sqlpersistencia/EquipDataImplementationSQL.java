@@ -57,6 +57,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
     PreparedStatement removeteam;
     PreparedStatement delfromplyteam;
     PreparedStatement addplyteam;
+    PreparedStatement rmveplayers;
+    PreparedStatement rmveteamswithPlayers;
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     public EquipDataImplementationSQL() {
@@ -449,7 +451,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
         } catch (SQLException ex) {
 
             System.out.println(ex.getMessage());
-            throw new EquipDataInterfaceException("Failed To Insert New User");
+            throw new EquipDataInterfaceException("Failed To Insert New User", ex.getCause());
         }
 
     }
@@ -514,7 +516,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
         } catch (SQLException ex) {
 
             System.err.println("Error while restoring password: " + ex.getMessage());
-            throw new EquipDataInterfaceException("Couldn't restore password. Please try again later.", ex);
+            throw new EquipDataInterfaceException("Couldn't restore password. Please try again later.", ex.getCause());
         }
     }
 
@@ -1307,6 +1309,60 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             System.out.println(ex.getMessage());
             throw new EquipDataInterfaceException("Error removing team " + t_name);
         }
+    }
+
+    @Override
+    public void removeTeamWithPlayers(Team team) {
+        if (team == null) {
+            throw new EquipDataInterfaceException("Team Can't be Null");
+        }
+
+        boolean ans = removePlayers(team);
+        if (ans) {
+            String query = "Delete from team where name = ?";
+            try {
+
+                rmveteamswithPlayers = con.prepareCall(query);
+                rmveteamswithPlayers.setString(1, team.getName());
+                int rs = rmveteamswithPlayers.executeUpdate();
+                if (rs == 1) {
+                    System.out.println("Team " + team.getName() + " Removed Successfuly");
+                } else {
+                    System.out.println("Team " + team.getName() + " Wasn't Removed");
+                }
+
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+                throw new EquipDataInterfaceException("Error removing team " + team.getName());
+            }
+        } else {
+            System.out.println("Could Not Delete Team With Players");
+        }
+
+    }
+
+    private boolean removePlayers(Team team) {
+        if (team == null) {
+            throw new EquipDataInterfaceException("Team Can't be Null");
+        }
+        boolean status = false;
+        String query = "Delete from playerteam where team = ?";
+
+        try {
+            rmveplayers = con.prepareStatement(query);
+            rmveplayers.setInt(1, team.getId());
+            int ans = rmveplayers.executeUpdate();
+
+            if (ans >= 0) { // >= 0 indicates successful execution
+                status = true;
+                System.out.println("Correctly Removed All Players From Team");
+            }
+
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            throw new EquipDataInterfaceException("Error removing players from team " + team.getName());
+        }
+        return status;
     }
 
     @Override

@@ -297,6 +297,7 @@ public class TestSQL {
             play.mostrarJugDetalle();
         }
     }
+
     public static void getAllTeams() {
         EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
         List<Team> teamlist = new ArrayList<>();
@@ -440,7 +441,7 @@ public class TestSQL {
     public static void main(String[] args) {
 
         // addNewPlayer();
-        //CREATEUSER();
+        CREATEUSER();
         //VALIDATEUSER();
         //RESTOREPASS();
         //getPlayersByLegalId();
@@ -456,7 +457,7 @@ public class TestSQL {
         //DELETETEAM();
         //GETTEAMSBYCAT();
         //getTeamsByType();
-        getTeamPlayers();
+        // getTeamPlayers();
         //getPlayers();
         //getPlayers_ordbycognom();
         //getPlayers_ordbybirthyear();

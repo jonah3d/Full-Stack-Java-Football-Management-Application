@@ -6,9 +6,13 @@ package org.joe.application.controllers;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
+import org.joe.application.views.CreateuserFrame;
 import org.joe.application.views.LoginScreen;
+import org.joe.application.views.RetrievePassowordFrame;
 import org.joe.gestion.model.persistence.EquipDataInterface;
 import org.joe.gestion.model.persistence.EquipDataInterfaceException;
 
@@ -22,6 +26,8 @@ public class LoginScreenController implements ActionListener {
     private EquipDataInterface edi;
     private String persistenceClassName;
     private ManagementFrameController managementFrameController;
+    private CreateuserFrame createuser;
+    private RetrievePassowordFrame rpf;
 
     public LoginScreenController(EquipDataInterface edi) {
         // this.persistenceClassName = persistenceClassName;
@@ -29,6 +35,8 @@ public class LoginScreenController implements ActionListener {
         this.edi = edi;
 
         loginScreen.loginOnClickListener(this);
+        loginScreen.registrarOnClick(this);
+        restorePassword_OnMouse();
         connectToDatabase();
 
     }
@@ -38,12 +46,18 @@ public class LoginScreenController implements ActionListener {
 
         try {
             if (e.getSource() == loginScreen.getJB_login()) {
-                if (edi.validateUser(loginScreen.getJTF_username().getText(), loginScreen.getJTF_password().getText())) {
+                String password = new String(loginScreen.getJTF_password().getPassword());
+                if (edi.validateUser(loginScreen.getJTF_username().getText(), password)) {
                     JOptionPane.showMessageDialog(null, "Credenciales Validada");
                     managementFrameController = new ManagementFrameController(edi);
                     loginScreen.getLoginframe().dispose();
 
                 }
+            }
+
+            if (e.getSource() == loginScreen.getRegistrar_btn()) {
+                createuser = new CreateuserFrame(edi);
+
             }
         } catch (EquipDataInterfaceException ex) {
             JOptionPane.showMessageDialog(null,
@@ -79,6 +93,18 @@ public class LoginScreenController implements ActionListener {
             }
 
         }).start();
+    }
+
+    private void restorePassword_OnMouse() {
+        loginScreen.getForgotten_passlbl().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getSource() == loginScreen.getForgotten_passlbl()) {
+                    rpf = new RetrievePassowordFrame(edi);
+
+                }
+            }
+        });
     }
 
 }

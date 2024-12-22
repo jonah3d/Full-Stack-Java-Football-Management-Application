@@ -84,11 +84,12 @@ public class TeamManagementController implements ActionListener {
 
                     if (confirmation == JOptionPane.OK_OPTION) {
 
-                        edi.removeTeamFromSeason(team.getName());
+                        edi.removeTeamWithPlayers(team);
                         JOptionPane.showMessageDialog(null,
                                 "Team " + team.getName() + " deleted successfully",
                                 "Success",
                                 JOptionPane.INFORMATION_MESSAGE);
+                        verEquiposController.getVerEquipos().getRefresh().doClick();
 
                     } else {
 
