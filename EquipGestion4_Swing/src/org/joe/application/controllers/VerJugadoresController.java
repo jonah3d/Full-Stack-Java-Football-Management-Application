@@ -222,7 +222,7 @@ public class VerJugadoresController implements ActionListener {
     private String calculateCat(int age) {
         if (age >= 7 && age <= 8) {
             return "Benjamí";
-        } else if (age >= 9 && age <= 10) {
+        } else if (age >= 9 && age <= 11) {
             return "Aleví";
         } else if (age >= 12 && age <= 13) {
             return "Infantil";
