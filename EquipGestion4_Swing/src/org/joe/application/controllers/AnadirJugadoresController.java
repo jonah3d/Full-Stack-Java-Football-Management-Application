@@ -26,6 +26,7 @@ import org.joe.application.views.tabs.AnadirJugadores;
 import org.joe.gestion.model.data.Player;
 import org.joe.gestion.model.persistence.EquipDataInterfaceException;
 import javax.sql.rowset.serial.SerialBlob;
+import org.joe.application.constants.ErrMsg;
 import org.joe.gestion.model.persistence.EquipDataInterface;
 
 /**
@@ -329,11 +330,7 @@ public class AnadirJugadoresController implements ActionListener {
         try {
             edi.addNewPlayer(player);
         } catch (EquipDataInterfaceException e) {
-            JOptionPane.showMessageDialog(null,
-                    e.getMessage(),
-                    "Error Inserting Player",
-                    JOptionPane.ERROR_MESSAGE
-            );
+            ErrMsg.error(e.getMessage(), e.getCause());
         }
 
     }
@@ -357,11 +354,7 @@ public class AnadirJugadoresController implements ActionListener {
             serialBlob = new SerialBlob(imageBytes);
             return serialBlob;
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null,
-                    ex.getMessage(),
-                    "Error De Conexion",
-                    JOptionPane.ERROR_MESSAGE
-            );
+            ErrMsg.error(ex.getMessage(), ex.getCause());
 
         }
         return serialBlob;

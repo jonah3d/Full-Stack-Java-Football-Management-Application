@@ -24,6 +24,7 @@ import java.text.ParseException;
 import javax.imageio.ImageIO;
 import javax.sql.rowset.serial.SerialBlob;
 import javax.swing.Icon;
+import org.joe.application.constants.ErrMsg;
 import org.joe.gestion.model.persistence.EquipDataInterfaceException;
 
 /**
@@ -53,6 +54,7 @@ public class EditarJugadoresController implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == getEditarJugadores().getEditplayer()) {
+
             boolean isvalid = settingUpCampVal();
 
             if (isvalid) {
@@ -132,10 +134,7 @@ public class EditarJugadoresController implements ActionListener {
                 ImageIcon icon = new ImageIcon(bufferedImage);
                 EditarJugadores.getProfileJLabel().setIcon(icon);
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null,
-                        "Error loading player image: " + ex.getMessage(),
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE);
+                ErrMsg.error(ex.getMessage(), ex.getCause());
             }
         } else {
             EditarJugadores.getProfilerror().setVisible(true);
@@ -272,8 +271,7 @@ public class EditarJugadoresController implements ActionListener {
                 }
             }
         } catch (NumberFormatException e) {
-            EditarJugadores.getCodiposerror().setVisible(true);
-            EditarJugadores.getCodiposerror().setText("El código postal tiene que ser un número");
+            ErrMsg.error(e.getMessage(), e.getCause());
         }
 
         //Setting Up Revision Medica
@@ -365,11 +363,7 @@ public class EditarJugadoresController implements ActionListener {
             edi.editarJugador(player);
 
         } catch (EquipDataInterfaceException e) {
-            JOptionPane.showMessageDialog(null,
-                    e.getMessage(),
-                    "Error Inserting Player",
-                    JOptionPane.ERROR_MESSAGE
-            );
+            ErrMsg.error(e.getMessage(), e.getCause());
         }
 
     }
@@ -399,11 +393,7 @@ public class EditarJugadoresController implements ActionListener {
             serialBlob = new SerialBlob(imageBytes);
             return serialBlob;
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null,
-                    ex.getMessage(),
-                    "Error De Conexion",
-                    JOptionPane.ERROR_MESSAGE
-            );
+            ErrMsg.error(ex.getMessage(), ex.getCause());
 
         }
         return serialBlob;

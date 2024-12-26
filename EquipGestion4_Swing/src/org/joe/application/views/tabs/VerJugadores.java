@@ -78,7 +78,9 @@ public class VerJugadores extends JPanel {
         anonacfilter.setEditor(anonaceditorfilter);
         anonaceditorfilter.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
         catComboBox.setBounds(470, 17, 140, 30);
+        catComboBox.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
         ordenarComboBox.setBounds(620, 17, 140, 30);
+        ordenarComboBox.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
         refresh.setBounds(860, 17, 70, 30);
         refresh.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
 
@@ -112,8 +114,8 @@ public class VerJugadores extends JPanel {
         };
 
         playerDet_Table = new JTable(tableModel);
-        //playerDet_Table = new JTable(tableModel);
 
+        //playerDet_Table = new JTable(tableModel);
         playerDet_Table.setRowHeight(25);
         playerDet_Table.setFillsViewportHeight(true);
 

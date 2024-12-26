@@ -84,9 +84,9 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             propfile.load(new FileInputStream(filename));
 
         } catch (FileNotFoundException ex) {
-            throw new EquipDataInterfaceException("The properties file " + filename + " wasn't found");
+            throw new EquipDataInterfaceException("The properties file " + filename + " wasn't found", ex.getCause());
         } catch (IOException ex) {
-            throw new EquipDataInterfaceException("Error loading the provided properties file");
+            throw new EquipDataInterfaceException("Error loading the provided properties file", ex.getCause());
         }
 
         String url = propfile.getProperty("url");
@@ -97,8 +97,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             con = DriverManager.getConnection(url, user, password);
             //  con.setAutoCommit(false);
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            throw new EquipDataInterfaceException("Unable To Establish Connection To The Defined Database", ex.getCause());
+
+            throw new EquipDataInterfaceException("Unable To Establish Connection To The Defined Database " + ex.getMessage(), ex.getCause());
         }
 
         return true;
@@ -110,8 +110,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             try {
                 con.close();
             } catch (SQLException ex) {
-                System.out.println(ex.getMessage());
-                throw new EquipDataInterfaceException("Datasource Wasn't Able To close");
+
+                throw new EquipDataInterfaceException("Datasource Wasn't Able To close" + ex.getMessage(), ex.getCause());
 
             } finally {
                 con = null;
@@ -194,7 +194,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
-            throw new EquipDataInterfaceException("Unable To get Player(s)");
+            throw new EquipDataInterfaceException("Unable To get Player(s) " + ex.getMessage(), ex.getCause());
         }
     }
 
@@ -272,7 +272,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
-            throw new EquipDataInterfaceException("Unable To get Players");
+            throw new EquipDataInterfaceException("Unable To get Players " + ex.getMessage(), ex.getCause());
         }
         return players;
     }
@@ -355,8 +355,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
 
             }
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            throw new EquipDataInterfaceException("Unable To get Players");
+
+            throw new EquipDataInterfaceException("Unable To get Players. " + ex.getMessage(), ex.getCause());
         }
         return players;
     }
@@ -385,8 +385,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             }
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            throw new EquipDataInterfaceException("Unable to get teams.");
+
+            throw new EquipDataInterfaceException("Unable to get teams." + e.getMessage(), e.getCause());
         }
         return teams;
     }
@@ -428,8 +428,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             }
 
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            throw new EquipDataInterfaceException("Unable To get Player(s)");
+
+            throw new EquipDataInterfaceException("Unable To get Player(s). " + ex.getMessage(), ex.getCause());
         }
     }
 
@@ -451,7 +451,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
         } catch (SQLException ex) {
 
             System.out.println(ex.getMessage());
-            throw new EquipDataInterfaceException("Failed To Insert New User", ex.getCause());
+            throw new EquipDataInterfaceException("Failed To Insert New User. " + ex.getMessage(), ex.getCause());
         }
 
     }
@@ -484,8 +484,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             }
         } catch (SQLException ex) {
 
-            System.err.println("Error executing query: " + ex.getMessage());
-            throw new EquipDataInterfaceException("Database error during validation", ex);
+            throw new EquipDataInterfaceException("Database error during validation." + ex.getMessage(), ex.getCause());
         }
     }
 
@@ -515,8 +514,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
 
         } catch (SQLException ex) {
 
-            System.err.println("Error while restoring password: " + ex.getMessage());
-            throw new EquipDataInterfaceException("Couldn't restore password. Please try again later.", ex.getCause());
+            throw new EquipDataInterfaceException("Couldn't restore password. Please try again later. " + ex.getMessage(), ex.getCause());
         }
     }
 
@@ -538,8 +536,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             return getPlayers(rs);
 
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            throw new EquipDataInterfaceException("Unable to retrieve player by legal ID");
+            throw new EquipDataInterfaceException("Unable to retrieve player by legal ID." + ex.getMessage(), ex.getCause());
         }
 
     }
@@ -562,8 +559,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             return getPlayer(rs);
 
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            throw new EquipDataInterfaceException("Unable to retrieve player by legal ID");
+
+            throw new EquipDataInterfaceException("Unable to retrieve player by legal ID. " + ex.getMessage(), ex.getCause());
         }
 
     }
@@ -586,7 +583,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             return getPlayers(rs);
 
         } catch (SQLException ex) {
-            throw new EquipDataInterfaceException("Error Trying To Get Players From Category " + cat, ex);
+            throw new EquipDataInterfaceException("Error Trying To Get Players From Category. " + ex.getMessage(), ex.getCause());
         }
     }
 
@@ -610,8 +607,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             ResultSet rs = playersbyyear.executeQuery();
             return getPlayers(rs);
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            throw new EquipDataInterfaceException("Error Trying To Retrieve The Players");
+
+            throw new EquipDataInterfaceException("Error Trying To Retrieve The Players. " + ex.getMessage(), ex.getCause());
         }
 
     }
@@ -637,8 +634,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             ResultSet rs = playersbyyear.executeQuery();
             return getPlayers(rs);
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            throw new EquipDataInterfaceException("Error Trying To Retrieve The Players");
+
+            throw new EquipDataInterfaceException("Error Trying To Retrieve The Players. " + ex.getMessage(), ex.getCause());
         }
 
     }
@@ -663,8 +660,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             ResultSet rs = playersbyyear.executeQuery();
             return getPlayers(rs);
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            throw new EquipDataInterfaceException("Error Trying To Retrieve The Players");
+
+            throw new EquipDataInterfaceException("Error Trying To Retrieve The Players. " + ex.getMessage(), ex.getCause());
         }
     }
 
@@ -687,7 +684,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             return getPlayers(rs);
 
         } catch (SQLException ex) {
-            throw new EquipDataInterfaceException("Error Trying To Get Players From Category " + cat, ex);
+            throw new EquipDataInterfaceException("Error Trying To Get Players From Category. " + cat + " . " + ex.getMessage(), ex.getCause());
         }
     }
 
@@ -710,7 +707,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             return getPlayers(rs);
 
         } catch (SQLException ex) {
-            throw new EquipDataInterfaceException("Error Trying To Get Players From Category " + cat, ex);
+            throw new EquipDataInterfaceException("Error Trying To Get Players From Category " + cat + " . " + ex.getMessage(), ex.getCause());
         }
     }
 
@@ -731,8 +728,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             return getPlayers(rs);
 
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            throw new EquipDataInterfaceException("Error Trying To Retrieve The Players");
+
+            throw new EquipDataInterfaceException("Error Trying To Retrieve The Players " + ex.getMessage(), ex.getCause());
         }
     }
 
@@ -754,7 +751,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
 
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
-            throw new EquipDataInterfaceException("Error Trying To Retrieve The Players");
+            throw new EquipDataInterfaceException("Error Trying To Retrieve The Players " + ex.getMessage(), ex.getCause());
         }
     }
 
@@ -776,7 +773,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
 
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
-            throw new EquipDataInterfaceException("Error Trying To Retrieve The Players");
+            throw new EquipDataInterfaceException("Error Trying To Retrieve The Players " + ex.getMessage(), ex.getCause());
         }
     }
 
@@ -798,7 +795,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
 
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
-            throw new EquipDataInterfaceException("Error Trying To Retrieve The Players");
+            throw new EquipDataInterfaceException("Error Trying To Retrieve The Players " + ex.getMessage(), ex.getCause());
         }
     }
 
@@ -817,7 +814,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
 
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
-            throw new EquipDataInterfaceException("Unable to create prepared statement for new player");
+            throw new EquipDataInterfaceException("Unable to create prepared statement for new player " + ex.getMessage(), ex.getCause());
         }
 
         try {
@@ -856,7 +853,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
-            throw new EquipDataInterfaceException("Unable To Insert New Player");
+            throw new EquipDataInterfaceException("Unable To Insert New Player " + ex.getMessage(), ex.getCause());
         }
 
     }
@@ -882,7 +879,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
 
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
-            throw new EquipDataInterfaceException("Somthing Went Wrong Trying To Create The Delete Statement");
+            throw new EquipDataInterfaceException("Somthing Went Wrong Trying To Create The Delete Statement " + ex.getMessage(), ex.getCause());
         }
 
     }
@@ -939,8 +936,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
                 System.out.println("Could not update player");
             }
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            throw new EquipDataInterfaceException("Error Trying Update Player");
+
+            throw new EquipDataInterfaceException("Error Trying Update Player " + ex.getMessage(), ex.getCause());
         }
     }
 
@@ -982,7 +979,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
 
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
-            throw new EquipDataInterfaceException("Couldn't Retrieve The Categories");
+            throw new EquipDataInterfaceException("Couldn't Retrieve The Categories " + ex.getMessage(), ex.getCause());
         }
     }
 
@@ -1003,8 +1000,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             return getTeams(rs);
 
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            throw new EquipDataInterfaceException("Error Trying To Retrieve The Teams By Categories");
+
+            throw new EquipDataInterfaceException("Error Trying To Retrieve The Teams By Categories " + ex.getMessage(), ex.getCause());
         }
 
     }
@@ -1034,7 +1031,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
-            throw new EquipDataInterfaceException("Error Trying To Retrieve COUNT of players of " + team);
+            throw new EquipDataInterfaceException("Error Trying To Retrieve COUNT of players of " + team + " " + ex.getMessage(), ex.getCause());
         }
 
         return count;
@@ -1064,7 +1061,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
 
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
-            throw new EquipDataInterfaceException("Error Getting Teams By Season " + season);
+            throw new EquipDataInterfaceException("Error Getting Teams By Season " + season + "  " + ex.getMessage(), ex.getCause());
         }
     }
 
@@ -1088,7 +1085,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
 
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
-            throw new EquipDataInterfaceException("Error Getting Teams By Type " + type);
+            throw new EquipDataInterfaceException("Error Getting Teams By Type " + type + " " + ex.getMessage(), ex.getCause());
         }
     }
 
@@ -1102,7 +1099,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             return getTeams(rs);
 
         } catch (SQLException ex) {
-            throw new EquipDataInterfaceException("Error All Teams Teams");
+            throw new EquipDataInterfaceException("Error All Teams Teams " + ex.getMessage(), ex.getCause());
         }
 
     }
@@ -1135,7 +1132,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
 
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
-            throw new EquipDataInterfaceException("Error Making A New Team");
+            throw new EquipDataInterfaceException("Error Making A New Team " + ex.getMessage(), ex.getCause());
         }
 
     }
@@ -1161,7 +1158,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
 
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
-            throw new EquipDataInterfaceException("Error Getting Players Of Team " + teamName);
+            throw new EquipDataInterfaceException("Error Getting Players Of Team " + teamName + "  " + ex.getMessage(), ex.getCause());
         }
 
     }
@@ -1196,7 +1193,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
 
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
-            throw new EquipDataInterfaceException("Error Adding Player To Team " + team.getName());
+            throw new EquipDataInterfaceException("Error Adding Player To Team " + team.getName() + " " + ex.getMessage(), ex.getCause());
         }
     }
 
@@ -1222,7 +1219,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
 
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
-            throw new EquipDataInterfaceException("Error Deleting Player Of Team " + team.getName());
+            throw new EquipDataInterfaceException("Error Deleting Player Of Team " + team.getName() + " " + ex.getMessage(), ex.getCause());
         }
 
     }
@@ -1248,7 +1245,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
 
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
-            throw new EquipDataInterfaceException("Somthing Went Wrong Trying To Create The Delete Statement");
+            throw new EquipDataInterfaceException("Somthing Went Wrong Trying To Create The Delete Statement " + ex.getMessage(), ex.getCause());
         }
 
     }
@@ -1277,7 +1274,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             System.out.println("New season " + season_n + " added successfully with date " + date);
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
-            throw new EquipDataInterfaceException("Error adding new season " + season_n);
+            throw new EquipDataInterfaceException("Error adding new season " + season_n + " " + ex.getMessage(), ex.getCause());
         }
     }
 
@@ -1307,7 +1304,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
 
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
-            throw new EquipDataInterfaceException("Error removing team " + t_name);
+            throw new EquipDataInterfaceException("Error removing team " + t_name + "  " + ex.getMessage(), ex.getCause());
         }
     }
 
@@ -1332,8 +1329,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
                 }
 
             } catch (SQLException ex) {
-                System.out.println(ex.getMessage());
-                throw new EquipDataInterfaceException("Error removing team " + team.getName());
+
+                throw new EquipDataInterfaceException("Error removing team " + team.getName() + " " + ex.getMessage(), ex.getCause());
             }
         } else {
             System.out.println("Could Not Delete Team With Players");
@@ -1360,14 +1357,14 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
 
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
-            throw new EquipDataInterfaceException("Error removing players from team " + team.getName());
+            throw new EquipDataInterfaceException("Error removing players from team " + team.getName() + " " + ex.getMessage(), ex.getCause());
         }
         return status;
     }
 
     @Override
     public List<Team> getSeasonTeams(String season_n) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
@@ -1381,7 +1378,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             return getPlayers(rs);
 
         } catch (SQLException ex) {
-            throw new EquipDataInterfaceException("Unable To Create Statement", ex);
+            throw new EquipDataInterfaceException("Unable To Create Statement " + ex.getMessage(), ex.getCause());
         }
 
     }
@@ -1397,7 +1394,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             return getPlayers(rs);
 
         } catch (SQLException ex) {
-            throw new EquipDataInterfaceException("Unable To Create Statement", ex);
+            throw new EquipDataInterfaceException("Unable To Create Statement " + ex.getMessage(), ex.getCause());
         }
     }
 
@@ -1421,7 +1418,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             }
 
         } catch (SQLException ex) {
-            throw new EquipDataInterfaceException("Unable To Create Statement", ex);
+            throw new EquipDataInterfaceException("Unable To Create Statement " + ex.getMessage(), ex.getCause());
         }
         return seasons;
     }
@@ -1437,7 +1434,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             return getPlayers(rs);
 
         } catch (SQLException ex) {
-            throw new EquipDataInterfaceException("Unable To Create Statement", ex);
+            throw new EquipDataInterfaceException("Unable To Create Statement " + ex.getMessage(), ex.getCause());
         }
     }
 
