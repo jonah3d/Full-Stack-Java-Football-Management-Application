@@ -438,10 +438,27 @@ public class TestSQL {
         implementationSQL.removeTeamFromSeason("Fc Monalco");
     }
 
+    public static void checkPlayerHasTeam() {
+        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+        boolean ans;
+        ans = implementationSQL.checkPlayerBelongsToTeam("9999902K");
+        if (ans) {
+            System.out.println("Player Belongs To A Team");
+        } else {
+            System.out.println("Player Is Not Part Of A Team");
+        }
+    }
+
+    public static void testGetPlayerTeam() {
+        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+        Team team = implementationSQL.getPlayerTeam("9999902K");
+        team.mostrarDetalle();
+    }
+
     public static void main(String[] args) {
 
         // addNewPlayer();
-        CREATEUSER();
+        //CREATEUSER();
         //VALIDATEUSER();
         //RESTOREPASS();
         //getPlayersByLegalId();
@@ -476,6 +493,9 @@ public class TestSQL {
         // getTeamMembercount();
         //removeTeam();
         //getAllTeams();
+        // checkPlayerHasTeam();
+        testGetPlayerTeam();
+
     }
 
 }

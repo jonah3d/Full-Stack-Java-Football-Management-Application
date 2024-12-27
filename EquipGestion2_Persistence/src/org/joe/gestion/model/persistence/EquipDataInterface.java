@@ -53,6 +53,12 @@ public interface EquipDataInterface {
 
     public void addNewPlayer(Player player);
 
+    public boolean checkPlayerBelongsToTeam(String legalID);
+
+    public Integer checkPlayerTeam(String legalID);
+
+    public Team getPlayerTeam(String legalID);
+
     public void eliminarJugador(String legalID);
 
     //Team Management
@@ -74,7 +80,7 @@ public interface EquipDataInterface {
 
     public void addPlayerToTeam(Player player, Team team, boolean titularidad);
 
-    public void deletePlayerFromTeam(Player player, Team team);
+    public void deletePlayerFromTeam(Player player, Integer team);
 
     public void deleteTeam(String name);
 

@@ -51,6 +51,7 @@ public class PlayerManagementController implements ActionListener {
 
         if (e.getSource() == playerManagementScreen.getSeeply_BTN()) {
             playerManagementScreen.getCenterJPanel().setSelectedIndex(0);
+            verJugadoresController.getVerJugadores().getRefresh().doClick();
         }
         if (e.getSource() == playerManagementScreen.getAddply_BTN()) {
             playerManagementScreen.getCenterJPanel().setSelectedIndex(1);
@@ -83,13 +84,48 @@ public class PlayerManagementController implements ActionListener {
 
                 Player player = verJugadoresController.getCurrrentplayerlist().get(selectedplayer);
 
-                edi.eliminarJugador(player.getLegal_id());
-                JOptionPane.showMessageDialog(null,
-                        "Player " + player.getName() + " deleted successfully",
-                        "Success",
-                        JOptionPane.INFORMATION_MESSAGE
-                );
-                verJugadoresController.getVerJugadores().getRefresh().doClick();
+                boolean ans = edi.checkPlayerBelongsToTeam(player.getLegal_id());
+                if (ans) {
+                    int confirmation = JOptionPane.showConfirmDialog(null,
+                            "The player belongs to a team. Are you sure you want to delete it?",
+                            "Confirm Deletion",
+                            JOptionPane.OK_CANCEL_OPTION,
+                            JOptionPane.WARNING_MESSAGE);
+
+                    if (confirmation == JOptionPane.OK_OPTION) {
+
+                        Integer teamname = edi.checkPlayerTeam(player.getLegal_id());
+                        if (teamname == null) {
+                            errorDialogue("Team ID Is Null");
+
+                        }
+
+                        edi.deletePlayerFromTeam(player, teamname);
+                        edi.eliminarJugador(player.getLegal_id());
+                        JOptionPane.showMessageDialog(null,
+                                "Player " + player.getName() + " deleted successfully",
+                                "Success",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        // verJugadoresController.getVerJugadores().getRefresh().doClick();
+
+                    } else {
+
+                        JOptionPane.showMessageDialog(null,
+                                "Player deletion operation canceled.",
+                                "Canceled",
+                                JOptionPane.INFORMATION_MESSAGE);
+                    }
+
+                } else {
+                    edi.eliminarJugador(player.getLegal_id());
+                    JOptionPane.showMessageDialog(null,
+                            "Player " + player.getName() + " deleted successfully",
+                            "Success",
+                            JOptionPane.INFORMATION_MESSAGE
+                    );
+                    verJugadoresController.getVerJugadores().getRefresh().doClick();
+                }
+
             } catch (Exception ex) {
                 ErrMsg.error(ex.getMessage(), ex.getCause());
             }

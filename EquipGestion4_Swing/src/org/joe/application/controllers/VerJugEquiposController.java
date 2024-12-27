@@ -61,7 +61,7 @@ public class VerJugEquiposController implements ActionListener {
                     Player player = currentPlayerlist.get(selectplaayerindex);
                     Team team = currentTeamlist.get(selectedTeamindex);
                     try {
-                        edi.deletePlayerFromTeam(player, team);
+                        edi.deletePlayerFromTeam(player, team.getId());
                         JOptionPane.showMessageDialog(verJuEquipos, "Player Deleted Successfully", "Success",
                                 JOptionPane.INFORMATION_MESSAGE);
                     } catch (Exception ex) {

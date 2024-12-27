@@ -25,6 +25,8 @@ import javax.imageio.ImageIO;
 import javax.sql.rowset.serial.SerialBlob;
 import javax.swing.Icon;
 import org.joe.application.constants.ErrMsg;
+import org.joe.application.constants.PlayerConstants;
+import org.joe.gestion.model.data.Team;
 import org.joe.gestion.model.persistence.EquipDataInterfaceException;
 
 /**
@@ -58,9 +60,14 @@ public class EditarJugadoresController implements ActionListener {
             boolean isvalid = settingUpCampVal();
 
             if (isvalid) {
-                editplayer();
-                JOptionPane.showMessageDialog(EditarJugadores, "Jugador Editado", "Success",
-                        JOptionPane.INFORMATION_MESSAGE);
+                boolean ans = editplayer();
+                if (ans) {
+                    JOptionPane.showMessageDialog(EditarJugadores, "Jugador Editado", "Success",
+                            JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(EditarJugadores, "Jugador No Editado", "Failure",
+                            JOptionPane.INFORMATION_MESSAGE);
+                }
 
             }
         }
@@ -315,7 +322,8 @@ public class EditarJugadoresController implements ActionListener {
         return isValid;
     }
 
-    public void editplayer() {
+    public boolean editplayer() {
+        boolean ans = false;
 
         String nif = EditarJugadores.getNif_tf().getText().trim();
         String nombre = EditarJugadores.getNombre_tf().getText().trim();
@@ -360,11 +368,24 @@ public class EditarJugadoresController implements ActionListener {
         Player player = new Player(nombre, apellido, sexe, datanaix, nif, iban,
                 direccion, codipostal, localidad, provincia, pais, image, medical);
         try {
-            edi.editarJugador(player);
+
+            boolean btoteam = edi.checkPlayerBelongsToTeam(player.getLegal_id());
+            Team playerteam = edi.getPlayerTeam(player.getLegal_id());
+            String teamtype = playerteam.getTeam_type();
+            String category = playerteam.getCategory();
+
+            if (!btoteam || teamtype.equals("M") || category.equals(PlayerConstants.calculateAge(datanaix))) {
+                edi.editarJugador(player);
+                ans = true;
+            } else {
+                errorDialogue("No Puede Cambiar El Sexe O Data Nacimiento.");
+
+            }
 
         } catch (EquipDataInterfaceException e) {
             ErrMsg.error(e.getMessage(), e.getCause());
         }
+        return ans;
 
     }
 

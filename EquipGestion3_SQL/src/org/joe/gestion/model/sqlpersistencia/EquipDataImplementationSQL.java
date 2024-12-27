@@ -59,6 +59,9 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
     PreparedStatement addplyteam;
     PreparedStatement rmveplayers;
     PreparedStatement rmveteamswithPlayers;
+    PreparedStatement checkplayer;
+    PreparedStatement checkplayerteam;
+    PreparedStatement playerteamget;
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     public EquipDataImplementationSQL() {
@@ -392,45 +395,44 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
     }
 
     private Team getTeam(ResultSet rs) {
-
+        Team nteam = null;
         try {
 
-            if (rs.next()) {
+            while (rs.next()) {
 
-                Integer teamid = rs.getInt("ID");
+                Integer teamid = rs.getInt("id");
                 if (rs.wasNull()) {
                     teamid = null;
                 }
 
-                String teamname = rs.getString("Name");
+                String teamname = rs.getString("name");
                 if (rs.wasNull()) {
                     teamname = "";
                 }
-                String teamType = rs.getString("TEAM_TYPE");
+                String teamType = rs.getString("team_type");
                 if (rs.wasNull()) {
                     teamType = "";
                 }
-                String teamCatName = rs.getString("CATEGORY_NAME");
+                String teamCatName = rs.getString("category_name");
                 if (rs.wasNull()) {
                     teamCatName = "";
                 }
-                Date teamSeason = rs.getDate("Season_year");
+                Date teamSeason = rs.getDate("season_year");
                 if (rs.wasNull()) {
                     teamSeason = null;
                 }
 
-                Team nteam = new Team(teamname, teamSeason, teamCatName, teamType);
+                nteam = new Team(teamname, teamSeason, teamCatName, teamType);
                 nteam.setId(teamid);
                 return nteam;
 
-            } else {
-                throw new EquipDataInterfaceException("Query returned with no team");
             }
 
         } catch (SQLException ex) {
 
             throw new EquipDataInterfaceException("Unable To get Player(s). " + ex.getMessage(), ex.getCause());
         }
+        return nteam;
     }
 
     @Override
@@ -878,7 +880,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             }
 
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+
             throw new EquipDataInterfaceException("Somthing Went Wrong Trying To Create The Delete Statement " + ex.getMessage(), ex.getCause());
         }
 
@@ -1198,7 +1200,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
     }
 
     @Override
-    public void deletePlayerFromTeam(Player player, Team team) {
+    public void deletePlayerFromTeam(Player player, Integer team) {
         if (player == null) {
             throw new EquipDataInterfaceException("Player Can't Be Null or Empty");
         }
@@ -1208,7 +1210,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
         try {
             delfromplyteam = con.prepareStatement(query);
             delfromplyteam.setInt(1, player.getId());
-            delfromplyteam.setInt(2, team.getId());
+            delfromplyteam.setInt(2, team.intValue());
 
             int ans = delfromplyteam.executeUpdate();
             if (ans == 1) {
@@ -1219,7 +1221,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
 
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
-            throw new EquipDataInterfaceException("Error Deleting Player Of Team " + team.getName() + " " + ex.getMessage(), ex.getCause());
+            throw new EquipDataInterfaceException("Error Deleting Player Of Team " + team + " " + ex.getMessage(), ex.getCause());
         }
 
     }
@@ -1438,4 +1440,83 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
         }
     }
 
+    @Override
+    public boolean checkPlayerBelongsToTeam(String legalID) {
+        boolean ans = false;
+        if (legalID == null || legalID.isBlank()) {
+            throw new EquipDataInterfaceException("Player Id Can't Be Null Or Empty");
+        }
+
+        String query = "SELECT P.NAME FROM PLAYER P"
+                + " JOIN PLAYERTEAM PT ON P.ID = PT.PLAYER WHERE P.LEGAL_ID = ?";
+
+        try {
+            checkplayer = con.prepareStatement(query);
+            checkplayer.setString(1, legalID);
+            ResultSet rs = checkplayer.executeQuery();
+
+            if (rs.next()) {
+                ans = true;
+
+            }
+
+        } catch (SQLException ex) {
+            throw new EquipDataInterfaceException("Could Not Verify If Player Belongs To A Team " + ex.getMessage(), ex.getCause());
+        }
+
+        return ans;
+    }
+
+    @Override
+    public Integer checkPlayerTeam(String legalID) {
+        Integer ans = null;
+        if (legalID == null || legalID.isBlank()) {
+            throw new EquipDataInterfaceException("Player Id Can't Be Null Or Empty");
+        }
+
+        String query = "SELECT T.ID FROM TEAM T JOIN PLAYERTEAM PT ON T.ID = PT.TEAM"
+                + " JOIN PLAYER P ON P.ID = PT.PLAYER WHERE P.LEGAL_ID = ?";
+
+        try {
+            checkplayerteam = con.prepareStatement(query);
+            checkplayerteam.setString(1, legalID);
+            ResultSet rs = checkplayerteam.executeQuery();
+
+            while (rs.next()) {
+                ans = rs.getInt(1);
+                if (rs.wasNull()) {
+                    ans = null;
+                }
+            }
+
+        } catch (SQLException ex) {
+            throw new EquipDataInterfaceException("Can't Get Player Team " + ex.getMessage(), ex.getCause());
+        }
+
+        return ans;
+    }
+
+    @Override
+    public Team getPlayerTeam(String legalID) {
+        if (legalID == null || legalID.isBlank()) {
+            throw new EquipDataInterfaceException("Player Id Can't Be Null Or Empty");
+        }
+
+        String query = "SELECT t.id, t.name, t.team_type, t.category_name, t.season_year "
+                + "FROM TEAM t "
+                + "JOIN PLAYERTEAM pt ON t.ID = pt.TEAM "
+                + "JOIN PLAYER p ON p.ID = pt.PLAYER "
+                + "WHERE p.LEGAL_ID = ?";
+        Team team = null;
+        try {
+            playerteamget = con.prepareStatement(query);
+            playerteamget.setString(1, legalID);
+            ResultSet rs = playerteamget.executeQuery();
+
+            team = getTeam(rs);
+        } catch (SQLException ex) {
+            throw new EquipDataInterfaceException("Can't Get Player Team " + ex.getMessage(), ex.getCause());
+        }
+        return team;
+    }
 }
