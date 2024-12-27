@@ -192,6 +192,7 @@ public class VerJugadoresController implements ActionListener {
         this.currrentplayerlist = players;
 
         DefaultTableModel tableModel = (DefaultTableModel) verJugadores.getPlayerDet_Table().getModel();
+        verJugadores.getPlayerDet_Table().setDefaultRenderer(Object.class, new CustomTableCellRenderer());
         tableModel.setRowCount(0);
 
         for (Player player : players) {
