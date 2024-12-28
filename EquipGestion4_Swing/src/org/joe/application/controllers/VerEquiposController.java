@@ -38,11 +38,12 @@ public class VerEquiposController implements ActionListener {
         }
 
         // Populate seasons combo box
-        verEquipos.getTempComboBox().addItem("");
+        // verEquipos.getTempComboBox().addItem("");
         for (Season season : edi.getSeasons()) {
             verEquipos.getTempComboBox().addItem(season.getName());
         }
 
+        verEquipos.getTeamDetails_JTable().setDefaultRenderer(Object.class, new CustomTeamTableCellRenderer());
         // Pre-populate the table with teams from the current season
         Season currentSeason = edi.getSeasons().get(0); // Assuming the current season is the first in the list
         try {
@@ -92,6 +93,14 @@ public class VerEquiposController implements ActionListener {
                 if (teams != null) {
                     populateTable(teams);
                 }
+
+                if (teams.size() < 1) {
+                    verEquipos.getErromessage().setVisible(true);
+                    verEquipos.getErromessage().setText("No hay equipos");
+                } else {
+                    verEquipos.getErromessage().setVisible(false);
+                }
+
             } catch (EquipDataInterfaceException ex) {
                 error(ex.getMessage(), ex.getCause());
             }

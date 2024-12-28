@@ -7,6 +7,7 @@ package org.joe.application.controllers;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
+import org.joe.application.constants.ErrMsg;
 import org.joe.application.views.TeamManagementScreen;
 import org.joe.gestion.model.data.Team;
 import org.joe.gestion.model.persistence.EquipDataInterface;
@@ -44,13 +45,20 @@ public class TeamManagementController implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == teamManagementScreen.getSeeEquip_Btn()) {
             teamManagementScreen.getCenterJPanel().setSelectedIndex(0);
+            verEquiposController.getVerEquipos().getRefresh().doClick();
         }
 
         if (e.getSource() == teamManagementScreen.getSeeJugEquip_Btn()) {
             teamManagementScreen.getCenterJPanel().setSelectedIndex(1);
+            try {
+                verJugEquiposController.populateAddPlayerTable(edi.getPlayers());
+            } catch (Exception ex) {
+                ErrMsg.error(ex.getMessage(), ex.getCause());
+            }
         }
         if (e.getSource() == teamManagementScreen.getAddEquip_Btn()) {
             teamManagementScreen.getCenterJPanel().setSelectedIndex(2);
+
         }
 
         if (e.getSource() == teamManagementScreen.getElimEquip_Btn()) {
@@ -69,6 +77,7 @@ public class TeamManagementController implements ActionListener {
                 if (count == 0) {
 
                     edi.removeTeamFromSeason(team.getName());
+                    verJugEquiposController.populateTeamTable(edi.getAllTeams());
                     JOptionPane.showMessageDialog(null,
                             "Team " + team.getName() + " deleted successfully",
                             "Success",
@@ -85,6 +94,7 @@ public class TeamManagementController implements ActionListener {
                     if (confirmation == JOptionPane.OK_OPTION) {
 
                         edi.removeTeamWithPlayers(team);
+                        verJugEquiposController.populateTeamTable(edi.getAllTeams());
                         JOptionPane.showMessageDialog(null,
                                 "Team " + team.getName() + " deleted successfully",
                                 "Success",

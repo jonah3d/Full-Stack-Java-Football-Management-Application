@@ -4,6 +4,7 @@
  */
 package org.joe.application.views;
 
+import com.formdev.flatlaf.FlatClientProperties;
 import java.awt.Dimension;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -50,9 +51,13 @@ public class TemporadaFrame extends JFrame {
         name = new JLabel("Nombre Temporada (yy/yy):");
         season = new JLabel("Fecha de Inicio de Temporada:");
         nameTF = new JTextField();
+        nameTF.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
         seasonTF = new JFormattedTextField();
+        seasonTF.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
         submitButton = new JButton("Guardar");
+        submitButton.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
         cancelButton = new JButton("Cancelar");
+        cancelButton.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
         datePicker = new DatePicker();
         datePicker.setEditor(seasonTF);
 

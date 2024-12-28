@@ -27,6 +27,8 @@ public class Player {
     protected Integer medical_rev_fin;
 
     protected String category;
+    protected String titularidad;
+
     public Player() {
     }
 
@@ -55,6 +57,14 @@ public class Player {
 
     public String getCodigo_postal() {
         return codigo_postal;
+    }
+
+    public String getTitularidad() {
+        return titularidad;
+    }
+
+    public void setTitularidad(String titularidad) {
+        this.titularidad = titularidad;
     }
 
     public void setCodigo_postal(String codigo_postal) {

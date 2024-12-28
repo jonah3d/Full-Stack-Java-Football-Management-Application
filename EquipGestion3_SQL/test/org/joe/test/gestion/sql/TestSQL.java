@@ -291,7 +291,7 @@ public class TestSQL {
         EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
         List<Player> playerlist = new ArrayList<>();
 
-        playerlist = implementationSQL.getTeamPlayers("FcCanPalladesMIX");
+        // playerlist = implementationSQL.getTeamPlayers("FcCanPalladesMIX");
         for (Player play : playerlist) {
             System.out.println("\n=========================\n");
             play.mostrarJugDetalle();
@@ -494,8 +494,7 @@ public class TestSQL {
         //removeTeam();
         //getAllTeams();
         // checkPlayerHasTeam();
-        testGetPlayerTeam();
-
+        //testGetPlayerTeam();
     }
 
 }

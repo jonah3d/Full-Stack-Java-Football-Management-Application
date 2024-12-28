@@ -5,6 +5,7 @@
 package org.joe.application.views.tabs;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import java.awt.Color;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -22,6 +23,7 @@ public class VerEquipos extends JPanel {
     JTable teamDetails_JTable;
     JLabel temporadaJLabel;
     JLabel categoriaJLabel;
+    JLabel erromessage;
     JComboBox<String> catComboBox;
     JComboBox<String> tempComboBox;
     JButton refresh;
@@ -38,11 +40,15 @@ public class VerEquipos extends JPanel {
         catComboBox = new JComboBox<>();
         tempComboBox = new JComboBox<>();
         refresh = new JButton("Refrescar");
+        erromessage = new JLabel();
 
         categoriaJLabel.setBounds(170, 50, 100, 30);
+
         catComboBox.setBounds(170, 17, 140, 30);
+        catComboBox.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
         temporadaJLabel.setBounds(20, 50, 100, 30);
         tempComboBox.setBounds(20, 17, 140, 30);
+        tempComboBox.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
 
         refresh.setBounds(320, 17, 140, 30);
         refresh.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
@@ -73,12 +79,21 @@ public class VerEquipos extends JPanel {
         JScrollPane scrollPane = new JScrollPane(teamDetails_JTable);
         scrollPane.setBounds(20, 90, 900, 500);
 
+        erromessage.setBounds(830, 590, 100, 20);
+        erromessage.setVisible(false);
+        erromessage.setForeground(Color.red);
+
         this.add(scrollPane);
         this.add(temporadaJLabel);
         this.add(categoriaJLabel);
         this.add(catComboBox);
         this.add(tempComboBox);
         this.add(refresh);
+        this.add(erromessage);
+    }
+
+    public JLabel getErromessage() {
+        return erromessage;
     }
 
     public JTable getTeamDetails_JTable() {

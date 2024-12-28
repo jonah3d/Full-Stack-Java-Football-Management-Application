@@ -10,6 +10,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.JOptionPane;
+import org.joe.application.constants.ErrMsg;
 import org.joe.application.views.tabs.AnadirEquipo;
 import org.joe.gestion.model.data.Category;
 import org.joe.gestion.model.persistence.EquipDataInterface;
@@ -43,10 +44,15 @@ public class AnadirEquipoController implements ActionListener {
             boolean ans = validatefields();
             if (ans) {
                 try {
-                    addTeam();
-                    JOptionPane.showMessageDialog(anadirEquipos, "Player Added Successfully", "Success",
-                            JOptionPane.INFORMATION_MESSAGE);
-                    clearField();
+                    boolean res = addTeam();
+                    if (res) {
+                        JOptionPane.showMessageDialog(anadirEquipos, "Team Added Successfully", "Success",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        clearField();
+                    } else {
+                        errorDialogue("Comprueba los campos(Temporada siempre empieza 01/09)");
+                    }
+
                 } catch (EquipDataInterfaceException ex) {
                     error(ex.getMessage(), ex.getCause());
                 }
@@ -109,7 +115,8 @@ public class AnadirEquipoController implements ActionListener {
         );
     }
 
-    public void addTeam() {
+    public boolean addTeam() {
+        boolean ans = false;
 
         String teamname = anadirEquipos.getName_tf().getText().trim();
         String teamtype = null;
@@ -130,8 +137,14 @@ public class AnadirEquipoController implements ActionListener {
             errorDialogue(ex.getMessage());
         }
 
-        edi.addNewTeam(teamname, teamtype, catname, inicial);
+        try {
+            edi.addNewTeam(teamname, teamtype, catname, inicial);
+            ans = true;
+        } catch (Exception ex) {
+            ErrMsg.error(ex.getMessage(), ex.getCause());
+        }
 
+        return ans;
     }
 
     private void clearField() {

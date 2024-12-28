@@ -43,7 +43,7 @@ public class VerJugEquipos extends JPanel {
     private void initComponents() {
 
         String[] TcolumnNames = {"Nom", "Categoria", "Tipo", "Temporada"};
-        String[] PTableNames = {"NOM", "COGNOM", "EDAT", "SEXE", "CATEGORIA"};
+        String[] PTableNames = {"NOM", "COGNOM", "EDAT", "SEXE", "CATEGORIA", "Titularidad"};
         DefaultTableModel teamTableModel = new DefaultTableModel(TcolumnNames, 0) {
             @Override
             public Class<?> getColumnClass(int columnIndex) {

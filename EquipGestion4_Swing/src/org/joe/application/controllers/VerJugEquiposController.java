@@ -12,6 +12,8 @@ import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import org.joe.application.constants.ErrMsg;
+import org.joe.application.constants.PlayerConstants;
 import org.joe.application.views.tabs.VerJugEquipos;
 import org.joe.gestion.model.data.Player;
 import org.joe.gestion.model.data.Team;
@@ -32,7 +34,11 @@ public class VerJugEquiposController implements ActionListener {
         currentPlayerlist = new ArrayList<>();
         allplayersList = new ArrayList<>();
 
-        populateTeamTable(edi.getAllTeams());
+        try {
+            populateTeamTable(edi.getAllTeams());
+        } catch (Exception ex) {
+            ErrMsg.error(ex.getMessage(), ex.getCause());
+        }
 
         verJuEquipos.getTeamTable().addMouseListener(new MouseAdapter() {
             @Override
@@ -40,7 +46,7 @@ public class VerJugEquiposController implements ActionListener {
                 int selectedTeamIndex = verJuEquipos.getTeamTable().getSelectedRow();
                 if (selectedTeamIndex != -1) {
                     Team selectedTeam = currentTeamlist.get(selectedTeamIndex);
-                    populatePlayerTable(edi.getTeamPlayers(selectedTeam.getName()));
+                    populatePlayerTable(edi.getTeamPlayers(selectedTeam.getName(), (java.sql.Date) selectedTeam.getSeason_year()));
                 }
             }
         });
@@ -64,6 +70,10 @@ public class VerJugEquiposController implements ActionListener {
                         edi.deletePlayerFromTeam(player, team.getId());
                         JOptionPane.showMessageDialog(verJuEquipos, "Player Deleted Successfully", "Success",
                                 JOptionPane.INFORMATION_MESSAGE);
+                        List<Player> updatedPlayerList = edi.getTeamPlayers(team.getName(), (java.sql.Date) team.getSeason_year());
+
+                        populatePlayerTable(updatedPlayerList);
+
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(null,
                                 ex.getMessage(),
@@ -96,16 +106,16 @@ public class VerJugEquiposController implements ActionListener {
                     Player player = allplayersList.get(selectplaayerindex);
                     Team team = currentTeamlist.get(selectedTeamindex);
                     boolean tit_sel = verJuEquipos.getTitularidad().isSelected();
+                    System.out.println(tit_sel);
                     try {
                         edi.addPlayerToTeam(player, team, tit_sel);
                         JOptionPane.showMessageDialog(verJuEquipos, "Player Added Successfully", "Success",
                                 JOptionPane.INFORMATION_MESSAGE);
+                        List<Player> updatedPlayerList = edi.getTeamPlayers(team.getName(), (java.sql.Date) team.getSeason_year());
+
+                        populatePlayerTable(updatedPlayerList);
                     } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(null,
-                                ex.getMessage(),
-                                "Adding Error",
-                                JOptionPane.ERROR_MESSAGE
-                        );
+                        ErrMsg.error(ex.getMessage(), ex.getCause());
                     }
 
                 } else {
@@ -129,7 +139,7 @@ public class VerJugEquiposController implements ActionListener {
         return verJuEquipos;
     }
 
-    private void populateTeamTable(List<Team> teams) {
+    public void populateTeamTable(List<Team> teams) {
         this.currentTeamlist = teams;
 
         DefaultTableModel tableModel = (DefaultTableModel) verJuEquipos.getTeamTable().getModel();
@@ -155,15 +165,16 @@ public class VerJugEquiposController implements ActionListener {
             Object[] row = {
                 player.getName(),
                 player.getSurname(),
-                calculateAge(player.getBirth_year()),
+                PlayerConstants.calculateAge(player.getBirth_year()),
                 player.getSex(),
-                player.getCategory()
+                player.getCategory(),
+                player.getTitularidad()
             };
             tableModel.addRow(row);
         }
     }
 
-    private void populateAddPlayerTable(List<Player> players) {
+    public void populateAddPlayerTable(List<Player> players) {
         this.allplayersList = players;
         DefaultTableModel tableModel = (DefaultTableModel) verJuEquipos.getAddplayerJTable()
                 .getModel();
@@ -173,45 +184,12 @@ public class VerJugEquiposController implements ActionListener {
             Object[] row = {
                 player.getName(),
                 player.getSurname(),
-                calculateAge(player.getBirth_year()),
+                PlayerConstants.calculateAge(player.getBirth_year()),
                 player.getSex(),
-                calculateCat(calculateAge(player.getBirth_year()))
+                PlayerConstants.calculateCat(PlayerConstants.calculateAge(player.getBirth_year()))
             };
             tableModel.addRow(row);
         }
     }
 
-    private int calculateAge(Date birthDate) {
-        if (birthDate == null) {
-            return 0;
-        }
-
-        LocalDate birthLocalDate;
-        if (birthDate instanceof java.sql.Date) {
-            birthLocalDate = ((java.sql.Date) birthDate).toLocalDate();
-        } else {
-            birthLocalDate = birthDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        }
-
-        LocalDate referenceDate = LocalDate.of(2024, 9, 1);
-
-        return Period.between(birthLocalDate, referenceDate).getYears();
-    }
-
-    private String calculateCat(int age) {
-        if (age >= 7 && age <= 8) {
-            return "Benjamí";
-        } else if (age >= 9 && age <= 10) {
-            return "Aleví";
-        } else if (age >= 12 && age <= 13) {
-            return "Infantil";
-        } else if (age >= 14 && age <= 15) {
-            return "Cadet";
-        } else if (age >= 16 && age <= 17) {
-            return "Juvenil";
-        } else if (age >= 18 && age <= 21) {
-            return "Senior";
-        }
-        return null; // Return null if no category matches
-    }
 }

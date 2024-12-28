@@ -351,9 +351,15 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
                 if (rs.wasNull()) {
                     category = "";
                 }
+
+                String titularidad = rs.getString("tit_con");
+                if (rs.wasNull()) {
+                    titularidad = "";
+                }
                 Player play = new Player(name, surname, sexe, datebirth, legalId, iban, direccion, codigopostal, localidad, provincia, pais, photo, medicalfin);
                 play.setCategory(category);
                 play.setId(playerid);
+                play.setTitularidad(titularidad);
                 players.add(play);
 
             }
@@ -1092,7 +1098,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
     }
 
     public List<Team> getAllTeams() {
-        String query = "Select * from team";
+        String query = "Select * from team order by season_year asc, id asc";
         ResultSet rs = null;
         try {
             Statement stm = con.createStatement();
@@ -1133,27 +1139,27 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             }
 
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            throw new EquipDataInterfaceException("Error Making A New Team " + ex.getMessage(), ex.getCause());
+            throw new EquipDataInterfaceException("Error Making A New Team ", ex.getCause());
         }
 
     }
 
     @Override
-    public List<Player> getTeamPlayers(String teamName) {
+    public List<Player> getTeamPlayers(String teamName, java.sql.Date seasonyear) {
         if (teamName == null) {
             throw new EquipDataInterfaceException("team name Can't Be Null or Empty");
         }
         String query = "SELECT p.id,p.name,p.surname,p.sex,p.birth_year,p.legal_id,p.iban,p.direcion,p.codigo_postal,p.localidad,p.provincia,p.pais,photo,p.medical_rev_fin"
-                + " ,t.category_name "
+                + " ,t.category_name,pt.tit_con "
                 + "FROM PLAYERTEAM pt "
                 + "JOIN PLAYER p ON pt.player = p.id "
                 + "JOIN TEAM t ON pt.team = t.id "
-                + "WHERE t.name = ?";
+                + "WHERE t.name = ? and t.season_year = ?";
 
         try {
             teamPlyers = con.prepareStatement(query);
             teamPlyers.setString(1, teamName);
+            teamPlyers.setDate(2, seasonyear);
             ResultSet rs = teamPlyers.executeQuery();
 
             return getPlayersconCat(rs);
@@ -1170,8 +1176,11 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
         if (player == null || team == null) {
             throw new EquipDataInterfaceException("Player | Team  Can't Be Null or Empty");
         }
-        String tit = "T";
-        if (titularidad == false) {
+        String tit = null;
+
+        if (titularidad) {
+            tit = "T";
+        } else {
             tit = "C";
         }
         String query = "Insert into playerteam (player,team,tit_con,season) values (?,?,?,?)";

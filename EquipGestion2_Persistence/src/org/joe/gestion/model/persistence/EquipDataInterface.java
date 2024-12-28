@@ -76,7 +76,7 @@ public interface EquipDataInterface {
 
     public void addNewTeam(String name, String teamtype, String cat_name, Date seasondate);
 
-    public List<Player> getTeamPlayers(String teamName);
+    public List<Player> getTeamPlayers(String teamName, java.sql.Date seasonyear);
 
     public void addPlayerToTeam(Player player, Team team, boolean titularidad);
 
