@@ -368,23 +368,32 @@ public class EditarJugadoresController implements ActionListener {
         Player player = new Player(nombre, apellido, sexe, datanaix, nif, iban,
                 direccion, codipostal, localidad, provincia, pais, image, medical);
         try {
-
             boolean btoteam = edi.checkPlayerBelongsToTeam(player.getLegal_id());
             Team playerteam = edi.getPlayerTeam(player.getLegal_id());
             String teamtype = playerteam.getTeam_type();
             String category = playerteam.getCategory();
 
-            if (!btoteam || teamtype.equals("M") || category.equals(PlayerConstants.calculateAge(datanaix))) {
+            // Retrieve the current player's information for comparison
+            Player currentPlayer = edi.getPlayerByLegalId(player.getLegal_id());
+
+            // Check if the date of birth or sexe has been edited
+            boolean isDateChanged = !currentPlayer.getBirth_year().equals(datanaix);
+            boolean isSexChanged = !currentPlayer.getSex().equals(sexe);
+
+            // Perform validation only if there are edits
+            if (!btoteam || teamtype.equals("M")
+                    || (isDateChanged && !category.equals(PlayerConstants.calculateAge(datanaix)))
+                    || isSexChanged) {
+
+                errorDialogue("No Puede Cambiar El Sexe O Data Nacimiento.");
+            } else {
                 edi.editarJugador(player);
                 ans = true;
-            } else {
-                errorDialogue("No Puede Cambiar El Sexe O Data Nacimiento.");
-
             }
-
         } catch (EquipDataInterfaceException e) {
             ErrMsg.error(e.getMessage(), e.getCause());
         }
+
         return ans;
 
     }

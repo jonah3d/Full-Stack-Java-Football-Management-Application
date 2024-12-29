@@ -325,7 +325,6 @@ public class AnadirJugadoresController implements ActionListener {
 
         Player player = new Player(nombre, apellido, sexe, datanaix, nif, iban,
                 direccion, codipostal, localidad, provincia, pais, image, medical);
-        //player.mostrarJugDetalle();
 
         try {
             edi.addNewPlayer(player);

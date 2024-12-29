@@ -37,6 +37,9 @@ public class PlayerManagementScreen extends JPanel {
     JButton addply_BTN;
     JButton edply_BTN;
     JButton delply_BTN;
+    JLabel userimg;
+    JLabel username;
+    JLabel nameuser;
     JTabbedPane centerJPanel;
 
     public PlayerManagementScreen() {
@@ -120,4 +123,21 @@ public class PlayerManagementScreen extends JPanel {
     public void deleteJugadores_OnCLick(ActionListener listener) {
         delply_BTN.addActionListener(listener);
     }
+
+    public JPanel getSideJPanel() {
+        return sideJPanel;
+    }
+
+    public JLabel getUserimg() {
+        return userimg;
+    }
+
+    public JLabel getUsername() {
+        return username;
+    }
+
+    public JLabel getNameuser() {
+        return nameuser;
+    }
+
 }

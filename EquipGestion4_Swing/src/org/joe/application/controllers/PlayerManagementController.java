@@ -5,8 +5,10 @@
  */
 package org.joe.application.controllers;
 
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import org.joe.application.constants.ErrMsg;
 import org.joe.application.views.PlayerManagementScreen;
@@ -24,6 +26,7 @@ public class PlayerManagementController implements ActionListener {
     private AnadirJugadoresController anadirJugadoresController;
     private EditarJugadoresController editarJugadoresController;
     private EquipDataInterface edi;
+    private ImageIcon profileIcon;
 
     public PlayerManagementController(EquipDataInterface edi) {
         this.edi = edi;
@@ -40,6 +43,9 @@ public class PlayerManagementController implements ActionListener {
         playerManagementScreen.deleteJugadores_OnCLick(this);
         playerManagementScreen.anadirJugadores_OnClick(this);
         playerManagementScreen.editarJugadores_OnClick(this);
+
+        this.profileIcon = new ImageIcon(getClass().getClassLoader().getResource("org/joe/application/resources/img/profile.jpg"));
+
     }
 
     public PlayerManagementScreen getPlayerManagementScreen() {
