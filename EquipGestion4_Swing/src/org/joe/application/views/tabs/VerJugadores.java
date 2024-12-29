@@ -46,6 +46,7 @@ public class VerJugadores extends JPanel {
     JComboBox<String> ordenarComboBox;
     JLabel ordenarJLabel;
     JButton refresh;
+    JLabel erromessage;
 
     public VerJugadores() {
 
@@ -63,6 +64,7 @@ public class VerJugadores extends JPanel {
         catComboBox = new JComboBox<>();
         ordenarComboBox = new JComboBox<>();
         refresh = new JButton("Refresh");
+        erromessage = new JLabel();
 
         nameJLabel = new JLabel("Cognom");
         niJLabel = new JLabel("Id Legal");
@@ -121,6 +123,9 @@ public class VerJugadores extends JPanel {
 
         JScrollPane scrollPane = new JScrollPane(playerDet_Table);
         scrollPane.setBounds(20, 90, 900, 500);
+        erromessage.setBounds(830, 590, 100, 20);
+        erromessage.setVisible(false);
+        erromessage.setForeground(Color.red);
 
         this.add(scrollPane);
 
@@ -136,6 +141,11 @@ public class VerJugadores extends JPanel {
         this.add(anoJLabel);
         this.add(catJLabel);
         this.add(ordenarJLabel);
+        this.add(erromessage);
+    }
+
+    public JLabel getErromessage() {
+        return erromessage;
     }
 
     public JTable getPlayerDet_Table() {

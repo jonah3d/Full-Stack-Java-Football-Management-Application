@@ -455,7 +455,25 @@ public class TestSQL {
         team.mostrarDetalle();
     }
 
-    public static void main(String[] args) {
+    public static void filteredPlayersList() throws ParseException {
+        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date birthday = sdf.parse("2016-04-03");
+
+        List<Player> players = implementationSQL.playerFilterSearch(null, null, null, "Juvenil", "birth_year");
+        if (players.isEmpty()) {
+            System.out.println("Query returned no results.");
+        } else {
+            System.out.println("Query returned results:");
+            for (Player play : players) {
+                System.out.println("----------------------------------------------");
+                play.mostrarJugDetalle();
+            }
+        }
+    }
+
+    public static void main(String[] args) throws ParseException {
 
         // addNewPlayer();
         //CREATEUSER();
@@ -495,6 +513,7 @@ public class TestSQL {
         //getAllTeams();
         // checkPlayerHasTeam();
         //testGetPlayerTeam();
+        filteredPlayersList();
     }
 
 }

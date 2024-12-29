@@ -61,6 +61,8 @@ public interface EquipDataInterface {
 
     public void eliminarJugador(String legalID);
 
+    public List<Player> playerFilterSearch(String cognom, String legalid, Date birthdate, String categoria, String order);
+
     //Team Management
     public List<Category> getCategorys();
 

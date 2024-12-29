@@ -12,6 +12,9 @@ import java.util.Date;
 import java.util.List;
 import java.sql.*;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -62,6 +65,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
     PreparedStatement checkplayer;
     PreparedStatement checkplayerteam;
     PreparedStatement playerteamget;
+    PreparedStatement filterplayerspstmt;
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     public EquipDataImplementationSQL() {
@@ -1527,5 +1531,96 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             throw new EquipDataInterfaceException("Can't Get Player Team " + ex.getMessage(), ex.getCause());
         }
         return team;
+    }
+
+    @Override
+    public List<Player> playerFilterSearch(String cognom, String legalid, Date birthdate, String categoria, String order) {
+        List<Player> players = new ArrayList<>();
+        StringBuilder query = new StringBuilder(
+                "SELECT P.LEGAL_ID, P.NAME, P.SURNAME, P.BIRTH_YEAR, P.SEX, T.CATEGORY_NAME, P.LOCALIDAD, P.MEDICAL_REV_FIN "
+                + "FROM PLAYERTEAM PT "
+                + "JOIN PLAYER P ON P.ID = PT.PLAYER "
+                + "JOIN TEAM T ON T.ID = PT.TEAM WHERE 1=1 ");
+
+        // Dynamically append filters
+        if (cognom != null) {
+            query.append("AND P.SURNAME = ? ");
+        }
+        if (legalid != null) {
+            query.append("AND P.LEGAL_ID = ? ");
+        }
+        if (birthdate != null) {
+            query.append("AND P.BIRTH_YEAR = ? ");
+        }
+        if (categoria != null) {
+            query.append("AND T.CATEGORY_NAME = ? ");
+        }
+
+        // Append ORDER BY clause
+        if (order != null && !order.isEmpty()) {
+            if (!order.matches("^[a-zA-Z_]+$")) { // Simple validation to avoid SQL injection
+                throw new IllegalArgumentException("Invalid order column: " + order);
+            }
+            query.append("ORDER BY P.").append(order);
+        }
+
+        try {
+            filterplayerspstmt = con.prepareStatement(query.toString());
+
+            // Debugging: Print query for verification
+            System.out.println("Final Query: " + query);
+
+            // Set parameters dynamically
+            int paramIndex = 1;
+            if (cognom != null) {
+                filterplayerspstmt.setString(paramIndex++, cognom);
+            }
+            if (legalid != null) {
+                filterplayerspstmt.setString(paramIndex++, legalid);
+            }
+            if (birthdate != null) {
+                filterplayerspstmt.setDate(paramIndex++, new java.sql.Date(birthdate.getTime()));
+            }
+            if (categoria != null) {
+                filterplayerspstmt.setString(paramIndex++, categoria);
+            }
+
+            try (ResultSet rs = filterplayerspstmt.executeQuery()) {
+                while (rs.next()) {
+                    Player player = new Player();
+                    player.setLegal_id(rs.getString("legal_id"));
+                    player.setName(rs.getString("name"));
+                    player.setSurname(rs.getString("surname"));
+                    player.setBirth_year(rs.getDate("birth_year"));
+                    player.setSex(rs.getString("sex"));
+                    player.setCategory(rs.getString("category_name"));
+                    player.setLocalidad(rs.getString("localidad"));
+                    player.setMedical_rev_fin(rs.getInt("medical_rev_fin"));
+
+                    players.add(player);
+                }
+            }
+        } catch (SQLException ex) {
+            throw new EquipDataInterfaceException("Unable to retrieve players: " + ex.getMessage(), ex);
+        }
+
+        return players;
+    }
+
+    private static int calculateAge(Date birthDate) {
+        if (birthDate == null) {
+            return 0;
+        }
+
+        LocalDate birthLocalDate;
+        if (birthDate instanceof java.sql.Date) {
+            birthLocalDate = ((java.sql.Date) birthDate).toLocalDate();
+        } else {
+            birthLocalDate = birthDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        }
+
+        LocalDate referenceDate = LocalDate.of(2024, 9, 1);
+
+        return Period.between(birthLocalDate, referenceDate).getYears();
     }
 }

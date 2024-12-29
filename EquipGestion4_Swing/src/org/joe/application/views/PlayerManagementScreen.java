@@ -49,7 +49,7 @@ public class PlayerManagementScreen extends JPanel {
     private void initializeComponents() {
 
         sideJPanel = new JPanel(null);
-        // sideJPanel.setBackground(Color.BLUE);
+
         sideJPanel.setBounds(0, 4, 244, 634);
         seeply_BTN = new JButton("Ver Jugadores");
         addply_BTN = new JButton("Añadir Jugadores");
