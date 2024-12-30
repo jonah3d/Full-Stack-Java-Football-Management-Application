@@ -31,6 +31,25 @@ public class Management extends JFrame {
     JMenu fileMenu;
     JMenu season;
     JMenu dataMenu;
+    /*DATA MENU ITEMS*/
+    //Xml
+    JMenu exportXmlMenu;
+    JMenu jugadoresxml;
+    JMenu teamxml;
+    JMenuItem todjugadores;
+    JMenuItem jugador;
+
+    JMenu todequipo;
+    JMenuItem equipo;
+    JMenuItem temporadaitem;
+    JMenuItem categoriaitem;
+
+    //Jasper
+    JMenu exportJsperMenuItem;
+
+    //CSV
+    JMenu exportCSVMenuItem;
+
     JMenu aboutMenu;
     JMenu helpMenu;
     JMenuItem createseason;
@@ -61,6 +80,20 @@ public class Management extends JFrame {
         teammngmtBTN = new JButton("Team Management");
         managementTyTabbedPane = new JTabbedPane(JTabbedPane.NORTH);
 
+        exportXmlMenu = new JMenu("Exportar Xml");
+        jugadoresxml = new JMenu("Jugadores");
+        teamxml = new JMenu("Equipos");
+        todjugadores = new JMenuItem("Todo Jugadores");
+        jugador = new JMenuItem("Jugador");
+
+        todequipo = new JMenu("Todo Equipos");
+        equipo = new JMenuItem("Equipo");
+        temporadaitem = new JMenuItem("Temporada");
+        categoriaitem = new JMenuItem("Categoria");
+
+        exportJsperMenuItem = new JMenu("Exportar Report");
+        exportCSVMenuItem = new JMenu("Exportar Csv");
+
         mngmtypePanel = new JPanel(null);
         mngmtypePanel.setBounds(0, 0, 1280, 48);
         //mngmtypePanel.setBackground(Color.red);
@@ -90,6 +123,20 @@ public class Management extends JFrame {
         season.add(createseason);
         menuBar.add(helpMenu);
         menuBar.add(aboutMenu);
+
+        dataMenu.add(exportXmlMenu);
+        dataMenu.add(exportJsperMenuItem);
+        dataMenu.add(exportCSVMenuItem);
+
+        exportXmlMenu.add(jugadoresxml);
+        jugadoresxml.add(todjugadores);
+        jugadoresxml.add(jugador);
+
+        exportXmlMenu.add(teamxml);
+        teamxml.add(todequipo);
+        todequipo.add(temporadaitem);
+        todequipo.add(categoriaitem);
+        teamxml.add(equipo);
 
         mngmtypePanel.add(playermngmtBTN);
         mngmtypePanel.add(teammngmtBTN);
