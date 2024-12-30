@@ -18,6 +18,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import org.joe.application.views.ExportarTodosJugadoresFrame;
 import org.joe.application.views.Management;
 import org.joe.application.views.TemporadaFrame;
 import org.joe.gestion.model.persistence.EquipDataInterface;
@@ -32,7 +33,8 @@ public class ManagementFrameController implements ActionListener {
     private Management managementview;
     static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     private TemporadaFrame tempframe;
-
+    private ExportarTodosJugadoresFrameController etjfc;
+    private ExportarJugadorFrameController ejfc;
     static EquipDataInterface edi;
 
     public ManagementFrameController(EquipDataInterface edi) {
@@ -42,6 +44,8 @@ public class ManagementFrameController implements ActionListener {
         managementview.PlayerMangementBTN_Onclick(this);
         managementview.TeamManagementBTN_OnClick(this);
         managementview.CreateTemp_OnClick(this);
+        managementview.ExportarTodJugadores_OnClicK(this);
+        managementview.ExportarJugador_OnClick(this);
     }
 
     @Override
@@ -56,6 +60,14 @@ public class ManagementFrameController implements ActionListener {
 
         if (e.getSource() == managementview.getCreateseason()) {
             tempframe = new TemporadaFrame(edi);
+        }
+
+        if (e.getSource() == managementview.getTodjugadores()) {
+            etjfc = new ExportarTodosJugadoresFrameController(edi);
+        }
+
+        if (e.getSource() == managementview.getJugador()) {
+            ejfc = new ExportarJugadorFrameController(edi);
         }
     }
 

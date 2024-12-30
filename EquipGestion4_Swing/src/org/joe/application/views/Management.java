@@ -207,4 +207,55 @@ public class Management extends JFrame {
         return edi;
     }
 
+    public JMenu getExportXmlMenu() {
+        return exportXmlMenu;
+    }
+
+    public JMenu getJugadoresxml() {
+        return jugadoresxml;
+    }
+
+    public JMenu getTeamxml() {
+        return teamxml;
+    }
+
+    public JMenuItem getTodjugadores() {
+        return todjugadores;
+    }
+
+    public JMenuItem getJugador() {
+        return jugador;
+    }
+
+    public JMenu getTodequipo() {
+        return todequipo;
+    }
+
+    public JMenuItem getEquipo() {
+        return equipo;
+    }
+
+    public JMenuItem getTemporadaitem() {
+        return temporadaitem;
+    }
+
+    public JMenuItem getCategoriaitem() {
+        return categoriaitem;
+    }
+
+    public JMenu getExportJsperMenuItem() {
+        return exportJsperMenuItem;
+    }
+
+    public JMenu getExportCSVMenuItem() {
+        return exportCSVMenuItem;
+    }
+
+    public void ExportarTodJugadores_OnClicK(ActionListener listener) {
+        this.todjugadores.addActionListener(listener);
+    }
+
+    public void ExportarJugador_OnClick(ActionListener listener) {
+        this.jugador.addActionListener(listener);
+    }
 }

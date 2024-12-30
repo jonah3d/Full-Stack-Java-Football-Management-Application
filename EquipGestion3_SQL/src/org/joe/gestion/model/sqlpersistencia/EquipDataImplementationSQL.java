@@ -197,11 +197,11 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
                 player.setId(playerid);
                 return player;
             } else {
-                throw new EquipDataInterfaceException("Query returned with zero players");
+                throw new EquipDataInterfaceException("Query returned with no player");
             }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
-            throw new EquipDataInterfaceException("Unable To get Player(s) " + ex.getMessage(), ex.getCause());
+            throw new EquipDataInterfaceException("Unable To get Player " + ex.getMessage(), ex.getCause());
         }
     }
 

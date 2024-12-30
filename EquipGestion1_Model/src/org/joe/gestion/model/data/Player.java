@@ -1,6 +1,17 @@
 package org.joe.gestion.model.data;
 
+import jakarta.xml.bind.annotation.XmlAccessOrder;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorOrder;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapters;
 import java.io.FileInputStream;
+import java.io.Serializable;
 import java.sql.Blob;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -8,51 +19,88 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.joe.gestion.model.adapter.DataAdapter;
 
-public class Player {
+@XmlRootElement(name = "jugador")
+@XmlAccessorType(XmlAccessType.FIELD) // Use field-level annotations
+@XmlAccessorOrder(XmlAccessOrder.UNDEFINED)
+public class Player implements Serializable {
 
+    @XmlAttribute(name = "id")
     private int id;
-    protected String name;
-    protected String surname;
-    protected String sex;
-    protected Date birth_year;
-    protected String legal_id;
-    protected String iban;
-    protected String direccion;
-    protected String codigo_postal;
-    protected String localidad;
-    protected String provincia;
-    protected String pais;
-    protected Blob image;
-    protected Integer medical_rev_fin;
 
-    protected String category;
-    protected String titularidad;
+    @XmlElement(name = "nombre")
+    private String name;
+
+    @XmlElement(name = "appellido")
+    private String surname;
+
+    @XmlElement(name = "sexo")
+    private String sex;
+
+    @XmlElement(name = "anoNacimiento")
+    @XmlJavaTypeAdapter(DataAdapter.class)
+    private Date birth_year;
+
+    @XmlAttribute(name = "nif")
+    private String legal_id;
+
+    @XmlElement(name = "iban")
+    private String iban;
+
+    @XmlElement(name = "dirección")
+    private String direccion;
+
+    @XmlElement(name = "codigoPostal")
+    private String codigo_postal;
+
+    @XmlElement(name = "localidad")
+    private String localidad;
+
+    @XmlElement(name = "provincia")
+    private String provincia;
+
+    @XmlElement(name = "pais")
+    private String pais;
+
+    @XmlTransient // Exclude from serialization
+    private Blob image;
+
+    @XmlElement(name = "revisiónMedica")
+    private Integer medical_rev_fin;
+
+    @XmlTransient // Exclude from serialization
+    private String category;
+
+    @XmlTransient // Exclude from serialization
+    private String titularidad;
 
     public Player() {
     }
 
     public Player(String name, String surname, String sex, Date birth_year) {
-        setName(name);
-        setSurname(surname);
-        setSex(sex);
-        setBirth_year(birth_year);
+        this.name = name;
+        this.surname = surname;
+        this.sex = sex;
+        this.birth_year = birth_year;
     }
 
-    public Player(String name, String surname, String sex, Date birth_year, String legal_id, String iban, String direccion, String codigo_postal, String localidad, String provincia, String pais, Blob image, Integer medical_rev_fin) {
-        setName(name);
-        setSurname(surname);
-        setSex(sex);
-        setBirth_year(birth_year);
-        setLegal_id(legal_id);
-        setIban(iban);
-        setDireccion(direccion);
-        setCodigo_postal(codigo_postal);
-        setLocalidad(localidad);
-        setProvincia(provincia);
-        setPais(pais);
-        setImage(image);
-        setMedical_rev_fin(medical_rev_fin);
+    public Player(String name, String surname, String sex, Date birth_year, String legal_id, String iban,
+            String direccion, String codigo_postal, String localidad, String provincia,
+            String pais, Blob image, Integer medical_rev_fin) {
+        this.name = name;
+        this.surname = surname;
+        this.sex = sex;
+        this.birth_year = birth_year;
+        this.legal_id = legal_id;
+        this.iban = iban;
+        this.direccion = direccion;
+        this.codigo_postal = codigo_postal;
+        this.localidad = localidad;
+        this.provincia = provincia;
+        this.pais = pais;
+        this.image = image;
+        this.medical_rev_fin = medical_rev_fin;
     }
 
     public String getCodigo_postal() {
