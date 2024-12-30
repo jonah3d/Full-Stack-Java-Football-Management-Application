@@ -16,6 +16,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.joe.gestion.model.data.Player;
 import org.joe.gestion.model.data.PlayerList;
+import org.joe.gestion.model.data.Team;
+import org.joe.gestion.model.data.TeamPlayers;
 import org.joe.gestion.model.persistence.EquipDataInterface;
 import org.joe.gestion.model.persistence.EquipDataInterfaceException;
 
@@ -70,12 +72,67 @@ public class DataToXML {
         File file = new File(pathname);
         try {
 
-            JAXBContext jaxbContext = JAXBContext.newInstance(PlayerList.class);
+            JAXBContext jaxbContext = JAXBContext.newInstance(Player.class);
             Marshaller marshaller = jaxbContext.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
             OutputStream os = new FileOutputStream(file);
             marshaller.marshal(player, os);
+
+        } catch (JAXBException ex) {
+            throw new EquipDataInterfaceException("JAXB Exception: " + ex.getMessage(), ex.getCause());
+        } catch (FileNotFoundException ex) {
+            throw new EquipDataInterfaceException("Error finding file: " + ex.getMessage(), ex.getCause());
+        }
+    }
+
+    public static void exportTeam(Team team, String pathname) {
+        if (team == null) {
+            throw new EquipDataInterfaceException("Passed a null or empty team.");
+        }
+        if (pathname == null || pathname.isBlank()) {
+            throw new EquipDataInterfaceException("Can't pass a null or empty pathname.");
+        }
+        File file = new File(pathname);
+        try {
+
+            JAXBContext jaxbContext = JAXBContext.newInstance(Team.class);
+            Marshaller marshaller = jaxbContext.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+
+            OutputStream os = new FileOutputStream(file);
+            marshaller.marshal(team, os);
+
+        } catch (JAXBException ex) {
+            throw new EquipDataInterfaceException("JAXB Exception: " + ex.getMessage(), ex.getCause());
+        } catch (FileNotFoundException ex) {
+            throw new EquipDataInterfaceException("Error finding file: " + ex.getMessage(), ex.getCause());
+        }
+    }
+
+    public static void exportTeamWithPlayers(Team team, List<Player> players, String pathname) {
+        if (team == null) {
+            throw new EquipDataInterfaceException("Passed a null or empty team.");
+        }
+        if (players == null) {
+            throw new EquipDataInterfaceException("Passed a null or empty player.");
+        }
+        if (pathname == null || pathname.isBlank()) {
+            throw new EquipDataInterfaceException("Can't pass a null or empty pathname.");
+        }
+        File file = new File(pathname);
+
+        try {
+
+            JAXBContext jaxbContext = JAXBContext.newInstance(TeamPlayers.class);
+            Marshaller marshaller = jaxbContext.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+
+            PlayerList playerList = new PlayerList(players);
+            TeamPlayers teamPlayers = new TeamPlayers(team, playerList);
+
+            OutputStream os = new FileOutputStream(file);
+            marshaller.marshal(teamPlayers, os);
 
         } catch (JAXBException ex) {
             throw new EquipDataInterfaceException("JAXB Exception: " + ex.getMessage(), ex.getCause());

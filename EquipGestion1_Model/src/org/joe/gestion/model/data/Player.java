@@ -22,7 +22,7 @@ import java.util.logging.Logger;
 import org.joe.gestion.model.adapter.DataAdapter;
 
 @XmlRootElement(name = "jugador")
-@XmlAccessorType(XmlAccessType.FIELD) // Use field-level annotations
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlAccessorOrder(XmlAccessOrder.UNDEFINED)
 public class Player implements Serializable {
 

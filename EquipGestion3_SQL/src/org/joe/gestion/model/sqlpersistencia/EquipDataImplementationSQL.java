@@ -28,6 +28,7 @@ import org.joe.gestion.model.data.Category;
 import org.joe.gestion.model.data.Player;
 import org.joe.gestion.model.data.Season;
 import org.joe.gestion.model.data.Team;
+import org.joe.gestion.model.data.TeamPlayers;
 import org.joe.gestion.model.persistence.EquipDataInterface;
 import org.joe.gestion.model.persistence.EquipDataInterfaceException;
 
@@ -66,6 +67,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
     PreparedStatement checkplayerteam;
     PreparedStatement playerteamget;
     PreparedStatement filterplayerspstmt;
+    PreparedStatement getteambynamepstmt;
+    PreparedStatement getTeamWithPlayersstmt;
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     public EquipDataImplementationSQL() {
@@ -1117,7 +1120,32 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
     }
 
     @Override
-    public void addNewTeam(String name, String teamtype, String cat_name, Date seasondate) {
+    public Team getTeamByName(String name) {
+        Team team = null;
+        if (name.isBlank() || name == null) {
+            throw new EquipDataInterfaceException("No Puedes Pasar Nombre Vacio O Nulo");
+        }
+
+        String query = "Select * from team where name = ?";
+
+        try {
+            getteambynamepstmt = con.prepareStatement(query);
+            getteambynamepstmt.setString(1, name);
+            ResultSet rs = getteambynamepstmt.executeQuery();
+
+            team = getTeam(rs);
+
+        } catch (SQLException ex) {
+            throw new EquipDataInterfaceException(ex.getMessage(), ex.getCause());
+        }
+
+        return team;
+    }
+
+    @Override
+    public void addNewTeam(String name, String teamtype,
+            String cat_name, Date seasondate
+    ) {
         if (name == null || name.isBlank() || cat_name == null || seasondate == null) {
             throw new EquipDataInterfaceException("Invalid Input For Creating A new Team");
         }
@@ -1149,7 +1177,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
     }
 
     @Override
-    public List<Player> getTeamPlayers(String teamName, java.sql.Date seasonyear) {
+    public List<Player> getTeamPlayers(String teamName, java.sql.Date seasonyear
+    ) {
         if (teamName == null) {
             throw new EquipDataInterfaceException("team name Can't Be Null or Empty");
         }
@@ -1176,7 +1205,9 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
     }
 
     @Override
-    public void addPlayerToTeam(Player player, Team team, boolean titularidad) {
+    public void addPlayerToTeam(Player player, Team team,
+            boolean titularidad
+    ) {
         if (player == null || team == null) {
             throw new EquipDataInterfaceException("Player | Team  Can't Be Null or Empty");
         }
@@ -1213,7 +1244,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
     }
 
     @Override
-    public void deletePlayerFromTeam(Player player, Integer team) {
+    public void deletePlayerFromTeam(Player player, Integer team
+    ) {
         if (player == null) {
             throw new EquipDataInterfaceException("Player Can't Be Null or Empty");
         }
@@ -1240,7 +1272,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
     }
 
     @Override
-    public void deleteTeam(String name) {
+    public void deleteTeam(String name
+    ) {
         if (name == null) {
             throw new EquipDataInterfaceException("The Name Field Can't Be Null");
         }
@@ -1266,7 +1299,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
     }
 
     @Override
-    public void addNewSeason(String season_n, Date date) {
+    public void addNewSeason(String season_n, Date date
+    ) {
 
         if (season_n == null || season_n.isEmpty()) {
             throw new EquipDataInterfaceException("Season name can't be null or empty.");
@@ -1294,12 +1328,14 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
     }
 
     @Override
-    public void removeSeason(String season_n) {
+    public void removeSeason(String season_n
+    ) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public void removeTeamFromSeason(String t_name) {
+    public void removeTeamFromSeason(String t_name
+    ) {
         if (t_name == null || t_name.isEmpty()) {
             throw new EquipDataInterfaceException("Team name can't be null or empty.");
         }
@@ -1324,7 +1360,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
     }
 
     @Override
-    public void removeTeamWithPlayers(Team team) {
+    public void removeTeamWithPlayers(Team team
+    ) {
         if (team == null) {
             throw new EquipDataInterfaceException("Team Can't be Null");
         }

@@ -258,4 +258,8 @@ public class Management extends JFrame {
     public void ExportarJugador_OnClick(ActionListener listener) {
         this.jugador.addActionListener(listener);
     }
+
+    public void ExportarEquipo_OnClick(ActionListener listener) {
+        this.equipo.addActionListener(listener);
+    }
 }

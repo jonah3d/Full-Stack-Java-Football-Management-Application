@@ -35,6 +35,7 @@ public class ManagementFrameController implements ActionListener {
     private TemporadaFrame tempframe;
     private ExportarTodosJugadoresFrameController etjfc;
     private ExportarJugadorFrameController ejfc;
+    private ExportarEquipoFrameController eefc;
     static EquipDataInterface edi;
 
     public ManagementFrameController(EquipDataInterface edi) {
@@ -46,6 +47,7 @@ public class ManagementFrameController implements ActionListener {
         managementview.CreateTemp_OnClick(this);
         managementview.ExportarTodJugadores_OnClicK(this);
         managementview.ExportarJugador_OnClick(this);
+        managementview.ExportarEquipo_OnClick(this);
     }
 
     @Override
@@ -68,6 +70,10 @@ public class ManagementFrameController implements ActionListener {
 
         if (e.getSource() == managementview.getJugador()) {
             ejfc = new ExportarJugadorFrameController(edi);
+        }
+
+        if (e.getSource() == managementview.getEquipo()) {
+            eefc = new ExportarEquipoFrameController(edi);
         }
     }
 

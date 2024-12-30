@@ -286,12 +286,14 @@ public class TestSQL {
         }
     }
 
-    public static void getTeamPlayers() {
+    public static void getTeamPlayers() throws ParseException {
 
         EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
         List<Player> playerlist = new ArrayList<>();
+        Date date = sdf.parse("01-09-2023");
 
-        // playerlist = implementationSQL.getTeamPlayers("FcCanPalladesMIX");
+        java.sql.Date oracldate = new java.sql.Date(date.getTime());
+        playerlist = implementationSQL.getTeamPlayers("Fc Olot Fem", oracldate);
         for (Player play : playerlist) {
             System.out.println("\n=========================\n");
             play.mostrarJugDetalle();
@@ -473,6 +475,12 @@ public class TestSQL {
         }
     }
 
+    public static void getTeamByName() {
+        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+        Team team = implementationSQL.getTeamByName("Fc Wildcats Masc");
+        team.mostrarDetalle();
+    }
+
     public static void main(String[] args) throws ParseException {
 
         // addNewPlayer();
@@ -492,7 +500,7 @@ public class TestSQL {
         //DELETETEAM();
         //GETTEAMSBYCAT();
         //getTeamsByType();
-        // getTeamPlayers();
+        getTeamPlayers();
         //getPlayers();
         //getPlayers_ordbycognom();
         //getPlayers_ordbybirthyear();
@@ -513,7 +521,8 @@ public class TestSQL {
         //getAllTeams();
         // checkPlayerHasTeam();
         //testGetPlayerTeam();
-        filteredPlayersList();
+        // filteredPlayersList();
+        // getTeamByName();
     }
 
 }

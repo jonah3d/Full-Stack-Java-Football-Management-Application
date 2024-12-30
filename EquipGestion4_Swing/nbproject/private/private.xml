@@ -12,7 +12,12 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/F:/Projecto/Programming/EquipGestion4_Swing/src/org/joe/application/views/Management.java</file>
+            <file>file:/F:/Projecto/Programming/EquipGestion4_Swing/src/org/joe/application/controllers/ExportarEquipoFrameController.java</file>
+            <file>file:/F:/Projecto/Programming/EquipGestion4_Swing/src/org/joe/application/views/ExportarEquipoFrame.java</file>
+            <file>file:/F:/Projecto/Programming/EquipGestion4_Swing/src/org/joe/application/controllers/VerJugadoresController.java</file>
+            <file>file:/F:/Projecto/Programming/EquipGestion4_Swing/src/org/joe/application/controllers/ExportarJugadorFrameController.java</file>
+            <file>file:/F:/Projecto/Programming/EquipGestion4_Swing/src/org/joe/application/views/ExportarJugadorFrame.java</file>
+            <file>file:/F:/Projecto/Programming/EquipGestion4_Swing/src/org/joe/application/data/xml/DataToXML.java</file>
         </group>
     </open-files>
 </project-private>

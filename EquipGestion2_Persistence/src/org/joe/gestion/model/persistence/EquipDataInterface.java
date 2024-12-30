@@ -7,6 +7,7 @@ import org.joe.gestion.model.data.Category;
 import org.joe.gestion.model.data.Player;
 import org.joe.gestion.model.data.Season;
 import org.joe.gestion.model.data.Team;
+import org.joe.gestion.model.data.TeamPlayers;
 
 /**
  *
@@ -85,6 +86,8 @@ public interface EquipDataInterface {
     public void deletePlayerFromTeam(Player player, Integer team);
 
     public void deleteTeam(String name);
+
+    public Team getTeamByName(String name);
 
     //Season management
     public void addNewSeason(String season_n, Date date);
