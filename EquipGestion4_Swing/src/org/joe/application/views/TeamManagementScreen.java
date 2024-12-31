@@ -41,7 +41,7 @@ public class TeamManagementScreen extends JPanel {
 
         centerJPanel = new JTabbedPane();
         centerJPanel.setBackground(Color.magenta);
-        centerJPanel.setBounds(244, -33, 1022, 671);
+        centerJPanel.setBounds(244, -33, 1022, 631);
 
         seeEquip_Btn.setBounds(17, 100, 200, 43);
         seeEquip_Btn.putClientProperty(FlatClientProperties.BUTTON_TYPE, "borderless");

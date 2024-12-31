@@ -15,6 +15,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JTabbedPane;
 import org.joe.application.constants.ManagemetConstants;
 import org.joe.application.controllers.PlayerManagementController;
@@ -57,6 +58,7 @@ public class Management extends JFrame {
     JButton playermngmtBTN;
     JButton teammngmtBTN;
     JTabbedPane managementTyTabbedPane;
+    JProgressBar progressBar;
     private EquipDataInterface edi;
 
     public Management(EquipDataInterface edi) {
@@ -79,6 +81,7 @@ public class Management extends JFrame {
         playermngmtBTN = new JButton("Player Management");
         teammngmtBTN = new JButton("Team Management");
         managementTyTabbedPane = new JTabbedPane(JTabbedPane.NORTH);
+        progressBar = new JProgressBar();
 
         exportXmlMenu = new JMenu("Exportar Xml");
         jugadoresxml = new JMenu("Jugadores");
@@ -104,6 +107,10 @@ public class Management extends JFrame {
         teammngmtBTN.setIcon(new FlatSVGIcon(ManagemetConstants.sideicon_path + "icon_person.svg", 0.7f));
         teammngmtBTN.putClientProperty(FlatClientProperties.BUTTON_TYPE, "borderless");
 
+        progressBar.setValue(0);
+        progressBar.setBounds(1090, 665, 160, 10);
+        progressBar.setStringPainted(true);
+
         JPanel panel1 = new JPanel();
         panel1.setBackground(Color.CYAN);
         panel1.add(new JLabel("This is Panel 1"));
@@ -114,7 +121,7 @@ public class Management extends JFrame {
         PlayerManagementController pms = new PlayerManagementController(edi);
         TeamManagementController tms = new TeamManagementController(edi);
 
-        managementTyTabbedPane.setBounds(0, 10, 1280, 671);
+        managementTyTabbedPane.setBounds(0, 10, 1280, 631);
         managementTyTabbedPane.add("Panel1", pms.getPlayerManagementScreen());
         managementTyTabbedPane.add("Panel2", tms.getTeamManagementScreen());
         menuBar.add(fileMenu);
@@ -137,6 +144,7 @@ public class Management extends JFrame {
         todequipo.add(temporadaitem);
         todequipo.add(categoriaitem);
         teamxml.add(equipo);
+        progressBar.setVisible(false);
 
         mngmtypePanel.add(playermngmtBTN);
         mngmtypePanel.add(teammngmtBTN);
@@ -144,6 +152,7 @@ public class Management extends JFrame {
         setJMenuBar(menuBar);
         add(mngmtypePanel);
         add(managementTyTabbedPane);
+        add(progressBar);
 
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -262,4 +271,17 @@ public class Management extends JFrame {
     public void ExportarEquipo_OnClick(ActionListener listener) {
         this.equipo.addActionListener(listener);
     }
+
+    public void ExportarEquipoTemp_OnClick(ActionListener listener) {
+        this.temporadaitem.addActionListener(listener);
+    }
+
+    public void ExportarEquipoCat_OnClick(ActionListener listener) {
+        this.categoriaitem.addActionListener(listener);
+    }
+
+    public JProgressBar getProgressBar() {
+        return progressBar;
+    }
+
 }

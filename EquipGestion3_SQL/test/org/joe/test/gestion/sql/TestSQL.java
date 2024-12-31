@@ -290,10 +290,14 @@ public class TestSQL {
 
         EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
         List<Player> playerlist = new ArrayList<>();
-        Date date = sdf.parse("01-09-2023");
+        Date date = sdf.parse("2024-09-01");
 
         java.sql.Date oracldate = new java.sql.Date(date.getTime());
+        System.out.println("ORCALE DATE: " + oracldate);
         playerlist = implementationSQL.getTeamPlayers("Fc Olot Fem", oracldate);
+        if (playerlist.isEmpty()) {
+            System.out.println("list is empty");
+        }
         for (Player play : playerlist) {
             System.out.println("\n=========================\n");
             play.mostrarJugDetalle();
@@ -500,7 +504,7 @@ public class TestSQL {
         //DELETETEAM();
         //GETTEAMSBYCAT();
         //getTeamsByType();
-        getTeamPlayers();
+        //getTeamPlayers();
         //getPlayers();
         //getPlayers_ordbycognom();
         //getPlayers_ordbybirthyear();
@@ -515,7 +519,7 @@ public class TestSQL {
         }*/
         // editPlayer();
         //getSeasons();
-        //getTeamsSeaon();
+        getTeamsSeaon();
         // getTeamMembercount();
         //removeTeam();
         //getAllTeams();

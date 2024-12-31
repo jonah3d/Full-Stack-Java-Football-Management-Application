@@ -48,7 +48,6 @@ public class Application {
         }
         nomClassePersistencia = args[0];
 
-        // Start the application
         new Application();
     }
 }

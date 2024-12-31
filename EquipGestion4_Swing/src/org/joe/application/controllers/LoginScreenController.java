@@ -30,7 +30,7 @@ public class LoginScreenController implements ActionListener {
     private RetrievePassowordFrame rpf;
 
     public LoginScreenController(EquipDataInterface edi) {
-        // this.persistenceClassName = persistenceClassName;
+
         loginScreen = new LoginScreen();
         this.edi = edi;
 

@@ -58,7 +58,7 @@ public class PlayerManagementScreen extends JPanel {
 
         centerJPanel = new JTabbedPane();
         centerJPanel.setBackground(Color.magenta);
-        centerJPanel.setBounds(244, -33, 1022, 671);
+        centerJPanel.setBounds(244, -33, 1022, 631);
 
         seeply_BTN.setBounds(17, 100, 200, 43);
         seeply_BTN.putClientProperty(FlatClientProperties.BUTTON_TYPE, "borderless");

@@ -7,6 +7,8 @@ package org.joe.application.controllers;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,7 +19,9 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import org.joe.application.views.ExportarTodosJugadoresFrame;
 import org.joe.application.views.Management;
 import org.joe.application.views.TemporadaFrame;
@@ -36,6 +40,7 @@ public class ManagementFrameController implements ActionListener {
     private ExportarTodosJugadoresFrameController etjfc;
     private ExportarJugadorFrameController ejfc;
     private ExportarEquipoFrameController eefc;
+    private ExportarEquipoTemporadaFrameController eetfc;
     static EquipDataInterface edi;
 
     public ManagementFrameController(EquipDataInterface edi) {
@@ -48,6 +53,9 @@ public class ManagementFrameController implements ActionListener {
         managementview.ExportarTodJugadores_OnClicK(this);
         managementview.ExportarJugador_OnClick(this);
         managementview.ExportarEquipo_OnClick(this);
+        managementview.ExportarEquipoCat_OnClick(this);
+        managementview.ExportarEquipoTemp_OnClick(this);
+        onWindowOpened();
     }
 
     @Override
@@ -75,6 +83,52 @@ public class ManagementFrameController implements ActionListener {
         if (e.getSource() == managementview.getEquipo()) {
             eefc = new ExportarEquipoFrameController(edi);
         }
+
+        if (e.getSource() == managementview.getTemporadaitem()) {
+            eetfc = new ExportarEquipoTemporadaFrameController(edi);
+        }
+    }
+
+    public void onWindowOpened() {
+        managementview.addWindowListener(new WindowListener() {
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                edi.disconnectDatasource();
+            }
+
+            @Override
+            public void windowOpened(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+
+            }
+
+        }
+        );
     }
 
 }

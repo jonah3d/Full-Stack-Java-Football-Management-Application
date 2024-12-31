@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.sql.*;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
@@ -28,7 +29,7 @@ import org.joe.gestion.model.data.Category;
 import org.joe.gestion.model.data.Player;
 import org.joe.gestion.model.data.Season;
 import org.joe.gestion.model.data.Team;
-import org.joe.gestion.model.data.TeamPlayers;
+import org.joe.gestion.model.helperclasses.TeamPlayers;
 import org.joe.gestion.model.persistence.EquipDataInterface;
 import org.joe.gestion.model.persistence.EquipDataInterfaceException;
 
@@ -69,6 +70,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
     PreparedStatement filterplayerspstmt;
     PreparedStatement getteambynamepstmt;
     PreparedStatement getTeamWithPlayersstmt;
+    PreparedStatement seasonTeamstmnt;
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     public EquipDataImplementationSQL() {
@@ -118,6 +120,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
 
         if (con != null) {
             try {
+                System.out.println("Connection Closed");
                 con.close();
             } catch (SQLException ex) {
 
@@ -374,7 +377,12 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
 
             throw new EquipDataInterfaceException("Unable To get Players. " + ex.getMessage(), ex.getCause());
         }
-        return players;
+        if (players.isEmpty()) {
+            throw new EquipDataInterfaceException("Player List Is Null. Check Season");
+        } else {
+            return players;
+        }
+
     }
 
     private List<Team> getTeams(ResultSet rs) {
@@ -443,9 +451,14 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
 
         } catch (SQLException ex) {
 
-            throw new EquipDataInterfaceException("Unable To get Player(s). " + ex.getMessage(), ex.getCause());
+            throw new EquipDataInterfaceException("Unable To get Team. " + ex.getMessage(), ex.getCause());
         }
-        return nteam;
+        if (nteam == null) {
+            throw new EquipDataInterfaceException("Unable To get Team. Check Name ");
+        } else {
+            return nteam;
+        }
+
     }
 
     @Override
@@ -1187,7 +1200,9 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
                 + "FROM PLAYERTEAM pt "
                 + "JOIN PLAYER p ON pt.player = p.id "
                 + "JOIN TEAM t ON pt.team = t.id "
-                + "WHERE t.name = ? and t.season_year = ?";
+                + "WHERE t.name = ? and pt.season = ?";
+
+        System.out.println("CONSULTA: " + query);
 
         try {
             teamPlyers = con.prepareStatement(query);
@@ -1198,7 +1213,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             return getPlayersconCat(rs);
 
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+
             throw new EquipDataInterfaceException("Error Getting Players Of Team " + teamName + "  " + ex.getMessage(), ex.getCause());
         }
 
@@ -1412,11 +1427,6 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             throw new EquipDataInterfaceException("Error removing players from team " + team.getName() + " " + ex.getMessage(), ex.getCause());
         }
         return status;
-    }
-
-    @Override
-    public List<Team> getSeasonTeams(String season_n) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override

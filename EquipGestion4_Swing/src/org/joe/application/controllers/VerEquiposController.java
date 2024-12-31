@@ -52,7 +52,6 @@ public class VerEquiposController implements ActionListener {
             error(ex.getMessage(), ex.getCause());
         }
 
-        // Add action listener to the Refresh button
         verEquipos.getRefresh().addActionListener(this);
     }
 
