@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package org.joe.gestion.model.adapter;
 
 import jakarta.xml.bind.annotation.adapters.XmlAdapter;
@@ -18,6 +14,7 @@ public class DataAdapter extends XmlAdapter<String, Date> {
 
     @Override
     public Date unmarshal(String date) throws Exception {
+
         return sdf.parse(date);
     }
 

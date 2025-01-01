@@ -33,6 +33,9 @@ public class Category {
     }
 
     public void setName(String name) {
+        if (name == null || name.isBlank()) {
+            throw new RuntimeException("Nombre no debería ser null o vacio");
+        }
         this.name = name;
     }
 
@@ -41,6 +44,9 @@ public class Category {
     }
 
     public void setMinimum_age(int minimum_age) {
+        if (minimum_age <= 6) {
+            throw new RuntimeException("Año minimum no puede ser 6 o menos de 6");
+        }
         this.minimum_age = minimum_age;
     }
 
@@ -49,6 +55,9 @@ public class Category {
     }
 
     public void setMaximum_age(int maximum_age) {
+        if (maximum_age >= 100) {
+            throw new RuntimeException("Año maximum no puede ser 100 o mas de 6");
+        }
         this.maximum_age = maximum_age;
     }
 
@@ -57,6 +66,9 @@ public class Category {
     }
 
     public void setId(int id) {
+        if (id <= 0) {
+            throw new RuntimeException("Id del categoría no puede ser 0 o menos de 0");
+        }
         this.id = id;
     }
 

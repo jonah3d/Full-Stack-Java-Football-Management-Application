@@ -9,16 +9,10 @@ import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapters;
-import java.io.FileInputStream;
 import java.io.Serializable;
 import java.sql.Blob;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.joe.gestion.model.adapter.DataAdapter;
 
 @XmlRootElement(name = "jugador")
@@ -63,16 +57,16 @@ public class Player implements Serializable {
     @XmlElement(name = "pais")
     private String pais;
 
-    @XmlTransient // Exclude from serialization
+    @XmlTransient
     private Blob image;
 
     @XmlElement(name = "revisiónMedica")
     private Integer medical_rev_fin;
 
-    @XmlTransient // Exclude from serialization
+    @XmlTransient
     private String category;
 
-    @XmlTransient // Exclude from serialization
+    @XmlTransient
     private String titularidad;
 
     public Player() {
@@ -112,16 +106,19 @@ public class Player implements Serializable {
     }
 
     public void setTitularidad(String titularidad) {
+        if (titularidad == null || titularidad.isBlank()) {
+            throw new RuntimeException("Titularidad del jugador no puede ser nulo o vacío");
+        }
         this.titularidad = titularidad;
     }
 
     public void setCodigo_postal(String codigo_postal) {
 
-        if (!codigo_postal.isEmpty()) {
-            this.codigo_postal = codigo_postal;
-        } else {
-            throw new RuntimeException("Direccion Field Can't Be Empty");
+        if (codigo_postal == null || codigo_postal.isBlank()) {
+            throw new RuntimeException("Codigo Postal no puede ser vacio o nulo");
         }
+
+        this.codigo_postal = codigo_postal;
 
     }
 
