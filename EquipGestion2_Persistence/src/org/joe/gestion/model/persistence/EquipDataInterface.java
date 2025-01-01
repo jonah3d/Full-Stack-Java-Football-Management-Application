@@ -62,6 +62,8 @@ public interface EquipDataInterface {
 
     public void eliminarJugador(String legalID);
 
+    public Category getCategory(String category);
+
     public List<Player> playerFilterSearch(String cognom, String legalid, Date birthdate, String categoria, String order);
 
     //Team Management
@@ -87,7 +89,9 @@ public interface EquipDataInterface {
 
     public void deleteTeam(String name);
 
-    public Team getTeamByName(String name);
+    public Team getTeamByName(String name, java.sql.Date date);
+
+    public List<Team> getSeasonCategoryTeam(String category, Date date);
 
     //Season management
     public void addNewSeason(String season_n, Date date);

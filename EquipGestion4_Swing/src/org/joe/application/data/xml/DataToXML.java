@@ -14,9 +14,11 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.joe.gestion.model.data.Category;
 import org.joe.gestion.model.data.Player;
 import org.joe.gestion.model.helperclasses.PlayerList;
 import org.joe.gestion.model.data.Team;
+import org.joe.gestion.model.helperclasses.CategoriaEquipos;
 import org.joe.gestion.model.helperclasses.SeasonTeamsPlayers;
 import org.joe.gestion.model.helperclasses.TeamList;
 import org.joe.gestion.model.helperclasses.TeamPlayers;
@@ -200,4 +202,36 @@ public class DataToXML {
             throw new EquipDataInterfaceException("Error finding file: " + ex.getMessage(), ex.getCause());
         }
     }
+
+    public static void exportSeasonCategoryTeam(List<Team> teams, Category Cat, String pathname) {
+        if (Cat == null) {
+            throw new EquipDataInterfaceException("Passed a null or empty category.");
+        }
+        if (teams == null || teams.isEmpty()) {
+            throw new EquipDataInterfaceException("Passed a null or empty player list.");
+        }
+        if (pathname == null || pathname.isBlank()) {
+            throw new EquipDataInterfaceException("Can't pass a null or empty pathname.");
+        }
+        File file = new File(pathname);
+        try {
+
+            TeamList teamList = new TeamList(teams);
+
+            JAXBContext jaxbContext = JAXBContext.newInstance(CategoriaEquipos.class);
+            Marshaller marshaller = jaxbContext.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+
+            CategoriaEquipos cate = new CategoriaEquipos(Cat, teamList);
+
+            OutputStream os = new FileOutputStream(file);
+            marshaller.marshal(cate, os);
+
+        } catch (JAXBException ex) {
+            throw new EquipDataInterfaceException("JAXB Exception: " + ex.getMessage(), ex.getCause());
+        } catch (FileNotFoundException ex) {
+            throw new EquipDataInterfaceException("Error finding file: " + ex.getMessage(), ex.getCause());
+        }
+    }
+
 }

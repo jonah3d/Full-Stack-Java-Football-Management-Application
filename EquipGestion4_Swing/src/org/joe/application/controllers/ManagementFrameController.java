@@ -41,6 +41,9 @@ public class ManagementFrameController implements ActionListener {
     private ExportarJugadorFrameController ejfc;
     private ExportarEquipoFrameController eefc;
     private ExportarEquipoTemporadaFrameController eetfc;
+    private ExportarEquipoCategoriaFrameController eecf;
+    private ExportarJugadorCSVFrameController ejcsvfc;
+    private ExportarEquipoCSVFrameController eecsvfc;
     static EquipDataInterface edi;
 
     public ManagementFrameController(EquipDataInterface edi) {
@@ -55,6 +58,9 @@ public class ManagementFrameController implements ActionListener {
         managementview.ExportarEquipo_OnClick(this);
         managementview.ExportarEquipoCat_OnClick(this);
         managementview.ExportarEquipoTemp_OnClick(this);
+        managementview.ExportarEquiposCSV_OnClick(this);
+        managementview.ExportarJugadoresCSV_onClick(this);
+
         onWindowOpened();
     }
 
@@ -86,6 +92,18 @@ public class ManagementFrameController implements ActionListener {
 
         if (e.getSource() == managementview.getTemporadaitem()) {
             eetfc = new ExportarEquipoTemporadaFrameController(edi);
+        }
+
+        if (e.getSource() == managementview.getCategoriaitem()) {
+            eecf = new ExportarEquipoCategoriaFrameController(edi);
+        }
+
+        if (e.getSource() == managementview.getExportJugadoresItem()) {
+            ejcsvfc = new ExportarJugadorCSVFrameController(edi);
+        }
+
+        if (e.getSource() == managementview.getExportarSeasonTeamsItem()) {
+            eecsvfc = new ExportarEquipoCSVFrameController(edi);
         }
     }
 

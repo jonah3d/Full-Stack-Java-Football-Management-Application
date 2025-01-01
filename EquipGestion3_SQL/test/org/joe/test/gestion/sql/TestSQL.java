@@ -479,10 +479,27 @@ public class TestSQL {
         }
     }
 
-    public static void getTeamByName() {
+    public static void getTeamByName() throws ParseException {
         EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
-        Team team = implementationSQL.getTeamByName("Fc Wildcats Masc");
+
+        String dateString = "2024-09-01";
+        Date date = sdf.parse(dateString);
+
+        java.sql.Date oracldate = new java.sql.Date(date.getTime());
+        Team team = implementationSQL.getTeamByName("Fc Wildcats Masc", oracldate);
         team.mostrarDetalle();
+    }
+
+    public static void getSeasonCatTeam() throws ParseException {
+        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+        String dateString = "2024-09-01";
+        Date date = sdf.parse(dateString);
+
+        List<Team> teams = implementationSQL.getSeasonCategoryTeam("Cadet", date);
+        for (Team team : teams) {
+            System.out.println("---------------------------");
+            team.mostrarDetalle();
+        }
     }
 
     public static void main(String[] args) throws ParseException {
@@ -519,14 +536,15 @@ public class TestSQL {
         }*/
         // editPlayer();
         //getSeasons();
-        getTeamsSeaon();
+        // getTeamsSeaon();
         // getTeamMembercount();
         //removeTeam();
         //getAllTeams();
         // checkPlayerHasTeam();
         //testGetPlayerTeam();
         // filteredPlayersList();
-        // getTeamByName();
+        //getTeamByName();
+        getSeasonCatTeam();
     }
 
 }

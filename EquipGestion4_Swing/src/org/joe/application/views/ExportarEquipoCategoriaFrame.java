@@ -19,25 +19,24 @@ import raven.datetime.component.date.DatePicker;
  *
  * @author jonah
  */
-public class ExportarEquipoFrame extends JFrame {
+public class ExportarEquipoCategoriaFrame extends JFrame {
 
+    JLabel categoriaJLabel;
+    JTextField categTextField;
+    JLabel temporadaLabel;
+    JFormattedTextField datefield;
+    DatePicker datePicker;
     JLabel filename;
-    JTextField equiponameTf;
-    JLabel filepath;
-    JLabel equipoJLabel;
     JTextField filenameTF;
+    JLabel filepath;
     JTextField filepathTF;
-    JButton searchButton;
     JButton browseButton;
     JButton exportButton;
     JFileChooser filepathChooser;
-    JCheckBox addPlayers;
-    JFormattedTextField datefield;
-    DatePicker datePicker;
 
-    public ExportarEquipoFrame() {
+    public ExportarEquipoCategoriaFrame() {
         setSize(400, 300);
-        setTitle("Exportar Equipo");
+        setTitle("Exportar Temporada Equipo");
         setLayout(null);
         setLocationRelativeTo(null);
         setVisible(true);
@@ -47,7 +46,7 @@ public class ExportarEquipoFrame extends JFrame {
     }
 
     private void initialiseComponents() {
-        filename = new JLabel("Nombre del archivo");
+        filename = new JLabel("Nombre del archivo(.xml)");
         filepath = new JLabel("Dirección del archivo");
         filenameTF = new JTextField();
         filepathTF = new JTextField();
@@ -55,18 +54,19 @@ public class ExportarEquipoFrame extends JFrame {
         exportButton = new JButton("Exportar");
         filepathChooser = new JFileChooser();
         filepathChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        equipoJLabel = new JLabel("Equipo A Exportar (Nombre)");
-        equiponameTf = new JTextField();
-        searchButton = new JButton("Buscar");
-        addPlayers = new JCheckBox("Añandir Jugadores");
+        temporadaLabel = new JLabel("Categoria Temporada");
+        categoriaJLabel = new JLabel("Categoria A Exportar");
+        categTextField = new JTextField();
         datePicker = new DatePicker();
         datefield = new JFormattedTextField();
 
-        equipoJLabel.setBounds(30, 10, 300, 17);
-        equiponameTf.setBounds(30, 30, 150, 30);
-        equiponameTf.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
-        searchButton.setBounds(190, 30, 120, 30);
-        searchButton.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
+        categoriaJLabel.setBounds(30, 10, 300, 17);
+        categTextField.setBounds(30, 30, 150, 30);
+        categTextField.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
+        temporadaLabel.setBounds(190, 10, 300, 17);
+        datefield.setBounds(190, 30, 150, 30);
+        datefield.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
+        datePicker.setEditor(datefield);
 
         filename.setBounds(30, 80, 300, 17);
         filenameTF.setBounds(30, 100, 150, 30);
@@ -78,52 +78,54 @@ public class ExportarEquipoFrame extends JFrame {
         browseButton.setBounds(190, 180, 120, 30);
         browseButton.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
         exportButton.setBounds(30, 225, 100, 30);
-        addPlayers.setBounds(150, 228, 150, 30);
 
-        datePicker.setEditor(datefield);
-        datefield.setBounds(190, 100, 120, 30);
-
-        datefield.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
-
+        add(categTextField);
+        add(categoriaJLabel);
+        add(datefield);
         add(filename);
         add(filenameTF);
         add(filepath);
         add(filepathTF);
         add(browseButton);
         add(exportButton);
-        add(equipoJLabel);
-        add(equiponameTf);
-        add(searchButton);
-        add(addPlayers);
-        add(datefield);
+        add(temporadaLabel);
+
+    }
+
+    public JLabel getCategoriaJLabel() {
+        return categoriaJLabel;
+    }
+
+    public JTextField getCategTextField() {
+        return categTextField;
+    }
+
+    public JLabel getTemporadaLabel() {
+        return temporadaLabel;
+    }
+
+    public JFormattedTextField getDatefield() {
+        return datefield;
+    }
+
+    public DatePicker getDatePicker() {
+        return datePicker;
     }
 
     public JLabel getFilename() {
         return filename;
     }
 
-    public JTextField getEquiponameTf() {
-        return equiponameTf;
+    public JTextField getFilenameTF() {
+        return filenameTF;
     }
 
     public JLabel getFilepath() {
         return filepath;
     }
 
-    public JLabel getEquipoJLabel() {
-        return equipoJLabel;
-    }
-
-    public JTextField getFilenameTF() {
-        return filenameTF;
-    }
-
     public JTextField getFilepathTF() {
         return filepathTF;
-    }
-
-    public JButton getSearchButton() {
-        return searchButton;
     }
 
     public JButton getBrowseButton() {
@@ -145,21 +147,4 @@ public class ExportarEquipoFrame extends JFrame {
     public void exportarJug_OnClick(ActionListener listener) {
         this.exportButton.addActionListener(listener);
     }
-
-    public void searhJugador_OnClick(ActionListener listener) {
-        this.searchButton.addActionListener(listener);
-    }
-
-    public JCheckBox getAddPlayers() {
-        return addPlayers;
-    }
-
-    public JFormattedTextField getDatefield() {
-        return datefield;
-    }
-
-    public DatePicker getDatePicker() {
-        return datePicker;
-    }
-
 }

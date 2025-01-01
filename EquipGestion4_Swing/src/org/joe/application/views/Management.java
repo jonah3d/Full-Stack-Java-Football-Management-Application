@@ -50,6 +50,8 @@ public class Management extends JFrame {
 
     //CSV
     JMenu exportCSVMenuItem;
+    JMenuItem exportJugadoresItem;
+    JMenuItem exportarSeasonTeamsItem;
 
     JMenu aboutMenu;
     JMenu helpMenu;
@@ -94,8 +96,13 @@ public class Management extends JFrame {
         temporadaitem = new JMenuItem("Temporada");
         categoriaitem = new JMenuItem("Categoria");
 
+        exportJugadoresItem = new JMenuItem("Todo Jugadores");
+        exportarSeasonTeamsItem = new JMenuItem("Todo Equipos");
+
         exportJsperMenuItem = new JMenu("Exportar Report");
         exportCSVMenuItem = new JMenu("Exportar Csv");
+        exportCSVMenuItem.add(exportJugadoresItem);
+        exportCSVMenuItem.add(exportarSeasonTeamsItem);
 
         mngmtypePanel = new JPanel(null);
         mngmtypePanel.setBounds(0, 0, 1280, 48);
@@ -278,6 +285,22 @@ public class Management extends JFrame {
 
     public void ExportarEquipoCat_OnClick(ActionListener listener) {
         this.categoriaitem.addActionListener(listener);
+    }
+
+    public void ExportarEquiposCSV_OnClick(ActionListener listener) {
+        this.exportarSeasonTeamsItem.addActionListener(listener);
+    }
+
+    public void ExportarJugadoresCSV_onClick(ActionListener listener) {
+        this.exportJugadoresItem.addActionListener(listener);
+    }
+
+    public JMenuItem getExportJugadoresItem() {
+        return exportJugadoresItem;
+    }
+
+    public JMenuItem getExportarSeasonTeamsItem() {
+        return exportarSeasonTeamsItem;
     }
 
     public JProgressBar getProgressBar() {

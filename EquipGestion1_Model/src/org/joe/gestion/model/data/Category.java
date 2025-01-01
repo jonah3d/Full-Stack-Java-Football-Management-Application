@@ -1,15 +1,28 @@
 package org.joe.gestion.model.data;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement(name = "categoria")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Category {
+
+    @XmlAttribute(name = "id")
     private int id;
+    @XmlElement(name = "nombre")
     private String name;
+    @XmlElement(name = "edatMin")
     private int minimum_age;
+    @XmlElement(name = "edatMax")
     private int maximum_age;
-    
-    public Category(){}
-    
-    public Category(String name,int minimum_age,int maximum_age){
+
+    public Category() {
+    }
+
+    public Category(String name, int minimum_age, int maximum_age) {
         setName(name);
         setMinimum_age(minimum_age);
         setMaximum_age(maximum_age);
@@ -46,12 +59,12 @@ public class Category {
     public void setId(int id) {
         this.id = id;
     }
-    
-    public void mostrarDetalle(){
+
+    public void mostrarDetalle() {
         System.out.println("ID:      " + getId());
         System.out.println("NAME:    " + getName());
         System.out.println("MIN AGE: " + getMinimum_age());
         System.out.println("MAX AGE: " + getMaximum_age());
     }
-    
+
 }

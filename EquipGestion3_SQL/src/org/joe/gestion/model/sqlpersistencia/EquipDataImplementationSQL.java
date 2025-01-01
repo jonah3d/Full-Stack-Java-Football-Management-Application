@@ -71,6 +71,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
     PreparedStatement getteambynamepstmt;
     PreparedStatement getTeamWithPlayersstmt;
     PreparedStatement seasonTeamstmnt;
+    PreparedStatement getseasoncatteamsStatement;
+    PreparedStatement getCategorypstmt;
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     public EquipDataImplementationSQL() {
@@ -454,7 +456,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             throw new EquipDataInterfaceException("Unable To get Team. " + ex.getMessage(), ex.getCause());
         }
         if (nteam == null) {
-            throw new EquipDataInterfaceException("Unable To get Team. Check Name ");
+            throw new EquipDataInterfaceException("Unable To get Team. Check Name || Season");
         } else {
             return nteam;
         }
@@ -1035,6 +1037,64 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
     }
 
     @Override
+    public List<Team> getSeasonCategoryTeam(String category, Date date) {
+        if (category.isBlank() || category == null) {
+            throw new EquipDataInterfaceException("Category Can't Be Null or Empty");
+        }
+
+        if (date == null) {
+            throw new EquipDataInterfaceException("Date Can't Be Null or Empty");
+        }
+
+        String query = "SELECT * FROM TEAM WHERE UPPER(CATEGORY_NAME) = UPPER(?) AND SEASON_YEAR = ?";
+        java.util.Date utildate = date;
+        java.sql.Date sqldate = new java.sql.Date(utildate.getTime());
+
+        try {
+            getseasoncatteamsStatement = con.prepareStatement(query);
+            getseasoncatteamsStatement.setString(1, category);
+            getseasoncatteamsStatement.setDate(2, sqldate);
+
+            ResultSet rs = getseasoncatteamsStatement.executeQuery();
+            return getTeams(rs);
+
+        } catch (SQLException ex) {
+            throw new EquipDataInterfaceException("Error retornando equipos de categoria " + category + " : " + ex.getMessage(), ex.getCause());
+        }
+
+    }
+
+    @Override
+    public Category getCategory(String category) {
+        if (category.isBlank() || category == null) {
+            throw new EquipDataInterfaceException("Category Can't Be Null or Empty");
+        }
+
+        String query = " select * from category where name = ?";
+        Category category1 = null;
+        try {
+            getCategorypstmt = con.prepareStatement(query);
+            getCategorypstmt.setString(1, category);
+            ResultSet rs = getCategorypstmt.executeQuery();
+
+            if (rs.next()) {
+                Integer id = rs.getInt("id");
+                String name = rs.getString("name");
+                Integer minage = rs.getInt("min_age");
+                Integer maxage = rs.getInt("max_age");
+
+                category1 = new Category(name, minage, maxage);
+                category1.setId(id);
+            }
+
+        } catch (SQLException ex) {
+            throw new EquipDataInterfaceException("Error Getting Category " + category + " : " + ex.getMessage(), ex.getCause());
+        }
+
+        return category1;
+    }
+
+    @Override
     public int getTeamMemCount(String team) {
         int count = 0;
 
@@ -1133,17 +1193,22 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
     }
 
     @Override
-    public Team getTeamByName(String name) {
+    public Team getTeamByName(String name, java.sql.Date date) {
+
+        if (date == null) {
+            throw new EquipDataInterfaceException("No Puedes Pasar Fecha Vacio O Nulo");
+        }
         Team team = null;
         if (name.isBlank() || name == null) {
             throw new EquipDataInterfaceException("No Puedes Pasar Nombre Vacio O Nulo");
         }
 
-        String query = "Select * from team where name = ?";
+        String query = "Select * from team where name = ? and season_year = ?";
 
         try {
             getteambynamepstmt = con.prepareStatement(query);
             getteambynamepstmt.setString(1, name);
+            getteambynamepstmt.setDate(2, date);
             ResultSet rs = getteambynamepstmt.executeQuery();
 
             team = getTeam(rs);

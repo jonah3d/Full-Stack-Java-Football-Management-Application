@@ -31,6 +31,7 @@ public class ExportarEquipoFrameController implements ActionListener {
     String teamname = null;
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     List<Player> players = null;
+    java.sql.Date oracldate = null;
 
     public ExportarEquipoFrameController(EquipDataInterface edi) {
         this.edi = edi;
@@ -41,23 +42,20 @@ public class ExportarEquipoFrameController implements ActionListener {
         ejf.exportarJug_OnClick(this);
         ejf.searhJugador_OnClick(this);
 
-        ejf.getAddPlayers().addItemListener(e -> {
-            if (e.getStateChange() == ItemEvent.SELECTED) {
-                ejf.getDatefield().setVisible(true); // Show the date field
-            } else {
-                ejf.getDatefield().setVisible(false); // Hide the date field
-            }
-            ejf.repaint(); // Refresh the UI
-        });
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
+
         if (e.getSource() == ejf.getSearchButton()) {
             teamname = ejf.getEquiponameTf().getText().trim();
 
             try {
-                team = edi.getTeamByName(teamname);
+                String dateString = ejf.getDatePicker().getSelectedDateAsString();
+                Date date = sdf.parse(dateString);
+
+                oracldate = new java.sql.Date(date.getTime());
+                team = edi.getTeamByName(teamname, oracldate);
 
                 JOptionPane.showMessageDialog(null,
                         "Equipo Encontrado",
@@ -81,11 +79,6 @@ public class ExportarEquipoFrameController implements ActionListener {
             try {
 
                 if (ejf.getAddPlayers().isSelected()) {
-
-                    String dateString = ejf.getDatePicker().getSelectedDateAsString();
-                    Date date = sdf.parse(dateString);
-
-                    java.sql.Date oracldate = new java.sql.Date(date.getTime());
 
                     players = edi.getTeamPlayers(teamname, oracldate);
 
