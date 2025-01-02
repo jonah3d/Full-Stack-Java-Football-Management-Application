@@ -79,15 +79,15 @@ public class TeamManagementController implements ActionListener {
                     edi.removeTeamFromSeason(team.getName());
                     verJugEquiposController.populateTeamTable(edi.getAllTeams());
                     JOptionPane.showMessageDialog(null,
-                            "Team " + team.getName() + " deleted successfully",
+                            "Equipo " + team.getName() + " eliminado exitosamente",
                             "Success",
                             JOptionPane.INFORMATION_MESSAGE);
 
                 } else if (count >= 1) {
 
                     int confirmation = JOptionPane.showConfirmDialog(null,
-                            "The team has members. Are you sure you want to delete it?",
-                            "Confirm Deletion",
+                            "El equipo tiene miembros. Estás seguro de que quieres eliminarlo?",
+                            "Confirmar Eliminación",
                             JOptionPane.OK_CANCEL_OPTION,
                             JOptionPane.WARNING_MESSAGE);
 
@@ -96,16 +96,16 @@ public class TeamManagementController implements ActionListener {
                         edi.removeTeamWithPlayers(team);
                         verJugEquiposController.populateTeamTable(edi.getAllTeams());
                         JOptionPane.showMessageDialog(null,
-                                "Team " + team.getName() + " deleted successfully",
-                                "Success",
+                                "Equipo " + team.getName() + " eliminado exitosamente",
+                                "Exito",
                                 JOptionPane.INFORMATION_MESSAGE);
                         verEquiposController.getVerEquipos().getRefresh().doClick();
 
                     } else {
 
                         JOptionPane.showMessageDialog(null,
-                                "Team deletion operation canceled.",
-                                "Canceled",
+                                "Operación de eliminación de equipo cancelada.",
+                                "Cancelada",
                                 JOptionPane.INFORMATION_MESSAGE);
                     }
                 }

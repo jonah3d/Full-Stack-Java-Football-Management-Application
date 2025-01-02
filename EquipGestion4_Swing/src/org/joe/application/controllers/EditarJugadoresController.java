@@ -46,7 +46,7 @@ public class EditarJugadoresController implements ActionListener {
         this.defaultIcon = new ImageIcon(getClass().getClassLoader().getResource("org/joe/application/resources/img/User.png"));
         EditarJugadores.getProfileJLabel().setIcon(defaultIcon);
         if (defaultIcon.getIconWidth() == -1) {
-            System.out.println("Image not found!");
+            System.out.println("Imagen no encontrado found!");
         }
         EditarJugadores.editPlayer_OnClick(this);
         profileimage();
@@ -82,7 +82,7 @@ public class EditarJugadoresController implements ActionListener {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setDialogTitle("Select Profile Image");
+                fileChooser.setDialogTitle("Seleciona una imagen");
                 fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Image Files", "jpg", "jpeg", "png", "gif"));
 
                 int returnValue = fileChooser.showOpenDialog(null);
@@ -95,7 +95,7 @@ public class EditarJugadoresController implements ActionListener {
                         ImageIcon profileIcon = new ImageIcon(new ImageIcon(filePath).getImage().getScaledInstance(280, 280, java.awt.Image.SCALE_SMOOTH));
                         EditarJugadores.getProfileJLabel().setIcon(profileIcon);
                     } else {
-                        JOptionPane.showMessageDialog(null, "Please select a valid image file.", "Invalid File", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Seleciona una imagen valida.", "Archivo Invalido", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
@@ -104,6 +104,7 @@ public class EditarJugadoresController implements ActionListener {
 
     public void getSelectedPlayer(Player player) {
         EditarJugadores.getNif_tf().setText(player.getLegal_id());
+        System.out.println(player.getLegal_id());
         EditarJugadores.getNombre_tf().setText(player.getName());
         EditarJugadores.getAppellido_tf().setText(player.getSurname());
 
@@ -116,8 +117,10 @@ public class EditarJugadoresController implements ActionListener {
         Date birthyear = player.getBirth_year();
         EditarJugadores.getDateeditor().setText(sdf.format(birthyear));
         EditarJugadores.getIban_tf().setText(player.getIban());
+        System.out.println(player.getIban());
         EditarJugadores.getAdd_tf().setText(player.getDireccion());
         EditarJugadores.getCodipos_tf().setText(player.getCodigo_postal());
+        System.out.println(player.getCodigo_postal());
         EditarJugadores.getCiu_tf().setText(player.getLocalidad());
         EditarJugadores.getPais_tf().setText(player.getPais());
 
@@ -145,7 +148,7 @@ public class EditarJugadoresController implements ActionListener {
             }
         } else {
             EditarJugadores.getProfilerror().setVisible(true);
-            EditarJugadores.getProfilerror().setText("No Image For Selected Player");
+            EditarJugadores.getProfilerror().setText("Ningun Imagen Seleccionado Para El Jugador");
         }
     }
 
@@ -153,7 +156,6 @@ public class EditarJugadoresController implements ActionListener {
 
         boolean isValid = true;
 
-        //Setting Up NIF VALIDATION
         if (EditarJugadores.getNif_tf().getText().isBlank()) {
             EditarJugadores.getNiferror().setVisible(true);
             EditarJugadores.getNiferror().setText("NIF no puede ser vacio");
@@ -173,7 +175,7 @@ public class EditarJugadoresController implements ActionListener {
         } else {
             EditarJugadores.getNiferror().setVisible(false);
         }
-        //Setting Up SEXO VALIDATION
+
         if (EditarJugadores.getSexebutons_btn().getSelection() == null) {
             EditarJugadores.getSexeerror().setVisible(true);
             EditarJugadores.getSexeerror().setText("Elige un sexe");
@@ -182,7 +184,6 @@ public class EditarJugadoresController implements ActionListener {
             EditarJugadores.getSexeerror().setVisible(false);
         }
 
-        //SETTING UP NOMBRE VALIDATION
         if (EditarJugadores.getNombre_tf().getText().isBlank()) {
             EditarJugadores.getNombreerror().setVisible(true);
             EditarJugadores.getNombreerror().setText("Nombre no puede ser vacio");
@@ -195,7 +196,6 @@ public class EditarJugadoresController implements ActionListener {
             EditarJugadores.getNombreerror().setVisible(false);
         }
 
-        //SETTING UP APELLIDO VALIDATION
         if (EditarJugadores.getAppellido_tf().getText().isBlank()) {
             EditarJugadores.getAppellidoerror().setVisible(true);
             EditarJugadores.getAppellidoerror().setText("Apellido no puede ser vacio");
@@ -208,7 +208,6 @@ public class EditarJugadoresController implements ActionListener {
             EditarJugadores.getAppellidoerror().setVisible(false);
         }
 
-        //SETTING UP DIRECCION
         if (EditarJugadores.getAdd_tf().getText().isBlank()) {
             EditarJugadores.getDirrerror().setVisible(true);
             EditarJugadores.getDirrerror().setText("Dirección no puede ser vacío");
@@ -221,7 +220,6 @@ public class EditarJugadoresController implements ActionListener {
             EditarJugadores.getDirrerror().setVisible(false);
         }
 
-        //Setting Up Ciudad
         if (EditarJugadores.getCiu_tf().getText().isBlank()) {
             EditarJugadores.getCiuerror().setVisible(true);
             EditarJugadores.getCiuerror().setText("Ciudad no puede ser vacío");
@@ -234,7 +232,6 @@ public class EditarJugadoresController implements ActionListener {
             EditarJugadores.getCiuerror().setVisible(false);
         }
 
-        //Setting Up Pais
         if (EditarJugadores.getPais_tf().getText().isBlank()) {
             EditarJugadores.getPaiserror().setVisible(true);
             EditarJugadores.getPaiserror().setText("Ciudad no puede ser vacío");
@@ -247,7 +244,6 @@ public class EditarJugadoresController implements ActionListener {
             EditarJugadores.getPaiserror().setVisible(false);
         }
 
-        //SETTING UP PROVINCIA
         if (EditarJugadores.getProvincia_tf().getText().isBlank()) {
             EditarJugadores.getProvinciaerror().setVisible(true);
             EditarJugadores.getProvinciaerror().setText("Provincia no puede ser vacío");
@@ -260,7 +256,6 @@ public class EditarJugadoresController implements ActionListener {
             EditarJugadores.getProvinciaerror().setVisible(false);
         }
 
-        //Setting Up Codigo postal
         try {
             if (EditarJugadores.getCodipos_tf().getText().isBlank()) {
                 EditarJugadores.getCodiposerror().setVisible(true);
@@ -281,7 +276,6 @@ public class EditarJugadoresController implements ActionListener {
             ErrMsg.error(e.getMessage(), e.getCause());
         }
 
-        //Setting Up Revision Medica
         if (EditarJugadores.getRevmedbtngrp().getSelection() == null) {
             EditarJugadores.getRevisionmederror().setVisible(true);
             EditarJugadores.getRevisionmederror().setText("Confirma la revision medica");
@@ -290,7 +284,6 @@ public class EditarJugadoresController implements ActionListener {
             EditarJugadores.getRevisionmederror().setVisible(false);
         }
 
-        //Setting Up Iban
         if (EditarJugadores.getIban_tf().getText().isBlank()) {
             EditarJugadores.getIbanerror().setVisible(true);
             getEditarJugadores().getIbanerror().setText("IBAN no puede ser vacio");
@@ -303,10 +296,9 @@ public class EditarJugadoresController implements ActionListener {
             EditarJugadores.getIbanerror().setVisible(false);
         }
 
-        //Setting Up Calender
         if (EditarJugadores.getDateeditor().getText().equals("")) {
             EditarJugadores.getDateerror().setVisible(true);
-            EditarJugadores.getDateerror().setText("Data Naixement no pueder ser vacio");
+            EditarJugadores.getDateerror().setText("Fecha de nacimiento no pueder ser vacio");
             isValid = false;
         } else {
             EditarJugadores.getDateerror().setVisible(false);
@@ -344,8 +336,9 @@ public class EditarJugadoresController implements ActionListener {
         String iban = EditarJugadores.getIban_tf().getText().trim();
         String direccion = EditarJugadores.getAdd_tf().getText().trim();
         String codipostal = EditarJugadores.getCodipos_tf().getText().trim();
+
         String localidad = EditarJugadores.getCiu_tf().getText().trim();
-        // String provincia = AnadirJugadores.getpro.getText().trim();
+
         String pais = EditarJugadores.getPais_tf().getText().trim();
         Integer medical = null;
         if (EditarJugadores.getSiRadioButton().isSelected()) {
@@ -373,14 +366,11 @@ public class EditarJugadoresController implements ActionListener {
             String teamtype = playerteam.getTeam_type();
             String category = playerteam.getCategory();
 
-            // Retrieve the current player's information for comparison
             Player currentPlayer = edi.getPlayerByLegalId(player.getLegal_id());
 
-            // Check if the date of birth or sexe has been edited
             boolean isDateChanged = !currentPlayer.getBirth_year().equals(datanaix);
             boolean isSexChanged = !currentPlayer.getSex().equals(sexe);
 
-            // Perform validation only if there are edits
             if (!btoteam || teamtype.equals("M")
                     || (isDateChanged && !category.equals(PlayerConstants.calculateAge(datanaix)))
                     || isSexChanged) {
@@ -415,7 +405,7 @@ public class EditarJugadoresController implements ActionListener {
         bufferedImage.getGraphics().drawImage(image, 0, 0, null);
         SerialBlob serialBlob = null;
         try {
-            // Write BufferedImage to ByteArrayOutputStream
+
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(bufferedImage, "png", baos);
             byte[] imageBytes = baos.toByteArray();

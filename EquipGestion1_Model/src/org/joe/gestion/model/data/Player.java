@@ -127,11 +127,11 @@ public class Player implements Serializable {
     }
 
     public void setLocalidad(String localidad) {
-        if (!localidad.isEmpty()) {
-            this.localidad = localidad;
-        } else {
-            throw new RuntimeException("Direccion Field Can't Be Empty");
+        if (localidad == null || localidad.isBlank()) {
+            throw new RuntimeException("Localidad no puede ser vacio o null");
         }
+        this.localidad = localidad;
+
     }
 
     public String getProvincia() {
@@ -139,11 +139,12 @@ public class Player implements Serializable {
     }
 
     public void setProvincia(String provincia) {
-        if (!provincia.isEmpty()) {
-            this.provincia = provincia;
-        } else {
-            throw new RuntimeException("Direccion Field Can't Be Empty");
+        if (provincia == null || provincia.isBlank()) {
+            throw new RuntimeException("Provincia no puede ser vacio o nulo");
         }
+
+        this.provincia = provincia;
+
     }
 
     public String getPais() {
@@ -151,11 +152,10 @@ public class Player implements Serializable {
     }
 
     public void setPais(String pais) {
-        if (!pais.isEmpty()) {
-            this.pais = pais;
-        } else {
-            throw new RuntimeException("Direccion Field Can't Be Empty");
+        if (pais == null || pais.isBlank()) {
+            throw new RuntimeException("Pais no puede ser vacio o null");
         }
+        this.pais = pais;
     }
 
     public int getId() {
@@ -163,6 +163,10 @@ public class Player implements Serializable {
     }
 
     public void setId(int id) {
+        if (id <= 0) {
+            throw new RuntimeException("Id no puedo 0 o menos de 0");
+        }
+
         this.id = id;
     }
 
@@ -206,7 +210,7 @@ public class Player implements Serializable {
         if (!name.isEmpty() || name != null) {
             this.name = name;
         } else {
-            throw new RuntimeException("The Name Field Can't Be Empty Or Null");
+            throw new RuntimeException("Nombre no puede ser null o vació");
         }
     }
 
@@ -214,7 +218,7 @@ public class Player implements Serializable {
         if (!surname.isEmpty() || surname != null) {
             this.surname = surname;
         } else {
-            throw new RuntimeException("The Surname Field Can't Be Empty Or Null");
+            throw new RuntimeException("Appellido no puede ser null o vació");
         }
     }
 
@@ -223,13 +227,13 @@ public class Player implements Serializable {
         if (sex.toUpperCase().equals("H") || sex.toUpperCase().equals("D")) {
             this.sex = sex;
         } else {
-            throw new RuntimeException("The Sex Of The Character Must Either be H or D");
+            throw new RuntimeException("El sexo tiene que ser D o H");
         }
     }
 
     public void setBirth_year(Date birth_year) {
         if (birth_year == null) {
-            throw new RuntimeException("Birth Year Is null");
+            throw new RuntimeException("Año Nacieminto no puede ser null");
         }
 
         this.birth_year = birth_year;
@@ -239,7 +243,7 @@ public class Player implements Serializable {
         if (!legal_id.isEmpty() && legal_id.length() == 8) {
             this.legal_id = legal_id;
         } else {
-            throw new RuntimeException("Legal ID Can't Be Empty Or Less Than 8 Digits");
+            throw new RuntimeException("El Nif no pueder ser vació y tiene que ser 8 caracteres");
         }
     }
 
@@ -247,24 +251,32 @@ public class Player implements Serializable {
         if (!iban.isEmpty() || iban.length() == 24) {
             this.iban = iban;
         } else {
-            throw new RuntimeException("The IBAN Must Be 24 Digits");
+            throw new RuntimeException("IBAN tiene que ser 24 caracteres");
         }
     }
 
     public void setDireccion(String direccion) {
-        if (!direccion.isEmpty()) {
+        if (!direccion.isEmpty() || direccion != null) {
             this.direccion = direccion;
         } else {
-            throw new RuntimeException("Direccion Field Can't Be Empty");
+            throw new RuntimeException("Dirección no puede ser null");
         }
     }
 
     public void setImage(Blob image) {
+        if (image == null) {
+            throw new RuntimeException("Imagen no puede ser null");
+        }
 
         this.image = image;
     }
 
     public void setMedical_rev_fin(Integer medical_rev_fin) {
+
+        if (medical_rev_fin == null) {
+            throw new RuntimeException("Revisión medical no puede ser null");
+        }
+
         this.medical_rev_fin = medical_rev_fin;
     }
 

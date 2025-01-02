@@ -27,6 +27,7 @@ public class PlayerManagementController implements ActionListener {
     private EditarJugadoresController editarJugadoresController;
     private EquipDataInterface edi;
     private ImageIcon profileIcon;
+    private Player player = null;
 
     public PlayerManagementController(EquipDataInterface edi) {
         this.edi = edi;
@@ -73,8 +74,14 @@ public class PlayerManagementController implements ActionListener {
                             JOptionPane.INFORMATION_MESSAGE);
                     playerManagementScreen.getSeeply_BTN().doClick();
                 }
-                Player player = verJugadoresController.getCurrrentplayerlist().get(selectedplayer);
-                editarJugadoresController.getSelectedPlayer(player);
+                String legalid = (String) verJugadoresController.getVerJugadores().getPlayerDet_Table().getValueAt(selectedplayer, 0);
+
+                player = edi.getPlayerByLegalId(legalid);
+
+                if (player != null) {
+                    editarJugadoresController.getSelectedPlayer(player);
+                }
+
             } catch (Exception ex) {
                 ErrMsg.error(ex.getMessage(), ex.getCause());
             }
@@ -84,7 +91,7 @@ public class PlayerManagementController implements ActionListener {
             try {
                 int selectedplayer = verJugadoresController.getVerJugadores().getPlayerDet_Table().getSelectedRow();
                 if (selectedplayer == -1) {
-                    JOptionPane.showMessageDialog(null, "Seleccionar un jugador de la tabla", "Error",
+                    JOptionPane.showMessageDialog(null, "Selecciona un jugador de la tabla", "Error",
                             JOptionPane.INFORMATION_MESSAGE);
                 }
 
@@ -93,8 +100,8 @@ public class PlayerManagementController implements ActionListener {
                 boolean ans = edi.checkPlayerBelongsToTeam(player.getLegal_id());
                 if (ans) {
                     int confirmation = JOptionPane.showConfirmDialog(null,
-                            "The player belongs to a team. Are you sure you want to delete it?",
-                            "Confirm Deletion",
+                            "El jugador pertenece a un equipo.Estás seguro de que quieres eliminarle?",
+                            "Confirmar Eliminación",
                             JOptionPane.OK_CANCEL_OPTION,
                             JOptionPane.WARNING_MESSAGE);
 
@@ -102,31 +109,30 @@ public class PlayerManagementController implements ActionListener {
 
                         Integer teamname = edi.checkPlayerTeam(player.getLegal_id());
                         if (teamname == null) {
-                            errorDialogue("Team ID Is Null");
+                            errorDialogue("Id de equipo es null");
 
                         }
 
                         edi.deletePlayerFromTeam(player, teamname);
                         edi.eliminarJugador(player.getLegal_id());
                         JOptionPane.showMessageDialog(null,
-                                "Player " + player.getName() + " deleted successfully",
+                                "Jugador " + player.getName() + " eliminado exitosamente",
                                 "Success",
                                 JOptionPane.INFORMATION_MESSAGE);
-                        // verJugadoresController.getVerJugadores().getRefresh().doClick();
 
                     } else {
 
                         JOptionPane.showMessageDialog(null,
-                                "Player deletion operation canceled.",
-                                "Canceled",
+                                "Operación de eliminación de jugador cancelada.",
+                                "Cancelada",
                                 JOptionPane.INFORMATION_MESSAGE);
                     }
 
                 } else {
                     edi.eliminarJugador(player.getLegal_id());
                     JOptionPane.showMessageDialog(null,
-                            "Player " + player.getName() + " deleted successfully",
-                            "Success",
+                            "Jugador " + player.getName() + " eliminado exitosamente",
+                            "Exito",
                             JOptionPane.INFORMATION_MESSAGE
                     );
                     verJugadoresController.getVerJugadores().getRefresh().doClick();

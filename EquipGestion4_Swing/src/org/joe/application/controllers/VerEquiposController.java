@@ -31,21 +31,19 @@ public class VerEquiposController implements ActionListener {
         this.edi = edi;
         verEquipos = new VerEquipos();
         currentTeams = new ArrayList<>();
-        // Populate categories combo box
+
         verEquipos.getCatComboBox().addItem("");
         for (Category item : edi.getCategorys()) {
             verEquipos.getCatComboBox().addItem(item.getName());
         }
 
-        // Populate seasons combo box
-        // verEquipos.getTempComboBox().addItem("");
         for (Season season : edi.getSeasons()) {
             verEquipos.getTempComboBox().addItem(season.getName());
         }
 
         verEquipos.getTeamDetails_JTable().setDefaultRenderer(Object.class, new CustomTeamTableCellRenderer());
-        // Pre-populate the table with teams from the current season
-        Season currentSeason = edi.getSeasons().get(0); // Assuming the current season is the first in the list
+
+        Season currentSeason = edi.getSeasons().get(0);
         try {
             populateTable(edi.getTeamsBySeason(currentSeason.getSeason()));
         } catch (EquipDataInterfaceException ex) {

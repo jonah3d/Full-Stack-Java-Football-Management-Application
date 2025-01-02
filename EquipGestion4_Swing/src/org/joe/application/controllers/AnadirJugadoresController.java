@@ -10,12 +10,9 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.Icon;
 import java.sql.Blob;
 import javax.imageio.ImageIO;
@@ -49,7 +46,7 @@ public class AnadirJugadoresController implements ActionListener {
         this.defaultIcon = new ImageIcon(getClass().getClassLoader().getResource("org/joe/application/resources/img/User.png"));
         AnadirJugadores.getProfileJLabel().setIcon(defaultIcon);
         if (defaultIcon.getIconWidth() == -1) {
-            System.out.println("Image not found!");
+            System.out.println("Imagen no encontrado found!");
         }
 
         AnadirJugadores.addPlayer_OnClick(this);
@@ -85,7 +82,6 @@ public class AnadirJugadoresController implements ActionListener {
 
         boolean isValid = true;
 
-        //Setting Up NIF VALIDATION
         if (AnadirJugadores.getNif_tf().getText().isBlank()) {
             AnadirJugadores.getNiferror().setVisible(true);
             AnadirJugadores.getNiferror().setText("NIF no puede ser vacio");
@@ -105,7 +101,7 @@ public class AnadirJugadoresController implements ActionListener {
         } else {
             AnadirJugadores.getNiferror().setVisible(false);
         }
-        //Setting Up SEXO VALIDATION
+
         if (AnadirJugadores.getSexebutons_btn().getSelection() == null) {
             AnadirJugadores.getSexeerror().setVisible(true);
             AnadirJugadores.getSexeerror().setText("Elige un sexe");
@@ -114,7 +110,6 @@ public class AnadirJugadoresController implements ActionListener {
             AnadirJugadores.getSexeerror().setVisible(false);
         }
 
-        //SETTING UP NOMBRE VALIDATION
         if (AnadirJugadores.getNombre_tf().getText().isBlank()) {
             AnadirJugadores.getNombreerror().setVisible(true);
             AnadirJugadores.getNombreerror().setText("Nombre no puede ser vacio");
@@ -127,7 +122,6 @@ public class AnadirJugadoresController implements ActionListener {
             AnadirJugadores.getNombreerror().setVisible(false);
         }
 
-        //SETTING UP APELLIDO VALIDATION
         if (AnadirJugadores.getAppellido_tf().getText().isBlank()) {
             AnadirJugadores.getAppellidoerror().setVisible(true);
             AnadirJugadores.getAppellidoerror().setText("Apellido no puede ser vacio");
@@ -140,7 +134,6 @@ public class AnadirJugadoresController implements ActionListener {
             AnadirJugadores.getAppellidoerror().setVisible(false);
         }
 
-        //SETTING UP DIRECCION
         if (AnadirJugadores.getAdd_tf().getText().isBlank()) {
             AnadirJugadores.getDirrerror().setVisible(true);
             AnadirJugadores.getDirrerror().setText("Dirección no puede ser vacío");
@@ -153,7 +146,6 @@ public class AnadirJugadoresController implements ActionListener {
             AnadirJugadores.getDirrerror().setVisible(false);
         }
 
-        //Setting Up Ciudad
         if (AnadirJugadores.getCiu_tf().getText().isBlank()) {
             AnadirJugadores.getCiuerror().setVisible(true);
             AnadirJugadores.getCiuerror().setText("Ciudad no puede ser vacío");
@@ -166,7 +158,6 @@ public class AnadirJugadoresController implements ActionListener {
             AnadirJugadores.getCiuerror().setVisible(false);
         }
 
-        //Setting Up Pais
         if (AnadirJugadores.getPais_tf().getText().isBlank()) {
             AnadirJugadores.getPaiserror().setVisible(true);
             AnadirJugadores.getPaiserror().setText("Ciudad no puede ser vacío");
@@ -179,7 +170,6 @@ public class AnadirJugadoresController implements ActionListener {
             AnadirJugadores.getPaiserror().setVisible(false);
         }
 
-        //SETTING UP PROVINCIA
         if (AnadirJugadores.getProvincia_tf().getText().isBlank()) {
             AnadirJugadores.getProvinciaerror().setVisible(true);
             AnadirJugadores.getProvinciaerror().setText("Provincia no puede ser vacío");
@@ -192,7 +182,6 @@ public class AnadirJugadoresController implements ActionListener {
             AnadirJugadores.getProvinciaerror().setVisible(false);
         }
 
-        //Setting Up Codigo postal
         try {
             if (AnadirJugadores.getCodipos_tf().getText().isBlank()) {
                 AnadirJugadores.getCodiposerror().setVisible(true);
@@ -214,7 +203,6 @@ public class AnadirJugadoresController implements ActionListener {
             AnadirJugadores.getCodiposerror().setText("El código postal tiene que ser un número");
         }
 
-        //Setting Up Revision Medica
         if (AnadirJugadores.getRevmedbtngrp().getSelection() == null) {
             AnadirJugadores.getRevisionmederror().setVisible(true);
             AnadirJugadores.getRevisionmederror().setText("Confirma la revision medica");
@@ -223,7 +211,6 @@ public class AnadirJugadoresController implements ActionListener {
             AnadirJugadores.getRevisionmederror().setVisible(false);
         }
 
-        //Setting Up Iban
         if (AnadirJugadores.getIban_tf().getText().isBlank()) {
             AnadirJugadores.getIbanerror().setVisible(true);
             getAnadirJugadores().getIbanerror().setText("IBAN no puede ser vacio");
@@ -236,10 +223,9 @@ public class AnadirJugadoresController implements ActionListener {
             AnadirJugadores.getIbanerror().setVisible(false);
         }
 
-        //Setting Up Calender
         if (AnadirJugadores.getDateeditor().getText().equals(emptycal)) {
             AnadirJugadores.getDateerror().setVisible(true);
-            AnadirJugadores.getDateerror().setText("Data Naixement no pueder ser vacio");
+            AnadirJugadores.getDateerror().setText("Fecha de nacimiento no pueder ser vacio");
             isValid = false;
         } else {
             AnadirJugadores.getDateerror().setVisible(false);
@@ -247,7 +233,7 @@ public class AnadirJugadoresController implements ActionListener {
 
         if (AnadirJugadores.getProfileJLabel().getIcon() == defaultIcon) {
             AnadirJugadores.getProfilerror().setVisible(true);
-            AnadirJugadores.getProfilerror().setText("Tiene que selectionar un imagen");
+            AnadirJugadores.getProfilerror().setText("Tiene que selectionar una imagen");
             isValid = false;
         } else {
             AnadirJugadores.getProfilerror().setVisible(false);
@@ -260,7 +246,7 @@ public class AnadirJugadoresController implements ActionListener {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setDialogTitle("Select Profile Image");
+                fileChooser.setDialogTitle("Seleciona una imagen");
                 fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Image Files", "jpg", "jpeg", "png", "gif"));
 
                 int returnValue = fileChooser.showOpenDialog(null);
@@ -273,7 +259,7 @@ public class AnadirJugadoresController implements ActionListener {
                         ImageIcon profileIcon = new ImageIcon(new ImageIcon(filePath).getImage().getScaledInstance(280, 280, java.awt.Image.SCALE_SMOOTH));
                         AnadirJugadores.getProfileJLabel().setIcon(profileIcon);
                     } else {
-                        JOptionPane.showMessageDialog(null, "Please select a valid image file.", "Invalid File", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Seleciona una imagen valida.", "Archivo Invalido", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
@@ -296,13 +282,13 @@ public class AnadirJugadoresController implements ActionListener {
         try {
             datanaix = sdf.parse(birthday);
         } catch (ParseException ex) {
-            System.out.println("Error Pasrsing Date into player");
+            System.out.println("Error Paseando año de nacimiento del jugador");
         }
         String iban = AnadirJugadores.getIban_tf().getText().trim();
         String direccion = AnadirJugadores.getAdd_tf().getText().trim();
         String codipostal = AnadirJugadores.getCodipos_tf().getText().trim();
         String localidad = AnadirJugadores.getCiu_tf().getText().trim();
-        // String provincia = AnadirJugadores.getpro.getText().trim();
+
         String pais = AnadirJugadores.getPais_tf().getText().trim();
         Integer medical = null;
         if (AnadirJugadores.getSiRadioButton().isSelected()) {
@@ -345,7 +331,7 @@ public class AnadirJugadoresController implements ActionListener {
         bufferedImage.getGraphics().drawImage(image, 0, 0, null);
         SerialBlob serialBlob = null;
         try {
-            // Write BufferedImage to ByteArrayOutputStream
+
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(bufferedImage, "png", baos);
             byte[] imageBytes = baos.toByteArray();

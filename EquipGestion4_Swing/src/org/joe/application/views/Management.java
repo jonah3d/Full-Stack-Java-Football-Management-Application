@@ -80,8 +80,8 @@ public class Management extends JFrame {
         aboutMenu = new JMenu("Sobre");
         season = new JMenu("Temporada");
         createseason = new JMenuItem("Crear Temporada");
-        playermngmtBTN = new JButton("Player Management");
-        teammngmtBTN = new JButton("Team Management");
+        playermngmtBTN = new JButton("Gestión De Jugadores");
+        teammngmtBTN = new JButton("Gestión De Equipos");
         managementTyTabbedPane = new JTabbedPane(JTabbedPane.NORTH);
         progressBar = new JProgressBar();
 

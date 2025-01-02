@@ -46,17 +46,15 @@ public class CustomPlayerTableCellRenderer extends DefaultTableCellRenderer {
             }
         }
 
-        // Set the default foreground color for better contrast
         if (isSelected) {
-            component.setForeground(Color.WHITE); // Default for selected rows
-            component.setBackground(table.getSelectionBackground()); // Keep selection background
+            component.setForeground(Color.WHITE);
+            component.setBackground(table.getSelectionBackground());
         } else {
-            // Ensure contrast for unselected rows
+
             component.setForeground(
                     component.getBackground().equals(Color.WHITE) ? Color.BLACK : Color.DARK_GRAY);
         }
 
-        // Set the default foreground color for better contrast
         if (!isSelected) {
             component.setForeground(Color.BLACK);
         }

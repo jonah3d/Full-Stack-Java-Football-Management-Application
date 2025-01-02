@@ -95,16 +95,16 @@ public class AnadirJugadores extends JPanel {
         ciu_tf = new JTextField();
         codipos_lbl = new JLabel("Codigo Postal");
         codipos_tf = new JTextField();
-        pais_lbl = new JLabel("Pais");
+        pais_lbl = new JLabel("País");
         pais_tf = new JTextField();
         appellido_lbl = new JLabel("Apellido");
         appellido_tf = new JTextField();
-        sexe_lbl = new JLabel("Sexe");
+        sexe_lbl = new JLabel("Sexo");
         hombre_rb = new JRadioButton("Hombre");
         mujer_rb = new JRadioButton("Mujer");
         Iban_lbl = new JLabel("Iban");
         iban_tf = new JTextField();
-        categ_lbl = new JLabel("Categoria");
+        categ_lbl = new JLabel("Categoría");
         sexebutons_btn = new ButtonGroup();
         revisionmedicaJLabel = new JLabel("Revisión Medica");
         siRadioButton = new JRadioButton("Sí");
@@ -125,7 +125,7 @@ public class AnadirJugadores extends JPanel {
         revisionmederror = new JLabel("Error");
         dateerror = new JLabel("Error");
 
-        datnnaix_lbl = new JLabel("Data De Naixement");
+        datnnaix_lbl = new JLabel("Año De Nacimiento");
         datePicker = new DatePicker();
         dateeditor = new JFormattedTextField();
         addplayer = new JButton("Anadir");

@@ -10,18 +10,9 @@ import java.awt.event.ActionListener;
 import java.text.Normalizer;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.joe.application.constants.ErrMsg;
 import org.joe.application.constants.PlayerConstants;
@@ -90,11 +81,11 @@ public class VerJugadoresController implements ActionListener {
 
             if (ordenar != null && !ordenar.isBlank()) {
                 if (ordenar.equals("Cognom")) {
-                    ordenar = "surname"; // Map to database column
+                    ordenar = "surname";
                 } else if (ordenar.equals("Data Naixement")) {
-                    ordenar = "birth_year"; // Map to database column
+                    ordenar = "birth_year";
                 } else {
-                    ordenar = null; // Default: no ordering
+                    ordenar = null;
                 }
             }
 

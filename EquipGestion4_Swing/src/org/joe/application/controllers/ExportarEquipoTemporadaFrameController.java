@@ -75,41 +75,6 @@ public class ExportarEquipoTemporadaFrameController implements ActionListener {
             String fileString = eetf.getFilepathTF().getText();
             try {
 
-//                if (eetf.getAddPlayers().isSelected()) {
-//                    try {
-//                        if (teams == null || teams.isEmpty()) {
-//                            JOptionPane.showMessageDialog(null, "No teams found for the given season.", "Error", JOptionPane.ERROR_MESSAGE);
-//                            return;
-//                        }
-//
-//                        String dateString = eetf.getDatePicker().getSelectedDateAsString();
-//                        Date date = sdf.parse(dateString);
-//                        java.sql.Date oracldate = new java.sql.Date(date.getTime());
-//
-//                        if (players == null) {
-//                            players = new ArrayList<>();
-//                        } else {
-//                            players.clear();
-//                        }
-//
-//                        for (Team team : teams) {
-//                            List<Player> teamPlayers = edi.getTeamPlayers(team.getName().trim(), oracldate);
-//                            if (teamPlayers != null) {
-//                                teamPlayers.forEach(Player::mostrarJugDetalle);
-//                                players.addAll(teamPlayers);
-//                            }
-//                        }
-//
-//                        if (players.isEmpty()) {
-//                            JOptionPane.showMessageDialog(null, "No players found for the selected teams.", "Info", JOptionPane.INFORMATION_MESSAGE);
-//                        } else {
-//                            DataToXML.exportSeasonTeamWithPlayers(teams, players, fileString);
-//                            JOptionPane.showMessageDialog(null, "Teams with players exported successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
-//                        }
-//                    } catch (Exception ex) {
-//                        ErrMsg.error(ex.getMessage(), ex.getCause());
-//                    }
-//                } else if (!eetf.getAddPlayers().isSelected()) {
                 DataToXML.exportSeasonTeam(teams, fileString);
                 JOptionPane.showMessageDialog(null,
                         "Equipos Exportado Existosamente",

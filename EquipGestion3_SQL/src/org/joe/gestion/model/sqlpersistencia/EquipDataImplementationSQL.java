@@ -208,7 +208,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
                 throw new EquipDataInterfaceException("Query returned with no player");
             }
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+
             throw new EquipDataInterfaceException("Unable To get Player " + ex.getMessage(), ex.getCause());
         }
     }
@@ -286,7 +286,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
 
             }
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+
             throw new EquipDataInterfaceException("Unable To get Players " + ex.getMessage(), ex.getCause());
         }
         return players;
@@ -407,7 +407,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             }
 
             if (teams.isEmpty()) {
-                System.out.println("No teams found in ResultSet.");
+
+                throw new EquipDataInterfaceException("Ningun equipo encontrado");
             }
 
         } catch (SQLException e) {
@@ -480,7 +481,6 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
 
         } catch (SQLException ex) {
 
-            System.out.println(ex.getMessage());
             throw new EquipDataInterfaceException("Failed To Insert New User. " + ex.getMessage(), ex.getCause());
         }
 
@@ -780,7 +780,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             return getPlayers(rs);
 
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+
             throw new EquipDataInterfaceException("Error Trying To Retrieve The Players " + ex.getMessage(), ex.getCause());
         }
     }
@@ -802,7 +802,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             return getPlayers(rs);
 
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+
             throw new EquipDataInterfaceException("Error Trying To Retrieve The Players " + ex.getMessage(), ex.getCause());
         }
     }
@@ -824,7 +824,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             return getPlayers(rs);
 
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+
             throw new EquipDataInterfaceException("Error Trying To Retrieve The Players " + ex.getMessage(), ex.getCause());
         }
     }
@@ -843,7 +843,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             addnewplayps = con.prepareStatement(newplayerQuery);
 
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+
             throw new EquipDataInterfaceException("Unable to create prepared statement for new player " + ex.getMessage(), ex.getCause());
         }
 
@@ -882,7 +882,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
 
             }
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+
             throw new EquipDataInterfaceException("Unable To Insert New Player " + ex.getMessage(), ex.getCause());
         }
 
@@ -1008,7 +1008,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             return categories;
 
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+
             throw new EquipDataInterfaceException("Couldn't Retrieve The Categories " + ex.getMessage(), ex.getCause());
         }
     }
@@ -1118,7 +1118,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
                 throw new EquipDataInterfaceException("Query Returned With Null");
             }
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+
             throw new EquipDataInterfaceException("Error Trying To Retrieve COUNT of players of " + team + " " + ex.getMessage(), ex.getCause());
         }
 
@@ -1148,7 +1148,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             return getTeams(rs);
 
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+
             throw new EquipDataInterfaceException("Error Getting Teams By Season " + season + "  " + ex.getMessage(), ex.getCause());
         }
     }
@@ -1165,14 +1165,13 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
         try {
 
             PreparedStatement stm = con.prepareStatement(query);
-            System.out.println(type);
 
             stm.setNString(1, type);
             rs = stm.executeQuery();
             return getTeams(rs);
 
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+
             throw new EquipDataInterfaceException("Error Getting Teams By Type " + type + " " + ex.getMessage(), ex.getCause());
         }
     }
@@ -1267,8 +1266,6 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
                 + "JOIN TEAM t ON pt.team = t.id "
                 + "WHERE t.name = ? and pt.season = ?";
 
-        System.out.println("CONSULTA: " + query);
-
         try {
             teamPlyers = con.prepareStatement(query);
             teamPlyers.setString(1, teamName);
@@ -1318,7 +1315,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             }
 
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+
             throw new EquipDataInterfaceException("Error Adding Player To Team " + team.getName() + " " + ex.getMessage(), ex.getCause());
         }
     }
@@ -1345,7 +1342,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             }
 
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+
             throw new EquipDataInterfaceException("Error Deleting Player Of Team " + team + " " + ex.getMessage(), ex.getCause());
         }
 
@@ -1372,7 +1369,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             }
 
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+
             throw new EquipDataInterfaceException("Somthing Went Wrong Trying To Create The Delete Statement " + ex.getMessage(), ex.getCause());
         }
 
@@ -1402,7 +1399,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             newSeasonDate.executeUpdate();
             System.out.println("New season " + season_n + " added successfully with date " + date);
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+
             throw new EquipDataInterfaceException("Error adding new season " + season_n + " " + ex.getMessage(), ex.getCause());
         }
     }
@@ -1434,7 +1431,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             }
 
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+
             throw new EquipDataInterfaceException("Error removing team " + t_name + "  " + ex.getMessage(), ex.getCause());
         }
     }
@@ -1488,7 +1485,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             }
 
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+
             throw new EquipDataInterfaceException("Error removing players from team " + team.getName() + " " + ex.getMessage(), ex.getCause());
         }
         return status;
@@ -1654,7 +1651,6 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
                 + "JOIN PLAYER P ON P.ID = PT.PLAYER "
                 + "JOIN TEAM T ON T.ID = PT.TEAM WHERE 1=1 ");
 
-        // Dynamically append filters
         if (cognom != null) {
             query.append("AND P.SURNAME = ? ");
         }
@@ -1679,10 +1675,6 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
         try {
             filterplayerspstmt = con.prepareStatement(query.toString());
 
-            // Debugging: Print query for verification
-            System.out.println("Final Query: " + query);
-
-            // Set parameters dynamically
             int paramIndex = 1;
             if (cognom != null) {
                 filterplayerspstmt.setString(paramIndex++, cognom);

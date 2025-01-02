@@ -63,13 +63,13 @@ public class VerJugadores extends JPanel {
         anonaceditorfilter = new JFormattedTextField();
         catComboBox = new JComboBox<>();
         ordenarComboBox = new JComboBox<>();
-        refresh = new JButton("Refresh");
+        refresh = new JButton("Refrescar");
         erromessage = new JLabel();
 
-        nameJLabel = new JLabel("Cognom");
+        nameJLabel = new JLabel("Apellido");
         niJLabel = new JLabel("Id Legal");
-        anoJLabel = new JLabel("Ano Naixement");
-        catJLabel = new JLabel("Categoria");
+        anoJLabel = new JLabel("Año Nacimiento");
+        catJLabel = new JLabel("Categoría");
         ordenarJLabel = new JLabel("Ordenar por");
 
         namefilter.setBounds(20, 17, 140, 30);
@@ -83,7 +83,7 @@ public class VerJugadores extends JPanel {
         catComboBox.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
         ordenarComboBox.setBounds(620, 17, 140, 30);
         ordenarComboBox.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
-        refresh.setBounds(860, 17, 70, 30);
+        refresh.setBounds(820, 17, 100, 30);
         refresh.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
 
         nameJLabel.setBounds(20, 50, 100, 30);
@@ -92,7 +92,7 @@ public class VerJugadores extends JPanel {
         catJLabel.setBounds(470, 50, 100, 30);
         ordenarJLabel.setBounds(620, 50, 100, 30);
 
-        String[] ordenarlist = {"", "Cognom", "Data Naixement"};
+        String[] ordenarlist = {"", "Apellido", "Año Nacimiento"};
         for (String item : ordenarlist) {
             ordenarComboBox.addItem(item);
         }
