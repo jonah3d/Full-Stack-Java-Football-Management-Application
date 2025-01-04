@@ -22,6 +22,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import org.joe.application.constants.ErrMsg;
 import org.joe.application.views.ExportarTodosJugadoresFrame;
 import org.joe.application.views.Management;
 import org.joe.application.views.TemporadaFrame;
@@ -44,6 +45,7 @@ public class ManagementFrameController implements ActionListener {
     private ExportarEquipoCategoriaFrameController eecf;
     private ExportarJugadorCSVFrameController ejcsvfc;
     private ExportarEquipoCSVFrameController eecsvfc;
+    private ExportarJasperFrameController ejasfc;
     static EquipDataInterface edi;
 
     public ManagementFrameController(EquipDataInterface edi) {
@@ -60,6 +62,7 @@ public class ManagementFrameController implements ActionListener {
         managementview.ExportarEquipoTemp_OnClick(this);
         managementview.ExportarEquiposCSV_OnClick(this);
         managementview.ExportarJugadoresCSV_onClick(this);
+        managementview.ExportarJasper_onClick(this);
 
         onWindowOpened();
     }
@@ -105,6 +108,10 @@ public class ManagementFrameController implements ActionListener {
         if (e.getSource() == managementview.getExportarSeasonTeamsItem()) {
             eecsvfc = new ExportarEquipoCSVFrameController(edi);
         }
+
+        if (e.getSource() == managementview.getExportJsperMenuItem()) {
+            ejasfc = new ExportarJasperFrameController(edi);
+        }
     }
 
     public void onWindowOpened() {
@@ -112,7 +119,14 @@ public class ManagementFrameController implements ActionListener {
 
             @Override
             public void windowClosing(WindowEvent e) {
-                edi.disconnectDatasource();
+                try {
+                    if (edi != null) {
+                        edi.disconnectDatasource();
+                    }
+                } catch (Exception ex) {
+                    ErrMsg.error(ex.getMessage(), ex.getCause());
+                }
+
             }
 
             @Override

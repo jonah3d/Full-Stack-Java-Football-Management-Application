@@ -107,6 +107,16 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
         String password = propfile.getProperty("password");
         String user = propfile.getProperty("username");
 
+        if (url.isBlank()) {
+            throw new EquipDataInterfaceException("Estas pasando un url vacio o nul");
+        }
+        if (user.isBlank()) {
+            throw new EquipDataInterfaceException("Estas pasando un usuario vacio o nul");
+        }
+        if (password.isBlank()) {
+            throw new EquipDataInterfaceException("Estas pasando una contraseña vacio o nul");
+        }
+
         try {
             con = DriverManager.getConnection(url, user, password);
             //  con.setAutoCommit(false);

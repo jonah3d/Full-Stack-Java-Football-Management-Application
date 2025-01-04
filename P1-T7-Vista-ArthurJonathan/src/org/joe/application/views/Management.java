@@ -295,6 +295,10 @@ public class Management extends JFrame {
         this.exportJugadoresItem.addActionListener(listener);
     }
 
+    public void ExportarJasper_onClick(ActionListener listener) {
+        this.exportJsperMenuItem.addActionListener(listener);
+    }
+
     public JMenuItem getExportJugadoresItem() {
         return exportJugadoresItem;
     }

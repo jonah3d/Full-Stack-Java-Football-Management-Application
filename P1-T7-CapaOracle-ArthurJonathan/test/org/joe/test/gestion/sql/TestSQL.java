@@ -502,6 +502,11 @@ public class TestSQL {
         }
     }
 
+    public static void closeDbConnection() {
+        EquipDataImplementationSQL isql = new EquipDataImplementationSQL();
+        isql.disconnectDatasource();
+    }
+
     public static void main(String[] args) throws ParseException {
 
         // addNewPlayer();
@@ -545,6 +550,8 @@ public class TestSQL {
         // filteredPlayersList();
         //getTeamByName();
         getSeasonCatTeam();
+
+        closeDbConnection();
     }
 
 }
