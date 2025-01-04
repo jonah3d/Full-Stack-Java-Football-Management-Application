@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"org.joe.gestion.model.adapter"},{"l":"org.joe.gestion.model.data"},{"l":"org.joe.gestion.model.helperclasses"}];updateSearchResults();
