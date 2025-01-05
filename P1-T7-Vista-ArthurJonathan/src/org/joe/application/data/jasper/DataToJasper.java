@@ -10,8 +10,10 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import org.joe.application.constants.ErrMsg;
@@ -51,54 +53,54 @@ public class DataToJasper {
         }
     }
 
-    public void getReport(String temporada, String categoria, String equipo) throws MalformedURLException, ProtocolException, IOException {
-
+    public void getReport(String temporada, String categoria, String equipo) throws IOException {
         StringBuilder urlBuilder = new StringBuilder(urlJRS);
-        urlBuilder.append("InformeEquipo.pdf");
+        urlBuilder.append("reports/EquipoReport.pdf");
 
-        List<String> params = new ArrayList<>();
+        boolean hasParams = false;
 
-        // Only add parameters that have values
         if (temporada != null && !temporada.isBlank()) {
-            params.add("Temporada=" + encodeURIComponent(temporada));
-        }
-        if (categoria != null && !categoria.isBlank()) {
-            params.add("Categoria=" + encodeURIComponent(categoria));
-        }
-        if (equipo != null && !equipo.isBlank()) {
-            params.add("Equipo=" + encodeURIComponent(equipo));
+            urlBuilder.append(hasParams ? "&" : "?");
+            urlBuilder.append("Temporada=").append(encodeURIComponent(temporada));
+            hasParams = true;
         }
 
-        if (!params.isEmpty()) {
-            urlBuilder.append("?").append(String.join("&", params));
+        if (categoria != null && !categoria.isBlank()) {
+            urlBuilder.append(hasParams ? "&" : "?");
+            urlBuilder.append("Categoria=").append(encodeURIComponent(categoria));
+            hasParams = true;
+        }
+
+        if (equipo != null && !equipo.isBlank()) {
+            urlBuilder.append(hasParams ? "&" : "?");
+            urlBuilder.append("Equipo=").append(encodeURIComponent(equipo));
         }
 
         String url = urlBuilder.toString();
         System.out.println("Connecting to: " + url);
 
-        // Create connection
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
         con.setRequestMethod("GET");
 
-        // Set up Basic Authentication
         String auth = Base64.getEncoder().encodeToString((userJRS + ":" + passwordJRS).getBytes());
         con.setRequestProperty("Authorization", "Basic " + auth);
+        con.setRequestProperty("Accept", "application/pdf");
 
-        // Get the response code
         int responseCode = con.getResponseCode();
         if (responseCode == HttpURLConnection.HTTP_OK) {
-            // Generate the file name dynamically
-            String fileName = "InformeEquipo";
-            if (equipo != null && !equipo.isBlank()) {
-                fileName += "-" + equipo;
-            }
-            if (categoria != null && !categoria.isBlank()) {
-                fileName += "-" + categoria;
-            }
-            fileName += ".pdf";
 
-            try (InputStream inputStream = con.getInputStream(); FileOutputStream outputStream = new FileOutputStream(fileName)) {
+            String timestamp = new SimpleDateFormat("ddMMyyyy").format(new Date());
+            String fileName = String.format("Informe_Equipo_%s_%s_%s.pdf",
+                    equipo != null ? equipo : "Todos",
+                    categoria != null ? categoria : "Todas",
+                    timestamp);
+
+            String userHome = System.getProperty("user.home");
+            File downloadsFolder = new File(userHome, "Downloads");
+            File outputFile = new File(downloadsFolder, fileName);
+
+            try (InputStream inputStream = con.getInputStream(); FileOutputStream outputStream = new FileOutputStream(outputFile)) {
 
                 byte[] buffer = new byte[BUFFER_SIZE];
                 int bytesRead;
@@ -106,20 +108,16 @@ public class DataToJasper {
                     outputStream.write(buffer, 0, bytesRead);
                 }
 
-                System.out.println("File downloaded: " + fileName);
+                System.out.println("File downloaded: " + outputFile.getAbsolutePath());
+
                 if (Desktop.isDesktopSupported()) {
-                    try {
-                        Desktop.getDesktop().open(new File(fileName));
-                    } catch (IOException ex) {
-                        System.err.println("No applications available to open the file.");
-                    }
+                    Desktop.getDesktop().open(outputFile);
                 }
             }
         } else {
             System.err.println("GET request failed: " + url);
             System.err.println("Response Code: " + responseCode);
 
-            // Print error stream for more details
             try (BufferedReader in = new BufferedReader(new InputStreamReader(
                     responseCode >= 400 ? con.getErrorStream() : con.getInputStream()))) {
                 String inputLine;
@@ -131,11 +129,9 @@ public class DataToJasper {
             }
         }
 
-        // Disconnect the connection
         con.disconnect();
     }
 
-    // Helper method to encode URL parameters
     private static String encodeURIComponent(String value) {
         try {
             return java.net.URLEncoder.encode(value, "UTF-8");
@@ -143,5 +139,4 @@ public class DataToJasper {
             throw new RuntimeException("URL encoding failed", ex);
         }
     }
-
 }

@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 
 /**
@@ -19,6 +20,7 @@ public class ExportarJasperFrame extends JFrame {
 
     JLabel temporadalabel;
     JTextField temporadatF;
+    JProgressBar progressBar;
 
     JLabel categorialable;
     JTextField categoriatF;
@@ -65,6 +67,11 @@ public class ExportarJasperFrame extends JFrame {
         exportBtn.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
         exportBtn.setBounds(30, 228, 150, 30);
 
+        progressBar = new JProgressBar();
+        progressBar.setVisible(false); // Initially hidden
+        progressBar.setBounds(230, 228, 140, 30);
+        add(progressBar);
+
         add(temporadalabel);
         add(temporadatF);
         add(categorialable);
@@ -73,6 +80,10 @@ public class ExportarJasperFrame extends JFrame {
         add(equipotF);
         add(exportBtn);
 
+    }
+
+    public JProgressBar getProgressBar() {
+        return progressBar;
     }
 
     public JTextField getTemporadatF() {
