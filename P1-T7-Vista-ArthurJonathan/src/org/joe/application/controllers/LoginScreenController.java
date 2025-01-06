@@ -30,11 +30,13 @@ public class LoginScreenController implements ActionListener {
     private ManagementFrameController managementFrameController;
     private CreateuserFrame createuser;
     private RetrievePassowordFrame rpf;
+    private String configFilePath;
 
-    public LoginScreenController(EquipDataInterface edi) {
+    public LoginScreenController(EquipDataInterface edi, String configFilePath) {
 
         loginScreen = new LoginScreen();
         this.edi = edi;
+        this.configFilePath = configFilePath;
 
         loginScreen.loginOnClickListener(this);
         loginScreen.registrarOnClick(this);
@@ -80,7 +82,7 @@ public class LoginScreenController implements ActionListener {
             @Override
             protected Void doInBackground() throws Exception {
                 try {
-                    edi.connectDatasource("config.properties");
+                    edi.connectDatasource(configFilePath);
                 } catch (Exception ex) {
                     ErrMsg.error(ex.getMessage(), ex.getCause());
                 }

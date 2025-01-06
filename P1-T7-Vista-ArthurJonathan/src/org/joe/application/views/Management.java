@@ -55,6 +55,14 @@ public class Management extends JFrame {
 
     JMenu aboutMenu;
     JMenu helpMenu;
+
+    JMenuItem contactMenuItem;
+    JMenuItem reportBugItem;
+
+    JMenuItem sobreme;
+
+    JMenuItem closeApp;
+
     JMenuItem createseason;
     JPanel mngmtypePanel;
     JButton playermngmtBTN;
@@ -84,6 +92,10 @@ public class Management extends JFrame {
         teammngmtBTN = new JButton("Gestión De Equipos");
         managementTyTabbedPane = new JTabbedPane(JTabbedPane.NORTH);
         progressBar = new JProgressBar();
+        contactMenuItem = new JMenuItem("Contacta Me");
+        reportBugItem = new JMenuItem("Informar de un problema");
+        sobreme = new JMenuItem("Sobre la aplicación");
+        closeApp = new JMenuItem("Tancar la aplicación");
 
         exportXmlMenu = new JMenu("Exportar Xml");
         jugadoresxml = new JMenu("Jugadores");
@@ -145,6 +157,13 @@ public class Management extends JFrame {
         exportXmlMenu.add(jugadoresxml);
         jugadoresxml.add(todjugadores);
         jugadoresxml.add(jugador);
+
+        helpMenu.add(contactMenuItem);
+        helpMenu.add(reportBugItem);
+
+        aboutMenu.add(sobreme);
+
+        fileMenu.add(closeApp);
 
         exportXmlMenu.add(teamxml);
         teamxml.add(todequipo);
@@ -291,12 +310,24 @@ public class Management extends JFrame {
         this.exportarSeasonTeamsItem.addActionListener(listener);
     }
 
+    public void closeApp_OnClick(ActionListener listener) {
+        this.closeApp.addActionListener(listener);
+    }
+
     public void ExportarJugadoresCSV_onClick(ActionListener listener) {
         this.exportJugadoresItem.addActionListener(listener);
     }
 
     public void ExportarJasper_onClick(ActionListener listener) {
         this.exportJsperMenuItem.addActionListener(listener);
+    }
+
+    public void contactMe_OnClick(ActionListener listener) {
+        this.contactMenuItem.addActionListener(listener);
+    }
+
+    public void reportBug_OnClick(ActionListener listener) {
+        this.reportBugItem.addActionListener(listener);
     }
 
     public JMenuItem getExportJugadoresItem() {
@@ -307,8 +338,28 @@ public class Management extends JFrame {
         return exportarSeasonTeamsItem;
     }
 
+    public void sobreMe_OnClick(ActionListener listener) {
+        this.sobreme.addActionListener(listener);
+    }
+
     public JProgressBar getProgressBar() {
         return progressBar;
+    }
+
+    public JMenuItem getContactMenuItem() {
+        return contactMenuItem;
+    }
+
+    public JMenuItem getReportBugItem() {
+        return reportBugItem;
+    }
+
+    public JMenuItem getSobreme() {
+        return sobreme;
+    }
+
+    public JMenuItem getCloseApp() {
+        return closeApp;
     }
 
 }

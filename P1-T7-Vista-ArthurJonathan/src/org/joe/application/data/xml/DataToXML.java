@@ -14,6 +14,7 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.joe.application.constants.ErrMsg;
 import org.joe.gestion.model.data.Category;
 import org.joe.gestion.model.data.Player;
 import org.joe.gestion.model.helperclasses.PlayerList;
@@ -62,6 +63,8 @@ public class DataToXML {
             throw new EquipDataInterfaceException("JAXB Exception: " + ex.getMessage(), ex.getCause());
         } catch (FileNotFoundException ex) {
             throw new EquipDataInterfaceException("Error finding file: " + ex.getMessage(), ex.getCause());
+        } catch (Exception ex) {
+            throw new EquipDataInterfaceException("Error: " + ex.getMessage(), ex.getCause());
         }
         return ans;
     }
@@ -87,6 +90,8 @@ public class DataToXML {
             throw new EquipDataInterfaceException("JAXB Exception: " + ex.getMessage(), ex.getCause());
         } catch (FileNotFoundException ex) {
             throw new EquipDataInterfaceException("Error finding file: " + ex.getMessage(), ex.getCause());
+        } catch (Exception ex) {
+            throw new EquipDataInterfaceException("Error: " + ex.getMessage(), ex.getCause());
         }
     }
 
@@ -111,6 +116,8 @@ public class DataToXML {
             throw new EquipDataInterfaceException("JAXB Exception: " + ex.getMessage(), ex.getCause());
         } catch (FileNotFoundException ex) {
             throw new EquipDataInterfaceException("Error finding file: " + ex.getMessage(), ex.getCause());
+        } catch (Exception ex) {
+            throw new EquipDataInterfaceException("Error: " + ex.getMessage(), ex.getCause());
         }
     }
 
@@ -142,6 +149,8 @@ public class DataToXML {
             throw new EquipDataInterfaceException("JAXB Exception: " + ex.getMessage(), ex.getCause());
         } catch (FileNotFoundException ex) {
             throw new EquipDataInterfaceException("Error finding file: " + ex.getMessage(), ex.getCause());
+        } catch (Exception ex) {
+            throw new EquipDataInterfaceException("Error: " + ex.getMessage(), ex.getCause());
         }
     }
 
@@ -168,6 +177,8 @@ public class DataToXML {
             throw new EquipDataInterfaceException("JAXB Exception: " + ex.getMessage(), ex.getCause());
         } catch (FileNotFoundException ex) {
             throw new EquipDataInterfaceException("Error finding file: " + ex.getMessage(), ex.getCause());
+        } catch (Exception ex) {
+            throw new EquipDataInterfaceException("Error: " + ex.getMessage(), ex.getCause());
         }
     }
 
@@ -200,6 +211,8 @@ public class DataToXML {
             throw new EquipDataInterfaceException("JAXB Exception: " + ex.getMessage(), ex.getCause());
         } catch (FileNotFoundException ex) {
             throw new EquipDataInterfaceException("Error finding file: " + ex.getMessage(), ex.getCause());
+        } catch (Exception ex) {
+            throw new EquipDataInterfaceException("Error: " + ex.getMessage(), ex.getCause());
         }
     }
 
@@ -231,6 +244,8 @@ public class DataToXML {
             throw new EquipDataInterfaceException("JAXB Exception: " + ex.getMessage(), ex.getCause());
         } catch (FileNotFoundException ex) {
             throw new EquipDataInterfaceException("Error finding file: " + ex.getMessage(), ex.getCause());
+        } catch (Exception ex) {
+            throw new EquipDataInterfaceException("Error: " + ex.getMessage(), ex.getCause());
         }
     }
 

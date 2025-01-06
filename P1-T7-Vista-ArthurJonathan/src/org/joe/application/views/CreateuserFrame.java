@@ -32,10 +32,9 @@ public class CreateuserFrame extends JFrame {
     }
 
     private void initializeComponents() {
-        // Set layout for the frame
+
         setLayout(null);
 
-        // Labels
         JLabel lblUsuario = new JLabel("USUARIO:");
         lblUsuario.setBounds(20, 20, 100, 30);
         lblUsuario.setFont(new Font("Segoe UI", Font.BOLD, 14));
@@ -56,7 +55,6 @@ public class CreateuserFrame extends JFrame {
         lblConfirmarContrasena.setFont(new Font("Segoe UI", Font.BOLD, 14));
         add(lblConfirmarContrasena);
 
-        // Text fields
         txtUsuario = new JTextField();
         txtUsuario.setBounds(20, 50, 280, 30);
         txtUsuario.putClientProperty(FlatClientProperties.STYLE, "arc:12;");
@@ -78,8 +76,8 @@ public class CreateuserFrame extends JFrame {
         txtConfirmarContrasena.putClientProperty(FlatClientProperties.STYLE, "arc:12;showRevealButton:true;");
         add(txtConfirmarContrasena);
 
-        // Button
         btnCrear = new JButton("Crear");
+        btnCrear.setToolTipText("Pulsa para crear nuevo usuario");
         btnCrear.setBounds(115, 400, 100, 30);
         btnCrear.putClientProperty(FlatClientProperties.STYLE, "arc:12;");
         add(btnCrear);

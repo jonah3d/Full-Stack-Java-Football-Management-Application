@@ -42,7 +42,11 @@ public class VerJugEquiposController implements ActionListener {
                 int selectedTeamIndex = verJuEquipos.getTeamTable().getSelectedRow();
                 if (selectedTeamIndex != -1) {
                     Team selectedTeam = currentTeamlist.get(selectedTeamIndex);
-                    populatePlayerTable(edi.getTeamPlayers(selectedTeam.getName(), (java.sql.Date) selectedTeam.getSeason_year()));
+                    try {
+                        populatePlayerTable(edi.getTeamPlayers(selectedTeam.getName(), (java.sql.Date) selectedTeam.getSeason_year()));
+                    } catch (Exception ex) {
+                        ErrMsg.error(ex.getMessage(), ex.getCause());
+                    }
                 }
             }
         });

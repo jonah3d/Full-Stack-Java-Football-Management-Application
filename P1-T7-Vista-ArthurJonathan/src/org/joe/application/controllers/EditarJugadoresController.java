@@ -358,9 +358,10 @@ public class EditarJugadoresController implements ActionListener {
         } else {
             errorDialogue("Ningun Imagen O Tipo No Suportado");
         }
-        Player player = new Player(nombre, apellido, sexe, datanaix, nif, iban,
-                direccion, codipostal, localidad, provincia, pais, image, medical);
+
         try {
+            Player player = new Player(nombre, apellido, sexe, datanaix, nif, iban,
+                    direccion, codipostal, localidad, provincia, pais, image, medical);
             boolean btoteam = edi.checkPlayerBelongsToTeam(player.getLegal_id());
             Team playerteam = edi.getPlayerTeam(player.getLegal_id());
             String teamtype = playerteam.getTeam_type();

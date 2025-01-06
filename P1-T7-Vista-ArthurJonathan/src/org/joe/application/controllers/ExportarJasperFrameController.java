@@ -56,7 +56,7 @@ public class ExportarJasperFrameController implements ActionListener {
 
                 @Override
                 protected void done() {
-                    // Hide the progress bar when done
+
                     progressBar.setIndeterminate(false);
                     progressBar.setVisible(false);
                 }

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import org.joe.application.constants.ErrMsg;
 import org.joe.application.views.tabs.VerEquipos;
 import org.joe.gestion.model.data.Category;
 import org.joe.gestion.model.data.Season;
@@ -31,20 +32,23 @@ public class VerEquiposController implements ActionListener {
         this.edi = edi;
         verEquipos = new VerEquipos();
         currentTeams = new ArrayList<>();
+        try {
+            verEquipos.getCatComboBox().addItem("");
+            for (Category item : edi.getCategorys()) {
+                verEquipos.getCatComboBox().addItem(item.getName());
+            }
 
-        verEquipos.getCatComboBox().addItem("");
-        for (Category item : edi.getCategorys()) {
-            verEquipos.getCatComboBox().addItem(item.getName());
-        }
-
-        for (Season season : edi.getSeasons()) {
-            verEquipos.getTempComboBox().addItem(season.getName());
+            for (Season season : edi.getSeasons()) {
+                verEquipos.getTempComboBox().addItem(season.getName());
+            }
+        } catch (Exception ex) {
+            ErrMsg.error(ex.getMessage(), ex.getCause());
         }
 
         verEquipos.getTeamDetails_JTable().setDefaultRenderer(Object.class, new CustomTeamTableCellRenderer());
 
-        Season currentSeason = edi.getSeasons().get(0);
         try {
+            Season currentSeason = edi.getSeasons().get(0);
             populateTable(edi.getTeamsBySeason(currentSeason.getSeason()));
         } catch (EquipDataInterfaceException ex) {
             error(ex.getMessage(), ex.getCause());

@@ -44,7 +44,6 @@ public class LoginScreen {
 
     public void loginscreen() {
 
-        //Initializacion De Componentes
         loginframe = new JFrame("Login");
         contentpanel = new JPanel();
         logintext = new JLabel("Usuario: ");
@@ -52,17 +51,20 @@ public class LoginScreen {
         JL_passwordtext = new JLabel("Contraseña");
         JTF_password = new JPasswordField();
         JB_login = new JButton("Entrar");
+        JB_login.setToolTipText("Tocar para entrar la aplicación");
         actionpanel = new JPanel();
         connectionBar = new JProgressBar();
         forgotten_passlbl = new JLabel("Olvidado la contraseña?");
+        forgotten_passlbl.setToolTipText("Tocar para reestablecer contraseña");
         registrar_btn = new JButton("Registrar");
+        registrar_btn
+                .setToolTipText("Tocar para registrar usuario de la aplicación");
 
-        //Operacion De Componentes
         loginframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         loginframe.setSize(1280, 720);
 
         contentpanel.setPreferredSize(new Dimension(1280, 720));
-        //contentpanel.setBackground(new Color(26,26,29));
+
         contentpanel.setLayout(null);
 
         connectionBar.setValue(0);
@@ -75,7 +77,7 @@ public class LoginScreen {
         actionpanel.setBackground(Color.white);
 
         logintext.setBounds(LoginConstants.loginTxtlbl_X, LoginConstants.loginTxtlbl_Y, LoginConstants.loginTxtlbl_Width, LoginConstants.loginTxtlbl_Height);
-        //logintext.setBackground(Color.white);
+
         logintext.setFont(new Font("Segoe UI", Font.BOLD, 14));
 
         JL_passwordtext.setBounds(LoginConstants.PassTxtlbl_X, LoginConstants.PassTxtlbl_Y, LoginConstants.PassTxtlbl_Width, LoginConstants.PassTxtlbl_Height);
@@ -96,7 +98,6 @@ public class LoginScreen {
         registrar_btn.setBounds(522, 347, 96, 48);
         registrar_btn.putClientProperty(FlatClientProperties.STYLE, "arc:20;");
 
-        //Añadiendo De Componentes A Su Padres
         contentpanel.add(connectionBar);
         actionpanel.add(logintext);
         actionpanel.add(JTF_username);

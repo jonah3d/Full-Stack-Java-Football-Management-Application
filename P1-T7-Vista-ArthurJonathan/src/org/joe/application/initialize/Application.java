@@ -21,6 +21,7 @@ public class Application {
 
     private LoginScreenController screenController;
     private static String nomClassePersistencia = null;
+    private static String configFilePath = null;
     private EquipDataInterface dbad = null;
 
     public Application() {
@@ -28,7 +29,7 @@ public class Application {
 
             dbad = (EquipDataInterface) Class.forName(nomClassePersistencia).newInstance();
 
-            screenController = new LoginScreenController(dbad);
+            screenController = new LoginScreenController(dbad, configFilePath);
         } catch (Exception e) {
             System.err.println("Error initializing persistence class: " + e.getMessage());
             System.exit(1);
@@ -42,12 +43,12 @@ public class Application {
             Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        if (args.length == 0) {
-            System.out.println("Please provide the persistence class name as the first argument.");
+        if (args.length < 2) {
+            System.out.println("USO: java -jar tu-aplicación.jar <persistence-class> <config-file-path>");
             System.exit(0);
         }
         nomClassePersistencia = args[0];
-
+        configFilePath = args[1];
         new Application();
     }
 }

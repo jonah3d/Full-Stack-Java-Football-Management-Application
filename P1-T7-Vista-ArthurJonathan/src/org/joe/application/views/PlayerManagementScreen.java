@@ -52,6 +52,7 @@ public class PlayerManagementScreen extends JPanel {
 
         sideJPanel.setBounds(0, 4, 244, 634);
         seeply_BTN = new JButton("Ver Jugadores");
+
         addply_BTN = new JButton("Añadir Jugadores");
         edply_BTN = new JButton("Editar Jugador");
         delply_BTN = new JButton("Eliminar Jugador");

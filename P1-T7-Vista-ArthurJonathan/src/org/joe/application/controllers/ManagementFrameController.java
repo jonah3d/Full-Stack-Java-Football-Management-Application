@@ -22,6 +22,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import org.joe.application.constants.ErrMsg;
 import org.joe.application.views.ExportarTodosJugadoresFrame;
 import org.joe.application.views.Management;
@@ -47,6 +48,10 @@ public class ManagementFrameController implements ActionListener {
     private ExportarEquipoCSVFrameController eecsvfc;
     private ExportarJasperFrameController ejasfc;
     static EquipDataInterface edi;
+    private ContactMeFrameController cmfc;
+    private ReportBugFrameController rbfc;
+    private AboutMeFrameController amfc;
+    JProgressBar progressBar = null;
 
     public ManagementFrameController(EquipDataInterface edi) {
         this.edi = edi;
@@ -64,12 +69,19 @@ public class ManagementFrameController implements ActionListener {
         managementview.ExportarJugadoresCSV_onClick(this);
         managementview.ExportarJasper_onClick(this);
 
+        managementview.contactMe_OnClick(this);
+        managementview.reportBug_OnClick(this);
+        managementview.sobreMe_OnClick(this);
+        managementview.closeApp_OnClick(this);
+        progressBar = managementview.getProgressBar();
+
         onWindowOpened();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == managementview.getPlayermngmtBTN()) {
+
             managementview.getManagementTyTabbedPane().setSelectedIndex(0);
         }
 
@@ -112,13 +124,31 @@ public class ManagementFrameController implements ActionListener {
         if (e.getSource() == managementview.getExportJsperMenuItem()) {
             ejasfc = new ExportarJasperFrameController(edi);
         }
+
+        if (e.getSource() == managementview.getContactMenuItem()) {
+            cmfc = new ContactMeFrameController();
+        }
+
+        if (e.getSource() == managementview.getReportBugItem()) {
+            rbfc = new ReportBugFrameController();
+        }
+
+        if (e.getSource() == managementview.getSobreme()) {
+            amfc = new AboutMeFrameController();
+        }
+
+        if (e.getSource() == managementview.getCloseApp()) {
+            closeApp();
+        }
     }
 
-    public void onWindowOpened() {
-        managementview.addWindowListener(new WindowListener() {
+    private void closeApp() {
+        progressBar.setVisible(true);
+        progressBar.setIndeterminate(true);
 
+        SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
             @Override
-            public void windowClosing(WindowEvent e) {
+            protected Void doInBackground() throws Exception {
                 try {
                     if (edi != null) {
                         edi.disconnectDatasource();
@@ -126,6 +156,51 @@ public class ManagementFrameController implements ActionListener {
                 } catch (Exception ex) {
                     ErrMsg.error(ex.getMessage(), ex.getCause());
                 }
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                progressBar.setIndeterminate(false);
+                progressBar.setVisible(false);
+                System.exit(0);
+            }
+        };
+        worker.execute();
+    }
+
+    public void onWindowOpened() {
+        managementview.addWindowListener(new WindowListener() {
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+
+                progressBar.setVisible(true);
+                progressBar.setIndeterminate(true);
+
+                SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+                    @Override
+                    protected Void doInBackground() throws Exception {
+
+                        try {
+                            if (edi != null) {
+
+                                edi.disconnectDatasource();
+                            }
+                        } catch (Exception ex) {
+                            ErrMsg.error(ex.getMessage(), ex.getCause());
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    protected void done() {
+
+                        progressBar.setIndeterminate(false);
+                        progressBar.setVisible(false);
+                    }
+                };
+                worker.execute();
 
             }
 

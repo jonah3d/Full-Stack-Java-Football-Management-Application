@@ -33,8 +33,12 @@ public class AnadirEquipoController implements ActionListener {
 
         anadirEquipos.addEquipo_OnClick(this);
 
-        for (Category item : edi.getCategorys()) {
-            anadirEquipos.getCategoriaBox().addItem(item.getName());
+        try {
+            for (Category item : edi.getCategorys()) {
+                anadirEquipos.getCategoriaBox().addItem(item.getName());
+            }
+        } catch (Exception ex) {
+            ErrMsg.error(ex.getMessage(), ex.getCause());
         }
     }
 

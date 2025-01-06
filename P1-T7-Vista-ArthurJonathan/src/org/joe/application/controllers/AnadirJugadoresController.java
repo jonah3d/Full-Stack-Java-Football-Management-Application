@@ -309,10 +309,9 @@ public class AnadirJugadoresController implements ActionListener {
             errorDialogue("Ningun Imagen O Tipo No Suportado");
         }
 
-        Player player = new Player(nombre, apellido, sexe, datanaix, nif, iban,
-                direccion, codipostal, localidad, provincia, pais, image, medical);
-
         try {
+            Player player = new Player(nombre, apellido, sexe, datanaix, nif, iban,
+                    direccion, codipostal, localidad, provincia, pais, image, medical);
             edi.addNewPlayer(player);
         } catch (EquipDataInterfaceException e) {
             ErrMsg.error(e.getMessage(), e.getCause());

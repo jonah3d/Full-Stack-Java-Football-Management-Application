@@ -35,7 +35,7 @@ public class ExportarEquipoCSVFrame extends JFrame {
 
     public ExportarEquipoCSVFrame() {
         setSize(400, 300);
-        setTitle("Exportar Temporada Equipo");
+        setTitle("Exportar Equipo");
         setLayout(null);
         setLocationRelativeTo(null);
         setVisible(true);
@@ -56,6 +56,7 @@ public class ExportarEquipoCSVFrame extends JFrame {
         temporadaLabel = new JLabel("Temporada A Exportar");
 
         searchButton = new JButton("Buscar");
+        searchButton.setToolTipText("Pulsa para buscar equipo");
 
         datePicker = new DatePicker();
         datefield = new JFormattedTextField();
@@ -75,8 +76,10 @@ public class ExportarEquipoCSVFrame extends JFrame {
         filepathTF.setBounds(30, 180, 150, 30);
         filepathTF.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
         browseButton.setBounds(190, 180, 120, 30);
+        browseButton.setToolTipText("Seleciona dirección del archivo");
         browseButton.putClientProperty(FlatClientProperties.STYLE, "arc:10;");
         exportButton.setBounds(30, 225, 100, 30);
+        exportButton.setToolTipText("Pulsa para guardar equipos");
 
         add(filename);
         add(filenameTF);

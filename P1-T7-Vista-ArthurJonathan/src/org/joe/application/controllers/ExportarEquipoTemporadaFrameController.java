@@ -7,7 +7,6 @@ package org.joe.application.controllers;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JFileChooser;
@@ -18,7 +17,6 @@ import org.joe.application.views.ExportarEquipoTemporadaFrame;
 import org.joe.gestion.model.data.Player;
 import org.joe.gestion.model.data.Team;
 import org.joe.gestion.model.persistence.EquipDataInterface;
-import org.joe.gestion.model.persistence.EquipDataInterfaceException;
 
 /**
  *
