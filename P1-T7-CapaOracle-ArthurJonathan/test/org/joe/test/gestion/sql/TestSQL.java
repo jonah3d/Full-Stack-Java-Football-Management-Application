@@ -37,18 +37,23 @@ public class TestSQL {
     private static EquipDataImplementationSQL edisql = null;
 
     public static void ConnectToDb(EquipDataImplementationSQL edisql) {
-        edisql = new EquipDataImplementationSQL();
-        edisql.connectDatasource("config.properties");
+        if (edisql != null) {
+            edisql.connectDatasource("config.properties");
+        } else {
+            throw new EquipDataInterfaceException("edisql cannot be null");
+        }
     }
 
     public static void closeDbConnection(EquipDataImplementationSQL edisql) {
-        edisql = new EquipDataImplementationSQL();
-        try {
-            edisql.disconnectDatasource();
-        } catch (Exception e) {
-            System.out.println("MENSAJE: " + e.getMessage() + "\n" + "\nCAUSA: " + e.getCause());
+        if (edisql != null) {
+            try {
+                edisql.disconnectDatasource();
+            } catch (Exception e) {
+                ErrorMsg(e);
+            }
+        } else {
+            System.out.println("edisql instance is null. Cannot close connection.");
         }
-
     }
 
     public static void addNewPlayer(EquipDataImplementationSQL edisql) {
@@ -139,12 +144,15 @@ public class TestSQL {
         return p1;
     }
 
-    public static void editPlayer() {
-        EquipDataImplementationSQL isql = new EquipDataImplementationSQL();
+    public static void editPlayer(EquipDataImplementationSQL edisql) {
+        edisql = new EquipDataImplementationSQL();
+        ConnectToDb(edisql);
         try {
-            isql.editarJugador(newPlayer());
+            edisql.editarJugador(newPlayer());
         } catch (Exception ex) {
             System.out.println("MENSAJE: " + ex.getMessage() + "\n" + "\nCAUSA: " + ex.getCause());
+        } finally {
+            closeDbConnection(edisql);
         }
 
     }
@@ -155,19 +163,23 @@ public class TestSQL {
         return new SerialBlob(bytes);
     }
 
-    public static void createUser() {
-        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+    public static void createUser(EquipDataImplementationSQL edisql) {
+        edisql = new EquipDataImplementationSQL();
+        ConnectToDb(edisql);
         try {
-            implementationSQL.createUser("admin", "joe", "admin");
+            edisql.createUser("admin", "joe", "admin");
         } catch (Exception ex) {
             System.out.println("MENSAJE: " + ex.getMessage() + "\n" + "\nCAUSA: " + ex.getCause());
+        } finally {
+            closeDbConnection(edisql);
         }
     }
 
-    public static void validateUser() {
-        EquipDataImplementationSQL isql = new EquipDataImplementationSQL();
+    public static void validateUser(EquipDataImplementationSQL edisql) {
+        edisql = new EquipDataImplementationSQL();
+        ConnectToDb(edisql);
         try {
-            boolean result = isql.validateUser("admin", "admin");
+            boolean result = edisql.validateUser("admin", "admin");
             if (result) {
                 System.out.println("USER IS VALID");
             } else {
@@ -175,25 +187,32 @@ public class TestSQL {
             }
         } catch (Exception ex) {
             System.out.println("MENSAJE: " + ex.getMessage() + "\n" + "\nCAUSA: " + ex.getCause());
+        } finally {
+            closeDbConnection(edisql);
         }
+
     }
 
-    public static void restorePassword() {
-        EquipDataImplementationSQL isql = new EquipDataImplementationSQL();
+    public static void restorePassword(EquipDataImplementationSQL edisql) {
+        edisql = new EquipDataImplementationSQL();
+        ConnectToDb(edisql);
         try {
-            isql.restorePassword("admin", "ADMIN");
+            edisql.restorePassword("admin", "ADMIN");
         } catch (Exception e) {
             System.out.println("MENSAJE: " + e.getMessage() + "\n" + "\nCAUSA: " + e.getCause());
+        } finally {
+            closeDbConnection(edisql);
         }
 
     }
 
-    public static void getTeamsByCategory() {
+    public static void getTeamsByCategory(EquipDataImplementationSQL edisql) {
         try {
             List<Team> teamsbycat = new ArrayList<>();
 
-            EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
-            teamsbycat = implementationSQL.getTeamsByCategory("Cadet");
+            edisql = new EquipDataImplementationSQL();
+            ConnectToDb(edisql);
+            teamsbycat = edisql.getTeamsByCategory("Cadet");
 
             for (Team t : teamsbycat) {
                 System.out.println("\n=========================\n");
@@ -201,6 +220,8 @@ public class TestSQL {
             }
         } catch (Exception e) {
             ErrorMsg(e);
+        } finally {
+            closeDbConnection(edisql);
         }
 
     }
@@ -209,61 +230,73 @@ public class TestSQL {
         System.out.println("MENSAJE: " + e.getMessage() + "\n" + "\nCAUSA: " + e.getCause());
     }
 
-    public static void deletePlayer() {
-        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
-
+    public static void deletePlayer(EquipDataImplementationSQL edisql) {
+        edisql = new EquipDataImplementationSQL();
+        ConnectToDb(edisql);
         try {
-            implementationSQL.eliminarJugador("X620841H");
+            edisql.eliminarJugador("X620841H");
         } catch (Exception e) {
             ErrorMsg(e);
+        } finally {
+            closeDbConnection(edisql);
         }
 
     }
 
-    public static void deleteTeam() {
-        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+    public static void deleteTeam(EquipDataImplementationSQL edisql) {
+        edisql = new EquipDataImplementationSQL();
+        ConnectToDb(edisql);
         try {
-            implementationSQL.deleteTeam("FcBarcelona");
+            edisql.deleteTeam("FcBarcelona");
         } catch (Exception e) {
             ErrorMsg(e);
+        } finally {
+            closeDbConnection(edisql);
         }
 
     }
 
-    public static void getAllCategories() {
+    public static void getAllCategories(EquipDataImplementationSQL edisql) {
         try {
-            EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+            edisql = new EquipDataImplementationSQL();
+            ConnectToDb(edisql);
             List<Category> catlist = new ArrayList<>();
-            catlist = implementationSQL.getCategorys();
+            catlist = edisql.getCategorys();
             for (Category cat : catlist) {
                 cat.mostrarDetalle();
                 System.out.println("\n");
             }
         } catch (Exception e) {
             ErrorMsg(e);
+        } finally {
+            closeDbConnection(edisql);
         }
 
     }
 
-    public static void addNewTeam() {
-        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+    public static void addNewTeam(EquipDataImplementationSQL edisql) {
+        edisql = new EquipDataImplementationSQL();
+        ConnectToDb(edisql);
         try {
-            implementationSQL.addNewTeam("FcBarcelona", "D", "Juvenil", sdf.parse("2024-09-01"));
+            edisql.addNewTeam("FcBarcelona", "D", "Juvenil", sdf.parse("2024-09-01"));
         } catch (Exception ex) {
             System.out.println("MENSAJE: " + ex.getMessage() + "\n" + "\nCAUSA: " + ex.getCause());
+        } finally {
+            closeDbConnection(edisql);
         }
     }
 
-    public static void getTeamPlayers() {
+    public static void getTeamPlayers(EquipDataImplementationSQL edisql) {
 
         try {
-            EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+            edisql = new EquipDataImplementationSQL();
+            ConnectToDb(edisql);
             List<Player> playerlist = new ArrayList<>();
             Date date = sdf.parse("2024-09-01");
 
             java.sql.Date oracldate = new java.sql.Date(date.getTime());
             System.out.println("ORCALE DATE: " + oracldate);
-            playerlist = implementationSQL.getTeamPlayers("Fc Olot Fem", oracldate);
+            playerlist = edisql.getTeamPlayers("Fc Olot Fem", oracldate);
             if (playerlist.isEmpty()) {
                 System.out.println("list is empty");
             }
@@ -273,47 +306,56 @@ public class TestSQL {
             }
         } catch (Exception e) {
             ErrorMsg(e);
+        } finally {
+            closeDbConnection(edisql);
         }
 
     }
 
-    public static void getAllTeams() {
+    public static void getAllTeams(EquipDataImplementationSQL edisql) {
         try {
-            EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+            edisql = new EquipDataImplementationSQL();
+            ConnectToDb(edisql);
             List<Team> teamlist = new ArrayList<>();
 
-            teamlist = implementationSQL.getAllTeams();
+            teamlist = edisql.getAllTeams();
             for (Team team : teamlist) {
                 team.mostrarDetalle();
             }
         } catch (Exception e) {
             ErrorMsg(e);
+        } finally {
+            closeDbConnection(edisql);
         }
 
     }
 
-    public static void getPlayers() {
+    public static void getPlayers(EquipDataImplementationSQL edisql) {
         try {
-            EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+            edisql = new EquipDataImplementationSQL();
+            ConnectToDb(edisql);
             List<Player> playerlist = new ArrayList<>();
 
-            playerlist = implementationSQL.getPlayers();
+            playerlist = edisql.getPlayers();
             for (Player play : playerlist) {
                 System.out.println("\n=========================\n");
                 play.mostrarJugDetalle();
             }
         } catch (Exception e) {
             ErrorMsg(e);
+        } finally {
+            closeDbConnection(edisql);
         }
 
     }
 
-    public static void getTeamsSeaon() {
+    public static void getTeamsSeaon(EquipDataImplementationSQL edisql) {
         try {
-            EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+            edisql = new EquipDataImplementationSQL();
+            ConnectToDb(edisql);
             List<Team> teamlist = new ArrayList<>();
             try {
-                teamlist = implementationSQL.getTeamsBySeason(sdf.parse("2024-09-01"));
+                teamlist = edisql.getTeamsBySeason(sdf.parse("2024-09-01"));
             } catch (ParseException ex) {
                 Logger.getLogger(TestSQL.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -323,63 +365,78 @@ public class TestSQL {
             }
         } catch (Exception e) {
             ErrorMsg(e);
+        } finally {
+            closeDbConnection(edisql);
         }
 
     }
 
-    public static void getSeasons() {
+    public static void getSeasons(EquipDataImplementationSQL edisql) {
         try {
-            EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+            edisql = new EquipDataImplementationSQL();
+            ConnectToDb(edisql);
             List<Season> seasonslist = new ArrayList<>();
 
-            seasonslist = implementationSQL.getSeasons();
+            seasonslist = edisql.getSeasons();
             for (Season season : seasonslist) {
                 System.out.println("\n=========================\n");
                 season.mostrarDetalle();
             }
         } catch (Exception e) {
             ErrorMsg(e);
+        } finally {
+            closeDbConnection(edisql);
         }
 
     }
 
-    public static void getPlayerByLegalId() {
+    public static void getPlayerByLegalId(EquipDataImplementationSQL edisql) {
         try {
-            EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
-            Player player = implementationSQL.getPlayerByLegalId("9999901J");
+            edisql = new EquipDataImplementationSQL();
+            ConnectToDb(edisql);
+            Player player = edisql.getPlayerByLegalId("9999901J");
             player.mostrarJugDetalle();
         } catch (Exception e) {
             ErrorMsg(e);
+        } finally {
+            closeDbConnection(edisql);
         }
 
     }
 
-    public static void getTeamMemberCount() {
+    public static void getTeamMemberCount(EquipDataImplementationSQL edisql) {
         try {
-            EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
-            int count = implementationSQL.getTeamMemCount("FcRoquetasMASC");
+            edisql = new EquipDataImplementationSQL();
+            ConnectToDb(edisql);
+            int count = edisql.getTeamMemCount("FcRoquetasMASC");
             System.out.println("COUNT: " + count);
         } catch (Exception e) {
             ErrorMsg(e);
+        } finally {
+            closeDbConnection(edisql);
         }
 
     }
 
-    public static void removeTeam() {
+    public static void removeTeam(EquipDataImplementationSQL edisql) {
         try {
-            EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
-            implementationSQL.removeTeamFromSeason("Fc Monalco");
+            edisql = new EquipDataImplementationSQL();
+            ConnectToDb(edisql);
+            edisql.removeTeamFromSeason("Fc Monalco");
         } catch (Exception e) {
             ErrorMsg(e);
+        } finally {
+            closeDbConnection(edisql);
         }
 
     }
 
-    public static void checkPlayerHasTeam() {
+    public static void checkPlayerHasTeam(EquipDataImplementationSQL edisql) {
         try {
-            EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+            edisql = new EquipDataImplementationSQL();
+            ConnectToDb(edisql);
             boolean ans;
-            ans = implementationSQL.checkPlayerBelongsToTeam("9999902K");
+            ans = edisql.checkPlayerBelongsToTeam("9999902K");
             if (ans) {
                 System.out.println("Player Belongs To A Team");
             } else {
@@ -387,29 +444,34 @@ public class TestSQL {
             }
         } catch (Exception e) {
             ErrorMsg(e);
+        } finally {
+            closeDbConnection(edisql);
         }
 
     }
 
-    public static void testGetPlayerTeam() {
+    public static void testGetPlayerTeam(EquipDataImplementationSQL edisql) {
         try {
-            EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
-            Team team = implementationSQL.getPlayerTeam("9999902K");
+            edisql = new EquipDataImplementationSQL();
+            ConnectToDb(edisql);
+            Team team = edisql.getPlayerTeam("9999902K");
             team.mostrarDetalle();
         } catch (Exception e) {
             ErrorMsg(e);
+        } finally {
+            closeDbConnection(edisql);
         }
 
     }
 
-    public static void filteredPlayersList() {
+    public static void filteredPlayersList(EquipDataImplementationSQL edisql) {
         try {
-            EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
-
+            edisql = new EquipDataImplementationSQL();
+            ConnectToDb(edisql);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Date birthday = sdf.parse("2016-04-03");
 
-            List<Player> players = implementationSQL.playerFilterSearch(null, null, null, "Juvenil", "birth_year");
+            List<Player> players = edisql.playerFilterSearch(null, null, null, "Juvenil", "birth_year");
             if (players.isEmpty()) {
                 System.out.println("Query returned no results.");
             } else {
@@ -421,33 +483,38 @@ public class TestSQL {
             }
         } catch (Exception e) {
             ErrorMsg(e);
+        } finally {
+            closeDbConnection(edisql);
         }
 
     }
 
-    public static void getTeamByName() {
-        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
-
+    public static void getTeamByName(EquipDataImplementationSQL edisql) {
+        edisql = new EquipDataImplementationSQL();
+        ConnectToDb(edisql);
         try {
             String dateString = "2024-09-01";
             Date date = sdf.parse(dateString);
 
             java.sql.Date oracldate = new java.sql.Date(date.getTime());
-            Team team = implementationSQL.getTeamByName("Fc Wildcats Masc", oracldate);
+            Team team = edisql.getTeamByName("Fc Wildcats Masc", oracldate);
             team.mostrarDetalle();
         } catch (Exception e) {
             System.out.println("MENSAJE: " + e.getMessage() + "\n" + "\nCAUSA: " + e.getCause());
+        } finally {
+            closeDbConnection(edisql);
         }
 
     }
 
-    public static void getSeasonCatTeam() throws ParseException {
+    public static void getSeasonCatTeam(EquipDataImplementationSQL edisql) {
 
         try {
-            EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+            edisql = new EquipDataImplementationSQL();
+            ConnectToDb(edisql);
             String dateString = "2024-09-01";
             Date date = sdf.parse(dateString);
-            List<Team> teams = implementationSQL.getSeasonCategoryTeam("Cadet", date);
+            List<Team> teams = edisql.getSeasonCategoryTeam("Cadet", date);
             for (Team team : teams) {
                 System.out.println("---------------------------");
                 team.mostrarDetalle();
@@ -455,6 +522,8 @@ public class TestSQL {
 
         } catch (Exception e) {
             System.out.println("MENSAJE: " + e.getMessage() + "\n" + "\nCAUSA: " + e.getCause());
+        } finally {
+            closeDbConnection(edisql);
         }
 
     }
@@ -507,70 +576,70 @@ public class TestSQL {
                         addNewPlayer(edisql);
                         break;
                     case 2:
-                        createUser();
+                        createUser(edisql);
                         break;
                     case 3:
-                        validateUser();
+                        validateUser(edisql);
                         break;
                     case 4:
-                        restorePassword();
+                        restorePassword(edisql);
                         break;
                     case 5:
-                        getPlayerByLegalId();
+                        getPlayerByLegalId(edisql);
                         break;
                     case 6:
-                        deletePlayer();
+                        deletePlayer(edisql);
                         break;
                     case 7:
-                        getAllCategories();
+                        getAllCategories(edisql);
                         break;
                     case 8:
-                        addNewTeam();
+                        addNewTeam(edisql);
                         break;
                     case 9:
-                        deleteTeam();
+                        deleteTeam(edisql);
                         break;
                     case 10:
-                        getTeamsByCategory();
+                        getTeamsByCategory(edisql);
                         break;
                     case 11:
-                        getTeamPlayers();
+                        getTeamPlayers(edisql);
                         break;
                     case 12:
-                        getPlayers();
+                        getPlayers(edisql);
                         break;
                     case 13:
-                        editPlayer();
+                        editPlayer(edisql);
                         break;
                     case 14:
-                        getSeasons();
+                        getSeasons(edisql);
                         break;
                     case 15:
-                        getTeamsSeaon();
+                        getTeamsSeaon(edisql);
                         break;
                     case 16:
-                        getTeamMemberCount();
+                        getTeamMemberCount(edisql);
                         break;
                     case 17:
-                        removeTeam();
+                        removeTeam(edisql);
                         break;
                     case 18:
-                        getAllTeams();
+                        getAllTeams(edisql);
                         break;
                     case 19:
-                        checkPlayerHasTeam();
+                        checkPlayerHasTeam(edisql);
                         break;
                     case 20:
-                        testGetPlayerTeam();
+                        testGetPlayerTeam(edisql);
                         break;
                     case 21:
-                        filteredPlayersList();
+                        filteredPlayersList(edisql);
                         break;
                     case 22:
-                        getTeamByName();
+                        getTeamByName(edisql);
                         break;
                     case 23:
-                        getSeasonCatTeam();
+                        getSeasonCatTeam(edisql);
                         break;
 
                     case 0:
