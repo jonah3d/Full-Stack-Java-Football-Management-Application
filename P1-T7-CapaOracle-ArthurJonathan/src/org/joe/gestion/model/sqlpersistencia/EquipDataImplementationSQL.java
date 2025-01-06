@@ -1,35 +1,25 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package org.joe.gestion.model.sqlpersistencia;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.sql.*;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import oracle.sql.BLOB;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import oracle.jdbc.OracleConnection;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.joe.gestion.model.data.Category;
 import org.joe.gestion.model.data.Player;
 import org.joe.gestion.model.data.Season;
 import org.joe.gestion.model.data.Team;
-import org.joe.gestion.model.helperclasses.TeamPlayers;
 import org.joe.gestion.model.persistence.EquipDataInterface;
 import org.joe.gestion.model.persistence.EquipDataInterfaceException;
 
@@ -46,17 +36,12 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
     PreparedStatement getplaybyid;
     PreparedStatement addnewplayps;
     PreparedStatement deletplayer;
-    PreparedStatement playersbyyear;
-    PreparedStatement playerbyname;
     PreparedStatement editplayer;
     PreparedStatement newteam;
     PreparedStatement teambyCat;
-    PreparedStatement teamtype;
-    PreparedStatement teamSea;
     PreparedStatement teamPlyers;
     PreparedStatement delteam;
     PreparedStatement newSeasonDate;
-    PreparedStatement playersbyCat;
     PreparedStatement teamseason;
     PreparedStatement getteammemcount;
     PreparedStatement removeteam;
@@ -69,7 +54,6 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
     PreparedStatement playerteamget;
     PreparedStatement filterplayerspstmt;
     PreparedStatement getteambynamepstmt;
-    PreparedStatement getTeamWithPlayersstmt;
     PreparedStatement seasonTeamstmnt;
     PreparedStatement getseasoncatteamsStatement;
     PreparedStatement getCategorypstmt;
@@ -84,10 +68,10 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             throw new EquipDataInterfaceException("The Configuration File Name Does Not Exists Or Is Null");
         }
 
-        boolean answer = connectDatasource(configurationfile);
+        /* boolean answer = connectDatasource(configurationfile);
         if (answer) {
             System.out.println("Connection Established");
-        }
+        }*/
     }
 
     public boolean connectDatasource(String filename) {
@@ -119,6 +103,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
 
         try {
             con = DriverManager.getConnection(url, user, password);
+            System.out.println("Connection Established");
+
             //  con.setAutoCommit(false);
         } catch (SQLException ex) {
 
@@ -132,8 +118,9 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
 
         if (con != null) {
             try {
-                System.out.println("Connection Closed");
+
                 con.close();
+                System.out.println("Connection Closed");
             } catch (SQLException ex) {
 
                 throw new EquipDataInterfaceException("Datasource Wasn't Able To close" + ex.getMessage(), ex.getCause());
@@ -214,12 +201,16 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
                         = new Player(name, surname, sexe, datebirth, legalId, iban, direccion, codigopostal, localidad, provincia, pais, photo, medicalfin);
                 player.setId(playerid);
                 return player;
+
             } else {
                 throw new EquipDataInterfaceException("Query returned with no player");
             }
+
         } catch (SQLException ex) {
 
             throw new EquipDataInterfaceException("Unable To get Player " + ex.getMessage(), ex.getCause());
+        } finally {
+            closeResultSet(rs);
         }
     }
 
@@ -298,6 +289,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
         } catch (SQLException ex) {
 
             throw new EquipDataInterfaceException("Unable To get Players " + ex.getMessage(), ex.getCause());
+        } finally {
+            closeResultSet(rs);
         }
         return players;
     }
@@ -388,6 +381,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
         } catch (SQLException ex) {
 
             throw new EquipDataInterfaceException("Unable To get Players. " + ex.getMessage(), ex.getCause());
+        } finally {
+            closeResultSet(rs);
         }
         if (players.isEmpty()) {
             throw new EquipDataInterfaceException("Player List Is Null. Check Season");
@@ -424,6 +419,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
         } catch (SQLException e) {
 
             throw new EquipDataInterfaceException("Unable to get teams." + e.getMessage(), e.getCause());
+        } finally {
+            closeResultSet(rs);
         }
         return teams;
     }
@@ -465,6 +462,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
         } catch (SQLException ex) {
 
             throw new EquipDataInterfaceException("Unable To get Team. " + ex.getMessage(), ex.getCause());
+        } finally {
+            closeResultSet(rs);
         }
         if (nteam == null) {
             throw new EquipDataInterfaceException("Unable To get Team. Check Name || Season");
@@ -487,13 +486,63 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             userPreparedStatement.setString(3, hashedPassword);
 
             userPreparedStatement.executeUpdate();
+
             return true;
 
         } catch (SQLException ex) {
 
             throw new EquipDataInterfaceException("Failed To Insert New User. " + ex.getMessage(), ex.getCause());
+        } finally {
+            closePreparedStatement(userPreparedStatement);
         }
 
+    }
+
+    private void closePreparedStatement(PreparedStatement ps) {
+
+        if (ps != null) {
+            try {
+                ps.close();
+
+                System.out.println("PreparedStatement Tancada");
+            } catch (SQLException ex) {
+                throw new EquipDataInterfaceException("Fallo en tancar preparedStatment:  \tINFO: -> " + ex.getMessage()
+                        + "\tCAUSE: -> " + ex.getCause());
+            }
+        } else {
+            System.out.println("PreparedStatement ya está cerrado o nunca fue creado.");
+        }
+
+    }
+
+    private void closeStatement(Statement s) {
+        if (s != null) {
+            try {
+                s.close();
+
+                System.out.println("Statement Tancada");
+            } catch (SQLException ex) {
+                throw new EquipDataInterfaceException("Fallo en tancar Statment:  \tINFO: -> " + ex.getMessage()
+                        + "\tCAUSE: -> " + ex.getCause());
+            }
+        } else {
+            System.out.println("Statement ya está cerrado o nunca fue creado.");
+        }
+    }
+
+    private void closeResultSet(ResultSet rs) {
+        if (rs != null) {
+            try {
+                rs.close();
+                System.out.println("ResultSet cerrado.");
+            } catch (SQLException ex) {
+
+                throw new EquipDataInterfaceException("Error al cerrar ResultSet: INFO -> " + ex.getMessage()
+                        + " CAUSE -> " + ex.getCause(), ex);
+            }
+        } else {
+            System.out.println("ResultSet ya está cerrado o nunca fue creado.");
+        }
     }
 
     @Override
@@ -505,11 +554,11 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
         String hashedPassword = DigestUtils.sha1Hex(password);
 
         String query = "SELECT username, password FROM usermg WHERE username = ?";
-
+        ResultSet rs = null;
         try {
             uservalidation = con.prepareStatement(query);
             uservalidation.setString(1, username);
-            ResultSet rs = uservalidation.executeQuery();
+            rs = uservalidation.executeQuery();
 
             if (rs.next()) {
                 String storedPassword = rs.getString("password");
@@ -525,6 +574,9 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
         } catch (SQLException ex) {
 
             throw new EquipDataInterfaceException("Database error during validation." + ex.getMessage(), ex.getCause());
+        } finally {
+            closePreparedStatement(uservalidation);
+            closeResultSet(rs);
         }
     }
 
@@ -555,30 +607,9 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
         } catch (SQLException ex) {
 
             throw new EquipDataInterfaceException("Couldn't restore password. Please try again later. " + ex.getMessage(), ex.getCause());
+        } finally {
+            closePreparedStatement(restorepassword);
         }
-    }
-
-    @Override
-    public List<Player> getPlayersByLegalId(String legalID) {
-
-        if (legalID == null || legalID.isEmpty()) {
-            throw new EquipDataInterfaceException("The legal ID provided is null or empty");
-        }
-
-        String query = "SELECT * FROM player WHERE legal_id = ?";
-
-        try {
-            getplaybyid = con.prepareStatement(query);
-            getplaybyid.setString(1, legalID);
-
-            ResultSet rs = getplaybyid.executeQuery();
-
-            return getPlayers(rs);
-
-        } catch (SQLException ex) {
-            throw new EquipDataInterfaceException("Unable to retrieve player by legal ID." + ex.getMessage(), ex.getCause());
-        }
-
     }
 
     @Override
@@ -601,242 +632,10 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
         } catch (SQLException ex) {
 
             throw new EquipDataInterfaceException("Unable to retrieve player by legal ID. " + ex.getMessage(), ex.getCause());
+        } finally {
+            closePreparedStatement(getplaybyid);
         }
 
-    }
-
-    @Override
-    public List<Player> getPlayersByCat(String cat) {
-        if (cat.equals("") || cat == null) {
-            throw new EquipDataInterfaceException("Category Can't Be Null or Empty");
-        }
-
-        String query = "select * from player p "
-                + "join playerteam pl on p.id = pl.player "
-                + "join team t on pl.team = t.id "
-                + "where t.category_name = ?";
-        try {
-            playersbyCat = con.prepareStatement(query);
-            playersbyCat.setString(1, cat);
-
-            ResultSet rs = playersbyCat.executeQuery();
-            return getPlayers(rs);
-
-        } catch (SQLException ex) {
-            throw new EquipDataInterfaceException("Error Trying To Get Players From Category. " + ex.getMessage(), ex.getCause());
-        }
-    }
-
-    @Override
-    public List<Player> getPlayerByBirthYear(Date date) {
-
-        if (date == null) {
-            throw new EquipDataInterfaceException("Date Can't Be Null");
-        }
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        int year = calendar.get(Calendar.YEAR);
-
-        String query = "SELECT * FROM PLAYER WHERE EXTRACT(YEAR FROM BIRTH_YEAR) = ?";
-
-        try {
-            playersbyyear = con.prepareStatement(query);
-            playersbyyear.setInt(1, year);
-
-            ResultSet rs = playersbyyear.executeQuery();
-            return getPlayers(rs);
-        } catch (SQLException ex) {
-
-            throw new EquipDataInterfaceException("Error Trying To Retrieve The Players. " + ex.getMessage(), ex.getCause());
-        }
-
-    }
-
-    @Override
-    public List<Player> getPlayerByBirthYear_orddDatnaix(Date date) {
-
-        if (date == null) {
-            throw new EquipDataInterfaceException("Date Can't Be Null");
-        }
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        int year = calendar.get(Calendar.YEAR);
-
-        String query = "SELECT * FROM PLAYER WHERE EXTRACT(YEAR FROM BIRTH_YEAR) = ?"
-                + " ORDER BY BIRTH_YEAR";
-
-        try {
-            playersbyyear = con.prepareStatement(query);
-            playersbyyear.setInt(1, year);
-
-            ResultSet rs = playersbyyear.executeQuery();
-            return getPlayers(rs);
-        } catch (SQLException ex) {
-
-            throw new EquipDataInterfaceException("Error Trying To Retrieve The Players. " + ex.getMessage(), ex.getCause());
-        }
-
-    }
-
-    @Override
-    public List<Player> getPlayerByBirthYear_ordCognom(Date date) {
-        if (date == null) {
-            throw new EquipDataInterfaceException("Date Can't Be Null");
-        }
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        int year = calendar.get(Calendar.YEAR);
-
-        String query = "SELECT * FROM PLAYER WHERE EXTRACT(YEAR FROM BIRTH_YEAR) = ?"
-                + " ORDER BY surname";
-
-        try {
-            playersbyyear = con.prepareStatement(query);
-            playersbyyear.setInt(1, year);
-
-            ResultSet rs = playersbyyear.executeQuery();
-            return getPlayers(rs);
-        } catch (SQLException ex) {
-
-            throw new EquipDataInterfaceException("Error Trying To Retrieve The Players. " + ex.getMessage(), ex.getCause());
-        }
-    }
-
-    @Override
-    public List<Player> getPlayeraByCat_ordCognom(String cat) {
-        if (cat.equals("") || cat == null) {
-            throw new EquipDataInterfaceException("Category Can't Be Null or Empty");
-        }
-
-        String query = "select * from player p "
-                + "join playerteam pl on p.id = pl.player "
-                + "join team t on pl.team = t.id "
-                + "where t.category_name = ? "
-                + "order by p.surname";
-        try {
-            playersbyCat = con.prepareStatement(query);
-            playersbyCat.setString(1, cat);
-
-            ResultSet rs = playersbyCat.executeQuery();
-            return getPlayers(rs);
-
-        } catch (SQLException ex) {
-            throw new EquipDataInterfaceException("Error Trying To Get Players From Category. " + cat + " . " + ex.getMessage(), ex.getCause());
-        }
-    }
-
-    @Override
-    public List<Player> getPlayeraByCat_ordDatnaix(String cat) {
-        if (cat.equals("") || cat == null) {
-            throw new EquipDataInterfaceException("Category Can't Be Null or Empty");
-        }
-
-        String query = "select * from player p "
-                + "join playerteam pl on p.id = pl.player "
-                + "join team t on pl.team = t.id "
-                + "where t.category_name = ? "
-                + "order by p.birth_year";
-        try {
-            playersbyCat = con.prepareStatement(query);
-            playersbyCat.setString(1, cat);
-
-            ResultSet rs = playersbyCat.executeQuery();
-            return getPlayers(rs);
-
-        } catch (SQLException ex) {
-            throw new EquipDataInterfaceException("Error Trying To Get Players From Category " + cat + " . " + ex.getMessage(), ex.getCause());
-        }
-    }
-
-    @Override
-    public List<Player> getPlayerByName(String Name) {
-        if (Name.equals("") || Name == null) {
-            throw new EquipDataInterfaceException("Name Can't Be Null or Empty");
-        }
-
-        String query = "SELECT * FROM PLAYER WHERE UPPER(NAME) = UPPER(?) ORDER BY SURNAME ASC";
-
-        try {
-            playerbyname = con.prepareStatement(query);
-            playerbyname.setString(1, Name);
-
-            ResultSet rs = playerbyname.executeQuery();
-
-            return getPlayers(rs);
-
-        } catch (SQLException ex) {
-
-            throw new EquipDataInterfaceException("Error Trying To Retrieve The Players " + ex.getMessage(), ex.getCause());
-        }
-    }
-
-    @Override
-    public List<Player> getPlayerBySurname(String surname) {
-        if (surname.equals("") || surname == null) {
-            throw new EquipDataInterfaceException("Surname Can't Be Null or Empty");
-        }
-
-        String query = "SELECT * FROM PLAYER WHERE UPPER(SURNAME) = UPPER(?)";
-
-        try {
-            playerbyname = con.prepareStatement(query);
-            playerbyname.setString(1, surname);
-
-            ResultSet rs = playerbyname.executeQuery();
-
-            return getPlayers(rs);
-
-        } catch (SQLException ex) {
-
-            throw new EquipDataInterfaceException("Error Trying To Retrieve The Players " + ex.getMessage(), ex.getCause());
-        }
-    }
-
-    @Override
-    public List<Player> getPlayerBySurname_ordCognom(String surname) {
-        if (surname.equals("") || surname == null) {
-            throw new EquipDataInterfaceException("Surname Can't Be Null or Empty");
-        }
-
-        String query = "SELECT * FROM PLAYER WHERE UPPER(SURNAME) = UPPER(?) ORDER BY SURNAME";
-
-        try {
-            playerbyname = con.prepareStatement(query);
-            playerbyname.setString(1, surname);
-
-            ResultSet rs = playerbyname.executeQuery();
-
-            return getPlayers(rs);
-
-        } catch (SQLException ex) {
-
-            throw new EquipDataInterfaceException("Error Trying To Retrieve The Players " + ex.getMessage(), ex.getCause());
-        }
-    }
-
-    @Override
-    public List<Player> getPlayerBySurname_ordDatnaix(String surname) {
-        if (surname.equals("") || surname == null) {
-            throw new EquipDataInterfaceException("Surname Can't Be Null or Empty");
-        }
-
-        String query = "SELECT * FROM PLAYER WHERE UPPER(SURNAME) = UPPER(?) ORDER BY BIRTH_YEAR";
-
-        try {
-            playerbyname = con.prepareStatement(query);
-            playerbyname.setString(1, surname);
-
-            ResultSet rs = playerbyname.executeQuery();
-
-            return getPlayers(rs);
-
-        } catch (SQLException ex) {
-
-            throw new EquipDataInterfaceException("Error Trying To Retrieve The Players " + ex.getMessage(), ex.getCause());
-        }
     }
 
     @Override
@@ -894,6 +693,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
         } catch (SQLException ex) {
 
             throw new EquipDataInterfaceException("Unable To Insert New Player " + ex.getMessage(), ex.getCause());
+        } finally {
+            closePreparedStatement(addnewplayps);
         }
 
     }
@@ -920,6 +721,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
         } catch (SQLException ex) {
 
             throw new EquipDataInterfaceException("Somthing Went Wrong Trying To Create The Delete Statement " + ex.getMessage(), ex.getCause());
+        } finally {
+            closePreparedStatement(deletplayer);
         }
 
     }
@@ -931,7 +734,6 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             throw new EquipDataInterfaceException("The ID Field Can't Be Null");
         }
 
-        // player = getPlayerByLegalId(legalID);
         String query = "UPDATE PLAYER "
                 + "SET NAME = ?, SURNAME = ?, SEX = ?, BIRTH_YEAR = ?, LEGAL_ID = ?,"
                 + "IBAN = ?, DIRECION = ?, CODIGO_POSTAL = ?, LOCALIDAD = ?, PROVINCIA = ?,"
@@ -978,18 +780,20 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
         } catch (SQLException ex) {
 
             throw new EquipDataInterfaceException("Error Trying Update Player " + ex.getMessage(), ex.getCause());
+        } finally {
+            closePreparedStatement(editplayer);
         }
     }
 
     @Override
     public List<Category> getCategorys() {
         List<Category> categories = new ArrayList<>();
-
+        ResultSet rs = null;
         try {
             String query = "Select * from category";
 
             Statement stm = con.createStatement();
-            ResultSet rs = stm.executeQuery(query);
+            rs = stm.executeQuery(query);
 
             while (rs.next()) {
 
@@ -1020,6 +824,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
         } catch (SQLException ex) {
 
             throw new EquipDataInterfaceException("Couldn't Retrieve The Categories " + ex.getMessage(), ex.getCause());
+        } finally {
+            closeResultSet(rs);
         }
     }
 
@@ -1042,6 +848,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
         } catch (SQLException ex) {
 
             throw new EquipDataInterfaceException("Error Trying To Retrieve The Teams By Categories " + ex.getMessage(), ex.getCause());
+        } finally {
+            closePreparedStatement(teambyCat);
         }
 
     }
@@ -1070,6 +878,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
 
         } catch (SQLException ex) {
             throw new EquipDataInterfaceException("Error retornando equipos de categoria " + category + " : " + ex.getMessage(), ex.getCause());
+        } finally {
+            closePreparedStatement(getseasoncatteamsStatement);
         }
 
     }
@@ -1082,10 +892,11 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
 
         String query = " select * from category where name = ?";
         Category category1 = null;
+        ResultSet rs = null;
         try {
             getCategorypstmt = con.prepareStatement(query);
             getCategorypstmt.setString(1, category);
-            ResultSet rs = getCategorypstmt.executeQuery();
+            rs = getCategorypstmt.executeQuery();
 
             if (rs.next()) {
                 Integer id = rs.getInt("id");
@@ -1099,6 +910,9 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
 
         } catch (SQLException ex) {
             throw new EquipDataInterfaceException("Error Getting Category " + category + " : " + ex.getMessage(), ex.getCause());
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(getCategorypstmt);
         }
 
         return category1;
@@ -1130,6 +944,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
         } catch (SQLException ex) {
 
             throw new EquipDataInterfaceException("Error Trying To Retrieve COUNT of players of " + team + " " + ex.getMessage(), ex.getCause());
+        } finally {
+            closePreparedStatement(getteammemcount);
         }
 
         return count;
@@ -1160,43 +976,25 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
         } catch (SQLException ex) {
 
             throw new EquipDataInterfaceException("Error Getting Teams By Season " + season + "  " + ex.getMessage(), ex.getCause());
-        }
-    }
-
-    @Override
-    public List<Team> getTeamsByType(String type) {
-
-        if (type == null || type.length() > 1) {
-            throw new EquipDataInterfaceException("Introduced Type Is Null Or More Than 1 Character");
-        }
-
-        String query = "SELECT * FROM TEAM WHERE TEAM_TYPE like ?";
-        ResultSet rs = null;
-        try {
-
-            PreparedStatement stm = con.prepareStatement(query);
-
-            stm.setNString(1, type);
-            rs = stm.executeQuery();
-            return getTeams(rs);
-
-        } catch (SQLException ex) {
-
-            throw new EquipDataInterfaceException("Error Getting Teams By Type " + type + " " + ex.getMessage(), ex.getCause());
+        } finally {
+            closePreparedStatement(teamseason);
         }
     }
 
     public List<Team> getAllTeams() {
         String query = "Select * from team order by season_year asc, id asc";
         ResultSet rs = null;
+        Statement stm = null;
         try {
-            Statement stm = con.createStatement();
+            stm = con.createStatement();
             rs = stm.executeQuery(query);
 
             return getTeams(rs);
 
         } catch (SQLException ex) {
             throw new EquipDataInterfaceException("Error All Teams Teams " + ex.getMessage(), ex.getCause());
+        } finally {
+            closeStatement(stm);
         }
 
     }
@@ -1224,6 +1022,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
 
         } catch (SQLException ex) {
             throw new EquipDataInterfaceException(ex.getMessage(), ex.getCause());
+        } finally {
+            closePreparedStatement(getteambynamepstmt);
         }
 
         return team;
@@ -1259,6 +1059,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
 
         } catch (SQLException ex) {
             throw new EquipDataInterfaceException("Error Making A New Team ", ex.getCause());
+        } finally {
+            closePreparedStatement(newteam);
         }
 
     }
@@ -1287,6 +1089,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
         } catch (SQLException ex) {
 
             throw new EquipDataInterfaceException("Error Getting Players Of Team " + teamName + "  " + ex.getMessage(), ex.getCause());
+        } finally {
+            closePreparedStatement(teamPlyers);
         }
 
     }
@@ -1327,6 +1131,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
         } catch (SQLException ex) {
 
             throw new EquipDataInterfaceException("Error Adding Player To Team " + team.getName() + " " + ex.getMessage(), ex.getCause());
+        } finally {
+            closePreparedStatement(addplyteam);
         }
     }
 
@@ -1354,6 +1160,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
         } catch (SQLException ex) {
 
             throw new EquipDataInterfaceException("Error Deleting Player Of Team " + team + " " + ex.getMessage(), ex.getCause());
+        } finally {
+            closePreparedStatement(delfromplyteam);
         }
 
     }
@@ -1381,6 +1189,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
         } catch (SQLException ex) {
 
             throw new EquipDataInterfaceException("Somthing Went Wrong Trying To Create The Delete Statement " + ex.getMessage(), ex.getCause());
+        } finally {
+            closePreparedStatement(delteam);
         }
 
     }
@@ -1411,13 +1221,9 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
         } catch (SQLException ex) {
 
             throw new EquipDataInterfaceException("Error adding new season " + season_n + " " + ex.getMessage(), ex.getCause());
+        } finally {
+            closePreparedStatement(newSeasonDate);
         }
-    }
-
-    @Override
-    public void removeSeason(String season_n
-    ) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
@@ -1443,6 +1249,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
         } catch (SQLException ex) {
 
             throw new EquipDataInterfaceException("Error removing team " + t_name + "  " + ex.getMessage(), ex.getCause());
+        } finally {
+            closePreparedStatement(removeteam);
         }
     }
 
@@ -1470,7 +1278,10 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             } catch (SQLException ex) {
 
                 throw new EquipDataInterfaceException("Error removing team " + team.getName() + " " + ex.getMessage(), ex.getCause());
+            } finally {
+                closePreparedStatement(rmveteamswithPlayers);
             }
+
         } else {
             System.out.println("Could Not Delete Team With Players");
         }
@@ -1489,7 +1300,7 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             rmveplayers.setInt(1, team.getId());
             int ans = rmveplayers.executeUpdate();
 
-            if (ans >= 0) { // >= 0 indicates successful execution
+            if (ans >= 0) {
                 status = true;
                 System.out.println("Correctly Removed All Players From Team");
             }
@@ -1497,6 +1308,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
         } catch (SQLException ex) {
 
             throw new EquipDataInterfaceException("Error removing players from team " + team.getName() + " " + ex.getMessage(), ex.getCause());
+        } finally {
+            closePreparedStatement(rmveplayers);
         }
         return status;
     }
@@ -1504,39 +1317,27 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
     @Override
     public List<Player> getPlayers() {
         String query = "select * from player";
-
+        Statement stm = null;
         try {
-            Statement stm = con.createStatement();
+            stm = con.createStatement();
             ResultSet rs = stm.executeQuery(query);
 
             return getPlayers(rs);
 
         } catch (SQLException ex) {
             throw new EquipDataInterfaceException("Unable To Create Statement " + ex.getMessage(), ex.getCause());
+        } finally {
+            closeStatement(stm);
         }
 
-    }
-
-    @Override
-    public List<Player> getPlayers_ordCognom() {
-        String query = "select * from player order by surname";
-
-        try {
-            Statement stm = con.createStatement();
-            ResultSet rs = stm.executeQuery(query);
-
-            return getPlayers(rs);
-
-        } catch (SQLException ex) {
-            throw new EquipDataInterfaceException("Unable To Create Statement " + ex.getMessage(), ex.getCause());
-        }
     }
 
     public List<Season> getSeasons() {
         String query = "Select * from season order by season_year DESC";
         List<Season> seasons = new ArrayList<>();
+        Statement stm = null;
         try {
-            Statement stm = con.createStatement();
+            stm = con.createStatement();
             ResultSet rs = stm.executeQuery(query);
 
             while (rs.next()) {
@@ -1553,23 +1354,10 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
 
         } catch (SQLException ex) {
             throw new EquipDataInterfaceException("Unable To Create Statement " + ex.getMessage(), ex.getCause());
+        } finally {
+            closeStatement(stm);
         }
         return seasons;
-    }
-
-    @Override
-    public List<Player> getPlayers_ordDatnaix() {
-        String query = "select * from player order by birth_year";
-
-        try {
-            Statement stm = con.createStatement();
-            ResultSet rs = stm.executeQuery(query);
-
-            return getPlayers(rs);
-
-        } catch (SQLException ex) {
-            throw new EquipDataInterfaceException("Unable To Create Statement " + ex.getMessage(), ex.getCause());
-        }
     }
 
     @Override
@@ -1594,6 +1382,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
 
         } catch (SQLException ex) {
             throw new EquipDataInterfaceException("Could Not Verify If Player Belongs To A Team " + ex.getMessage(), ex.getCause());
+        } finally {
+            closePreparedStatement(checkplayer);
         }
 
         return ans;
@@ -1623,6 +1413,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
 
         } catch (SQLException ex) {
             throw new EquipDataInterfaceException("Can't Get Player Team " + ex.getMessage(), ex.getCause());
+        } finally {
+            closePreparedStatement(checkplayerteam);
         }
 
         return ans;
@@ -1648,6 +1440,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             team = getTeam(rs);
         } catch (SQLException ex) {
             throw new EquipDataInterfaceException("Can't Get Player Team " + ex.getMessage(), ex.getCause());
+        } finally {
+            closePreparedStatement(playerteamget);
         }
         return team;
     }
@@ -1674,9 +1468,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             query.append("AND T.CATEGORY_NAME = ? ");
         }
 
-        // Append ORDER BY clause
         if (order != null && !order.isEmpty()) {
-            if (!order.matches("^[a-zA-Z_]+$")) { // Simple validation to avoid SQL injection
+            if (!order.matches("^[a-zA-Z_]+$")) {
                 throw new IllegalArgumentException("Invalid order column: " + order);
             }
             query.append("ORDER BY P.").append(order);
@@ -1716,6 +1509,8 @@ public class EquipDataImplementationSQL implements EquipDataInterface {
             }
         } catch (SQLException ex) {
             throw new EquipDataInterfaceException("Unable to retrieve players: " + ex.getMessage(), ex);
+        } finally {
+            closePreparedStatement(filterplayerspstmt);
         }
 
         return players;

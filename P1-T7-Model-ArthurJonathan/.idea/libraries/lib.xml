@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="lib">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/dist/lib/jakarta.xml.bind-api.jar!/" />
+      <root url="jar://$PROJECT_DIR$/dist/lib/jaxb-core.jar!/" />
+      <root url="jar://$PROJECT_DIR$/dist/lib/jaxb-xjc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/dist/lib/angus-activation.jar!/" />
+      <root url="jar://$PROJECT_DIR$/dist/lib/jakarta.activation-api.jar!/" />
+      <root url="jar://$PROJECT_DIR$/dist/lib/jaxb-impl.jar!/" />
+      <root url="jar://$PROJECT_DIR$/dist/lib/jaxb-jxc.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -16,7 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.joe.gestion.model.data.Player;
@@ -34,9 +34,26 @@ import org.joe.gestion.model.data.Team;
 public class TestSQL {
 
     public static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    private static EquipDataImplementationSQL edisql = null;
 
-    public static void addNewPlayer() {
-        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+    public static void ConnectToDb(EquipDataImplementationSQL edisql) {
+        edisql = new EquipDataImplementationSQL();
+        edisql.connectDatasource("config.properties");
+    }
+
+    public static void closeDbConnection(EquipDataImplementationSQL edisql) {
+        edisql = new EquipDataImplementationSQL();
+        try {
+            edisql.disconnectDatasource();
+        } catch (Exception e) {
+            System.out.println("MENSAJE: " + e.getMessage() + "\n" + "\nCAUSA: " + e.getCause());
+        }
+
+    }
+
+    public static void addNewPlayer(EquipDataImplementationSQL edisql) {
+        edisql = new EquipDataImplementationSQL();
+        ConnectToDb(edisql);
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -66,17 +83,23 @@ public class TestSQL {
 
             p1.setImage(blob);
         } catch (FileNotFoundException ex) {
-            System.out.println(ex.getMessage());
+            System.out.println("MENSAJE: " + ex.getMessage() + "\n" + "\nCAUSA: " + ex.getCause());
             throw new EquipDataInterfaceException("unable to load image");
         } catch (SQLException ex) {
-            Logger.getLogger(TestSQL.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("MENSAJE: " + ex.getMessage() + "\n" + "\nCAUSA: " + ex.getCause());
         } catch (IOException ex) {
-            Logger.getLogger(TestSQL.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("MENSAJE: " + ex.getMessage() + "\n" + "\nCAUSA: " + ex.getCause());
         }
 
         p1.mostrarJugDetalle();
 
-        implementationSQL.addNewPlayer(p1);
+        try {
+            edisql.addNewPlayer(p1);
+        } catch (Exception ex) {
+            System.out.println("MENSAJE: " + ex.getMessage() + "\n" + "\nCAUSA: " + ex.getCause());
+        } finally {
+            closeDbConnection(edisql);
+        }
     }
 
     public static Player newPlayer() {
@@ -106,452 +129,464 @@ public class TestSQL {
 
             p1.setImage(blob);
         } catch (FileNotFoundException ex) {
-            System.out.println(ex.getMessage());
+            System.out.println("MENSAJE: " + ex.getMessage() + "\n" + "\nCAUSA: " + ex.getCause());
             throw new EquipDataInterfaceException("unable to load image");
         } catch (SQLException ex) {
-            Logger.getLogger(TestSQL.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("MENSAJE: " + ex.getMessage() + "\n" + "\nCAUSA: " + ex.getCause());
         } catch (IOException ex) {
-            Logger.getLogger(TestSQL.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("MENSAJE: " + ex.getMessage() + "\n" + "\nCAUSA: " + ex.getCause());
         }
         return p1;
     }
 
     public static void editPlayer() {
         EquipDataImplementationSQL isql = new EquipDataImplementationSQL();
-        isql.editarJugador(newPlayer());
+        try {
+            isql.editarJugador(newPlayer());
+        } catch (Exception ex) {
+            System.out.println("MENSAJE: " + ex.getMessage() + "\n" + "\nCAUSA: " + ex.getCause());
+        }
 
     }
 
     private static Blob createBlobFromInputStream(InputStream is) throws SQLException, IOException {
+
         byte[] bytes = is.readAllBytes();
         return new SerialBlob(bytes);
     }
 
-    public static void CREATEUSER() {
+    public static void createUser() {
         EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
-        implementationSQL.createUser("admin", "joe", "admin");
+        try {
+            implementationSQL.createUser("admin", "joe", "admin");
+        } catch (Exception ex) {
+            System.out.println("MENSAJE: " + ex.getMessage() + "\n" + "\nCAUSA: " + ex.getCause());
+        }
     }
 
-    public static void VALIDATEUSER() {
+    public static void validateUser() {
         EquipDataImplementationSQL isql = new EquipDataImplementationSQL();
-
-        boolean result = isql.validateUser("admin", "admin");
-        if (result) {
-            System.out.println("USER IS VALID");
-        } else {
-            System.out.println("Incorrect user");
+        try {
+            boolean result = isql.validateUser("admin", "admin");
+            if (result) {
+                System.out.println("USER IS VALID");
+            } else {
+                System.out.println("Incorrect user");
+            }
+        } catch (Exception ex) {
+            System.out.println("MENSAJE: " + ex.getMessage() + "\n" + "\nCAUSA: " + ex.getCause());
         }
     }
 
-    public static void RESTOREPASS() {
+    public static void restorePassword() {
         EquipDataImplementationSQL isql = new EquipDataImplementationSQL();
-        isql.restorePassword("admin", "ADMIN");
-
-    }
-
-    public static void getPlayersByLegalId() {
-        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
-        List<Player> player = implementationSQL.getPlayersByLegalId("ID016");
-
-        for (Player play : player) {
-            System.out.println("\n=========================\n");
-            play.mostrarJugDetalle();
-        }
-    }
-
-    public static void GETTEAMSBYCAT() {
-        List<Team> teamsbycat = new ArrayList<>();
-
-        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
-        teamsbycat = implementationSQL.getTeamsByCategory("Cadet");
-
-        for (Team t : teamsbycat) {
-            System.out.println("\n=========================\n");
-            t.mostrarDetalle();
+        try {
+            isql.restorePassword("admin", "ADMIN");
+        } catch (Exception e) {
+            System.out.println("MENSAJE: " + e.getMessage() + "\n" + "\nCAUSA: " + e.getCause());
         }
 
     }
 
-    public static void getTeamsByType() {
-        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
-        List<Team> teamsbytype = new ArrayList<>();
+    public static void getTeamsByCategory() {
+        try {
+            List<Team> teamsbycat = new ArrayList<>();
 
-        teamsbytype = implementationSQL.getTeamsByType("D");
+            EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+            teamsbycat = implementationSQL.getTeamsByCategory("Cadet");
 
-        if (teamsbytype == null || teamsbytype.isEmpty()) {
-            System.out.println("No teams found for the given type.");
-            return;
+            for (Team t : teamsbycat) {
+                System.out.println("\n=========================\n");
+                t.mostrarDetalle();
+            }
+        } catch (Exception e) {
+            ErrorMsg(e);
         }
 
-        for (Team t : teamsbytype) {
-            System.out.println("\n=========================\n");
-            t.mostrarDetalle();
-        }
+    }
+
+    public static void ErrorMsg(Exception e) {
+        System.out.println("MENSAJE: " + e.getMessage() + "\n" + "\nCAUSA: " + e.getCause());
     }
 
     public static void deletePlayer() {
         EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
 
-        implementationSQL.eliminarJugador("X620841H");
-    }
-
-    public static void DELETETEAM() {
-        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
-
-        implementationSQL.deleteTeam("FcBarcelona");
-    }
-
-    public static void PLAYSBYYEAR() {
-        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
-        String dateuser = ("2007-01-25");
-        List<Player> playerlist = new ArrayList<>();
-
         try {
-            playerlist = implementationSQL.getPlayerByBirthYear(sdf.parse(dateuser));
-
-            for (Player play : playerlist) {
-                System.out.println("\n=========================\n");
-                play.mostrarJugDetalle();
-            }
-
-        } catch (ParseException ex) {
-            System.out.println(ex.getMessage());
-        }
-    }
-
-    public static void GETPLAYERSBYNAME() {
-        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
-        List<Player> playerlist = new ArrayList<>();
-
-        playerlist = implementationSQL.getPlayerByName("Pedro");
-        for (Player play : playerlist) {
-            System.out.println("\n=========================\n");
-            play.mostrarJugDetalle();
+            implementationSQL.eliminarJugador("X620841H");
+        } catch (Exception e) {
+            ErrorMsg(e);
         }
 
     }
 
-    public static void getPlayerBySurname() {
+    public static void deleteTeam() {
         EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
-        List<Player> playerlist = new ArrayList<>();
-
-        playerlist = implementationSQL.getPlayerBySurname("Reyes");
-        for (Player play : playerlist) {
-            System.out.println("\n=========================\n");
-            play.mostrarJugDetalle();
-        }
-
-    }
-
-    public static void getPlayerBySurname_Ordbycognom() {
-        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
-        List<Player> playerlist = new ArrayList<>();
-
-        playerlist = implementationSQL.getPlayerBySurname_ordCognom("Reyes");
-        for (Player play : playerlist) {
-            System.out.println("\n=========================\n");
-            play.mostrarJugDetalle();
-        }
-
-    }
-
-    public static void getPlayerBySurname_Orddatnaix() {
-        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
-        List<Player> playerlist = new ArrayList<>();
-
-        playerlist = implementationSQL.getPlayerBySurname_ordDatnaix("Reyes");
-        for (Player play : playerlist) {
-            System.out.println("\n=========================\n");
-            play.mostrarJugDetalle();
+        try {
+            implementationSQL.deleteTeam("FcBarcelona");
+        } catch (Exception e) {
+            ErrorMsg(e);
         }
 
     }
 
     public static void getAllCategories() {
-        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
-        List<Category> catlist = new ArrayList<>();
-        catlist = implementationSQL.getCategorys();
-        for (Category cat : catlist) {
-            cat.mostrarDetalle();
-            System.out.println("\n");
+        try {
+            EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+            List<Category> catlist = new ArrayList<>();
+            catlist = implementationSQL.getCategorys();
+            for (Category cat : catlist) {
+                cat.mostrarDetalle();
+                System.out.println("\n");
+            }
+        } catch (Exception e) {
+            ErrorMsg(e);
         }
+
     }
 
-    public static void ADDNEWTEAM() {
+    public static void addNewTeam() {
         EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
         try {
             implementationSQL.addNewTeam("FcBarcelona", "D", "Juvenil", sdf.parse("2024-09-01"));
-        } catch (ParseException ex) {
-            System.out.println(ex.getMessage());
+        } catch (Exception ex) {
+            System.out.println("MENSAJE: " + ex.getMessage() + "\n" + "\nCAUSA: " + ex.getCause());
         }
     }
 
-    public static void getTeamPlayers() throws ParseException {
+    public static void getTeamPlayers() {
 
-        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
-        List<Player> playerlist = new ArrayList<>();
-        Date date = sdf.parse("2024-09-01");
+        try {
+            EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+            List<Player> playerlist = new ArrayList<>();
+            Date date = sdf.parse("2024-09-01");
 
-        java.sql.Date oracldate = new java.sql.Date(date.getTime());
-        System.out.println("ORCALE DATE: " + oracldate);
-        playerlist = implementationSQL.getTeamPlayers("Fc Olot Fem", oracldate);
-        if (playerlist.isEmpty()) {
-            System.out.println("list is empty");
+            java.sql.Date oracldate = new java.sql.Date(date.getTime());
+            System.out.println("ORCALE DATE: " + oracldate);
+            playerlist = implementationSQL.getTeamPlayers("Fc Olot Fem", oracldate);
+            if (playerlist.isEmpty()) {
+                System.out.println("list is empty");
+            }
+            for (Player play : playerlist) {
+                System.out.println("\n=========================\n");
+                play.mostrarJugDetalle();
+            }
+        } catch (Exception e) {
+            ErrorMsg(e);
         }
-        for (Player play : playerlist) {
-            System.out.println("\n=========================\n");
-            play.mostrarJugDetalle();
-        }
+
     }
 
     public static void getAllTeams() {
-        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
-        List<Team> teamlist = new ArrayList<>();
+        try {
+            EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+            List<Team> teamlist = new ArrayList<>();
 
-        teamlist = implementationSQL.getAllTeams();
-        for (Team team : teamlist) {
-            team.mostrarDetalle();
+            teamlist = implementationSQL.getAllTeams();
+            for (Team team : teamlist) {
+                team.mostrarDetalle();
+            }
+        } catch (Exception e) {
+            ErrorMsg(e);
         }
+
     }
 
     public static void getPlayers() {
-        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
-        List<Player> playerlist = new ArrayList<>();
+        try {
+            EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+            List<Player> playerlist = new ArrayList<>();
 
-        playerlist = implementationSQL.getPlayers();
-        for (Player play : playerlist) {
-            System.out.println("\n=========================\n");
-            play.mostrarJugDetalle();
+            playerlist = implementationSQL.getPlayers();
+            for (Player play : playerlist) {
+                System.out.println("\n=========================\n");
+                play.mostrarJugDetalle();
+            }
+        } catch (Exception e) {
+            ErrorMsg(e);
         }
-    }
 
-    public static void getPlayers_ordbycognom() {
-        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
-        List<Player> playerlist = new ArrayList<>();
-
-        playerlist = implementationSQL.getPlayers_ordCognom();
-        for (Player play : playerlist) {
-            System.out.println("\n=========================\n");
-            play.mostrarJugDetalle();
-        }
-    }
-
-    public static void getPlayers_ordbybirthyear() {
-        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
-        List<Player> playerlist = new ArrayList<>();
-
-        playerlist = implementationSQL.getPlayers_ordDatnaix();
-        for (Player play : playerlist) {
-            System.out.println("\n=========================\n");
-            play.mostrarJugDetalle();
-        }
-    }
-
-    public static void getPlayersCat() {
-        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
-        List<Player> playerlist = new ArrayList<>();
-
-        playerlist = implementationSQL.getPlayersByCat("Cadet");
-        for (Player play : playerlist) {
-            System.out.println("\n=========================\n");
-            play.mostrarJugDetalle();
-        }
-    }
-
-    public static void getPlayersCat_ordbycognom() {
-        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
-        List<Player> playerlist = new ArrayList<>();
-
-        playerlist = implementationSQL.getPlayeraByCat_ordCognom("Juvenil");
-        for (Player play : playerlist) {
-            System.out.println("\n=========================\n");
-            play.mostrarJugDetalle();
-        }
-    }
-
-    public static void getPlayersCat_ordbydatnaix() {
-        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
-        List<Player> playerlist = new ArrayList<>();
-
-        playerlist = implementationSQL.getPlayeraByCat_ordDatnaix("Juvenil");
-        for (Player play : playerlist) {
-            System.out.println("\n=========================\n");
-            play.mostrarJugDetalle();
-        }
-    }
-
-    public static void getPlayersByBirtYear() throws ParseException {
-        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
-        List<Player> playerlist = new ArrayList<>();
-
-        playerlist = implementationSQL.getPlayerByBirthYear(sdf.parse("2007-05-16"));
-        for (Player play : playerlist) {
-            System.out.println("\n=========================\n");
-            play.mostrarJugDetalle();
-        }
     }
 
     public static void getTeamsSeaon() {
-        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
-        List<Team> teamlist = new ArrayList<>();
         try {
-            teamlist = implementationSQL.getTeamsBySeason(sdf.parse("2024-09-01"));
-        } catch (ParseException ex) {
-            Logger.getLogger(TestSQL.class.getName()).log(Level.SEVERE, null, ex);
+            EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+            List<Team> teamlist = new ArrayList<>();
+            try {
+                teamlist = implementationSQL.getTeamsBySeason(sdf.parse("2024-09-01"));
+            } catch (ParseException ex) {
+                Logger.getLogger(TestSQL.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            for (Team team : teamlist) {
+                System.out.println("\n=========================\n");
+                team.mostrarDetalle();
+            }
+        } catch (Exception e) {
+            ErrorMsg(e);
         }
-        for (Team team : teamlist) {
-            System.out.println("\n=========================\n");
-            team.mostrarDetalle();
-        }
-    }
 
-    public static void getPlayersByBirtYear_OrdbySurname() throws ParseException {
-        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
-        List<Player> playerlist = new ArrayList<>();
-
-        playerlist = implementationSQL.getPlayerByBirthYear_ordCognom(sdf.parse("2007-05-16"));
-        for (Player play : playerlist) {
-            System.out.println("\n=========================\n");
-            play.mostrarJugDetalle();
-        }
     }
 
     public static void getSeasons() {
-        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
-        List<Season> seasonslist = new ArrayList<>();
+        try {
+            EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+            List<Season> seasonslist = new ArrayList<>();
 
-        seasonslist = implementationSQL.getSeasons();
-        for (Season season : seasonslist) {
-            System.out.println("\n=========================\n");
-            season.mostrarDetalle();
+            seasonslist = implementationSQL.getSeasons();
+            for (Season season : seasonslist) {
+                System.out.println("\n=========================\n");
+                season.mostrarDetalle();
+            }
+        } catch (Exception e) {
+            ErrorMsg(e);
         }
+
     }
 
     public static void getPlayerByLegalId() {
-        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
-        Player player = implementationSQL.getPlayerByLegalId("9999901J");
-        player.mostrarJugDetalle();
+        try {
+            EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+            Player player = implementationSQL.getPlayerByLegalId("9999901J");
+            player.mostrarJugDetalle();
+        } catch (Exception e) {
+            ErrorMsg(e);
+        }
+
     }
 
-    public static void getTeamMembercount() {
-        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
-        int count = implementationSQL.getTeamMemCount("FcRoquetasMASC");
-        System.out.println("COUNT: " + count);
+    public static void getTeamMemberCount() {
+        try {
+            EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+            int count = implementationSQL.getTeamMemCount("FcRoquetasMASC");
+            System.out.println("COUNT: " + count);
+        } catch (Exception e) {
+            ErrorMsg(e);
+        }
+
     }
 
     public static void removeTeam() {
-        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
-        implementationSQL.removeTeamFromSeason("Fc Monalco");
+        try {
+            EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+            implementationSQL.removeTeamFromSeason("Fc Monalco");
+        } catch (Exception e) {
+            ErrorMsg(e);
+        }
+
     }
 
     public static void checkPlayerHasTeam() {
-        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
-        boolean ans;
-        ans = implementationSQL.checkPlayerBelongsToTeam("9999902K");
-        if (ans) {
-            System.out.println("Player Belongs To A Team");
-        } else {
-            System.out.println("Player Is Not Part Of A Team");
+        try {
+            EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+            boolean ans;
+            ans = implementationSQL.checkPlayerBelongsToTeam("9999902K");
+            if (ans) {
+                System.out.println("Player Belongs To A Team");
+            } else {
+                System.out.println("Player Is Not Part Of A Team");
+            }
+        } catch (Exception e) {
+            ErrorMsg(e);
         }
+
     }
 
     public static void testGetPlayerTeam() {
-        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
-        Team team = implementationSQL.getPlayerTeam("9999902K");
-        team.mostrarDetalle();
-    }
-
-    public static void filteredPlayersList() throws ParseException {
-        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date birthday = sdf.parse("2016-04-03");
-
-        List<Player> players = implementationSQL.playerFilterSearch(null, null, null, "Juvenil", "birth_year");
-        if (players.isEmpty()) {
-            System.out.println("Query returned no results.");
-        } else {
-            System.out.println("Query returned results:");
-            for (Player play : players) {
-                System.out.println("----------------------------------------------");
-                play.mostrarJugDetalle();
-            }
+        try {
+            EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+            Team team = implementationSQL.getPlayerTeam("9999902K");
+            team.mostrarDetalle();
+        } catch (Exception e) {
+            ErrorMsg(e);
         }
+
     }
 
-    public static void getTeamByName() throws ParseException {
+    public static void filteredPlayersList() {
+        try {
+            EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date birthday = sdf.parse("2016-04-03");
+
+            List<Player> players = implementationSQL.playerFilterSearch(null, null, null, "Juvenil", "birth_year");
+            if (players.isEmpty()) {
+                System.out.println("Query returned no results.");
+            } else {
+                System.out.println("Query returned results:");
+                for (Player play : players) {
+                    System.out.println("----------------------------------------------");
+                    play.mostrarJugDetalle();
+                }
+            }
+        } catch (Exception e) {
+            ErrorMsg(e);
+        }
+
+    }
+
+    public static void getTeamByName() {
         EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
 
-        String dateString = "2024-09-01";
-        Date date = sdf.parse(dateString);
+        try {
+            String dateString = "2024-09-01";
+            Date date = sdf.parse(dateString);
 
-        java.sql.Date oracldate = new java.sql.Date(date.getTime());
-        Team team = implementationSQL.getTeamByName("Fc Wildcats Masc", oracldate);
-        team.mostrarDetalle();
+            java.sql.Date oracldate = new java.sql.Date(date.getTime());
+            Team team = implementationSQL.getTeamByName("Fc Wildcats Masc", oracldate);
+            team.mostrarDetalle();
+        } catch (Exception e) {
+            System.out.println("MENSAJE: " + e.getMessage() + "\n" + "\nCAUSA: " + e.getCause());
+        }
+
     }
 
     public static void getSeasonCatTeam() throws ParseException {
-        EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
-        String dateString = "2024-09-01";
-        Date date = sdf.parse(dateString);
 
-        List<Team> teams = implementationSQL.getSeasonCategoryTeam("Cadet", date);
-        for (Team team : teams) {
-            System.out.println("---------------------------");
-            team.mostrarDetalle();
+        try {
+            EquipDataImplementationSQL implementationSQL = new EquipDataImplementationSQL();
+            String dateString = "2024-09-01";
+            Date date = sdf.parse(dateString);
+            List<Team> teams = implementationSQL.getSeasonCategoryTeam("Cadet", date);
+            for (Team team : teams) {
+                System.out.println("---------------------------");
+                team.mostrarDetalle();
+            }
+
+        } catch (Exception e) {
+            System.out.println("MENSAJE: " + e.getMessage() + "\n" + "\nCAUSA: " + e.getCause());
         }
+
     }
 
-    public static void closeDbConnection() {
-        EquipDataImplementationSQL isql = new EquipDataImplementationSQL();
-        isql.disconnectDatasource();
-    }
+    public static void main(String[] args) {
 
-    public static void main(String[] args) throws ParseException {
+        Scanner scanner = new Scanner(System.in);
+        EquipDataImplementationSQL edisql = new EquipDataImplementationSQL();
 
-        // addNewPlayer();
-        //CREATEUSER();
-        //VALIDATEUSER();
-        //RESTOREPASS();
-        //getPlayersByLegalId();
-        //getPlayerByLegalId();
-        //deletePlayer();
-        //PLAYSBYYEAR();
-        //GETPLAYERSBYNAME();
-        //getPlayerBySurname();
-        //getPlayerBySurname_Ordbycognom();
-        // getPlayerBySurname_Orddatnaix();
-        //GETALLCATEGORIES();
-        //ADDNEWTEAM();
-        //DELETETEAM();
-        //GETTEAMSBYCAT();
-        //getTeamsByType();
-        //getTeamPlayers();
-        //getPlayers();
-        //getPlayers_ordbycognom();
-        //getPlayers_ordbybirthyear();
-        //getPlayersCat();
-        //getPlayersCat_ordbycognom();
-        //getPlayersCat_ordbydatnaix();
-        /*  try {
-            getPlayersByBirtYear();
-            //getPlayersByBirtYear_OrdbySurname();
-        } catch (ParseException ex) {
-            System.out.println(ex);
-        }*/
-        // editPlayer();
-        //getSeasons();
-        // getTeamsSeaon();
-        // getTeamMembercount();
-        //removeTeam();
-        //getAllTeams();
-        // checkPlayerHasTeam();
-        //testGetPlayerTeam();
-        // filteredPlayersList();
-        //getTeamByName();
-        getSeasonCatTeam();
+        System.out.println(
+                "\t \t \t = = = = AREA DE TEST = = = = = ");
+        System.out.println(
+                " Los metodos aqui son unicamente los metodos utilizados en el producto final. Cualquier otro \n"
+                + " metodo innecesario que fue escrito durante el desarrollo de esta aplicación ha sido eliminado.");
 
-        closeDbConnection();
+        while (true) {
+
+            System.out.println("\nSelecciona una opción:");
+            System.out.println("1. addNewPlayer()");
+            System.out.println("2. createUser()");
+            System.out.println("3. validateUser()");
+            System.out.println("4. restorePassword()");
+            System.out.println("5. getPlayerByLegalId()");
+            System.out.println("6. deletePlayer()");
+            System.out.println("7. getAllCategories()");
+            System.out.println("8. addNewTeam()");
+            System.out.println("9. deleteTeam()");
+            System.out.println("10. getTeamsByCategory()");
+            System.out.println("11. getTeamPlayers()");
+            System.out.println("12. getPlayers()");
+            System.out.println("13. editPlayer()");
+            System.out.println("14. getSeasons()");
+            System.out.println("15. getTeamsSeason()");
+            System.out.println("16. getTeamMemberCount()");
+            System.out.println("17. removeTeam()");
+            System.out.println("18. getAllTeams()");
+            System.out.println("19. checkPlayerHasTeam()");
+            System.out.println("20. testGetPlayerTeam()");
+            System.out.println("21. filteredPlayersList()");
+            System.out.println("22. getTeamByName()");
+            System.out.println("23. getSeasonCatTeam()");
+
+            System.out.println("0. Salir");
+
+            int choice = scanner.nextInt();
+
+            try {
+                switch (choice) {
+                    case 1:
+                        addNewPlayer(edisql);
+                        break;
+                    case 2:
+                        createUser();
+                        break;
+                    case 3:
+                        validateUser();
+                        break;
+                    case 4:
+                        restorePassword();
+                        break;
+                    case 5:
+                        getPlayerByLegalId();
+                        break;
+                    case 6:
+                        deletePlayer();
+                        break;
+                    case 7:
+                        getAllCategories();
+                        break;
+                    case 8:
+                        addNewTeam();
+                        break;
+                    case 9:
+                        deleteTeam();
+                        break;
+                    case 10:
+                        getTeamsByCategory();
+                        break;
+                    case 11:
+                        getTeamPlayers();
+                        break;
+                    case 12:
+                        getPlayers();
+                        break;
+                    case 13:
+                        editPlayer();
+                        break;
+                    case 14:
+                        getSeasons();
+                        break;
+                    case 15:
+                        getTeamsSeaon();
+                        break;
+                    case 16:
+                        getTeamMemberCount();
+                        break;
+                    case 17:
+                        removeTeam();
+                        break;
+                    case 18:
+                        getAllTeams();
+                        break;
+                    case 19:
+                        checkPlayerHasTeam();
+                        break;
+                    case 20:
+                        testGetPlayerTeam();
+                        break;
+                    case 21:
+                        filteredPlayersList();
+                        break;
+                    case 22:
+                        getTeamByName();
+                        break;
+                    case 23:
+                        getSeasonCatTeam();
+                        break;
+
+                    case 0:
+                        System.out.println("Saliendo del programa...");
+                        closeDbConnection(edisql);
+                        scanner.close();
+                        System.exit(0);
+                        break;
+                    default:
+                        System.out.println("Opción inválida. Por favor, elige una opción entre 0 y 24.");
+                }
+            } catch (Exception ex) {
+                System.out.println("MENSAJE: " + ex.getMessage() + "\n" + "\nCAUSA: " + ex.getCause());
+            }
+        }
+
     }
 
 }

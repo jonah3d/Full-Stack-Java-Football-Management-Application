@@ -10,6 +10,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
+import javax.swing.SwingWorker;
+import org.joe.application.constants.ErrMsg;
 import org.joe.application.views.CreateuserFrame;
 import org.joe.application.views.LoginScreen;
 import org.joe.application.views.RetrievePassowordFrame;
@@ -70,29 +72,29 @@ public class LoginScreenController implements ActionListener {
     }
 
     private void connectToDatabase() {
-        new Thread(() -> {
-            try {
-                JProgressBar progressBar = loginScreen.getConnectionBar();
-                progressBar.setValue(0);
-                for (int i = 1; i <= 100; i += 20) {
-                    Thread.sleep(500);
-                    progressBar.setValue(i);
+
+        JProgressBar progressBar = loginScreen.getConnectionBar();
+        progressBar.setVisible(true);
+        progressBar.setIndeterminate(true);
+        SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                try {
+                    edi.connectDatasource("config.properties");
+                } catch (Exception ex) {
+                    ErrMsg.error(ex.getMessage(), ex.getCause());
                 }
-
-                progressBar.setValue(100);
-                progressBar.setVisible(false);
-                JOptionPane.showMessageDialog(null, "Connectado Al Servidor");
-
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null,
-                        e.getMessage(),
-                        "Error De Conexion",
-                        JOptionPane.ERROR_MESSAGE
-                );
-
+                return null;
             }
 
-        }).start();
+            @Override
+            protected void done() {
+
+                progressBar.setIndeterminate(false);
+                progressBar.setVisible(false);
+            }
+        };
+        worker.execute();
     }
 
     private void restorePassword_OnMouse() {

@@ -4,8 +4,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * La {@code User} clase representa la la persona/usuario con el derecho a
- * gestionar equipos o jugadores con este aplicación
+ * La clase {@code User} representa a un usuario con derechos para gestionar
+ * equipos o jugadores en esta aplicación.
+ * <p>
+ * Esta clase contiene información básica del usuario, como su nombre de usuario
+ * y contraseña, y proporciona métodos para acceder y modificar estos atributos.
+ * </p>
  *
  * @author Jonathan Arthur
  * @version 1.0
@@ -17,11 +21,11 @@ public class User {
     private String password;
 
     /**
-     * Constructor del clase que acepta dos paramateros
+     * Constructor de la clase {@code User} que inicializa un nuevo usuario con
+     * un nombre de usuario y una contraseña.
      *
-     * @param username
-     * @param password
-     *
+     * @param username el nombre de usuario del usuario.
+     * @param password la contraseña del usuario.
      */
     public User(String username, String password) {
         setPassword(password);
@@ -29,34 +33,47 @@ public class User {
     }
 
     /**
-     * Metodo
+     * Devuelve el nombre de usuario del usuario.
      *
-     * @return username
-     *
+     * @return el nombre de usuario.
      */
     public String getUsername() {
         return username;
     }
 
     /**
+     * Establece el nombre de usuario del usuario.
      *
-     * @param username
+     * @param username el nuevo nombre de usuario.
      */
     public void setUsername(String username) {
         this.username = username;
     }
 
     /**
+     * Devuelve la contraseña del usuario.
      *
-     * @return password
+     * @return la contraseña del usuario.
      */
     public String getPassword() {
         return password;
     }
 
     /**
+     * Establece la contraseña del usuario.
+     * <p>
+     * La contraseña debe cumplir con los siguientes criterios:
+     * </p>
+     * <ul>
+     * <li>Debe contener al menos una letra mayúscula.</li>
+     * <li>Debe contener al menos un número.</li>
+     * <li>Debe contener al menos un carácter especial.</li>
+     * <li>Debe tener entre 8 y 20 caracteres.</li>
+     * <li>No puede contener espacios.</li>
+     * </ul>
      *
-     * @param password
+     * @param password la nueva contraseña del usuario.
+     * @throws RuntimeException si la contraseña no cumple con los requisitos.
      */
     public void setPassword(String password) {
         String regExpn = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,20}$";
@@ -66,8 +83,7 @@ public class User {
         if (matcher.find()) {
             this.password = password;
         } else {
-            throw new RuntimeException("Password must contain at least one capital letter, one number (not in sequence), and one special character.");
+            throw new RuntimeException("La contraseña debe contener al menos una letra mayúscula, un número, y un carácter especial.");
         }
     }
-
 }

@@ -9,12 +9,24 @@ import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
 import java.io.Serializable;
 import java.sql.Blob;
 
 import java.util.Date;
+
 import org.joe.gestion.model.adapter.DataAdapter;
 
+/**
+ * La clase {@code Player} representa un jugador dentro del sistema.
+ * <p>
+ * Está diseñada para ser serializable en XML utilizando anotaciones JAX-B.
+ * </p>
+ *
+ * @author Jonathan Arthur
+ * @version 1.0
+ * @since 2025-01-01
+ */
 @XmlRootElement(name = "jugador")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlAccessorOrder(XmlAccessOrder.UNDEFINED)
@@ -69,9 +81,20 @@ public class Player implements Serializable {
     @XmlTransient
     private String titularidad;
 
+    /**
+     * Constructor por defecto requerido por JAX-B.
+     */
     public Player() {
     }
 
+    /**
+     * Constructor que inicializa un jugador con información básica.
+     *
+     * @param name       el nombre del jugador.
+     * @param surname    el apellido del jugador.
+     * @param sex        el sexo del jugador.
+     * @param birth_year el año de nacimiento del jugador.
+     */
     public Player(String name, String surname, String sex, Date birth_year) {
         this.name = name;
         this.surname = surname;
@@ -79,9 +102,27 @@ public class Player implements Serializable {
         this.birth_year = birth_year;
     }
 
+    /**
+     * Constructor que inicializa un jugador con información detallada.
+     *
+     * @param name            el nombre del jugador.
+     * @param surname         el apellido del jugador.
+     * @param sex             el sexo del jugador.
+     * @param birth_year      el año de nacimiento del jugador.
+     * @param legal_id        el identificador legal del jugador.
+     * @param iban            el IBAN del jugador.
+     * @param direccion       la dirección del jugador.
+     * @param codigo_postal   el código postal del jugador.
+     * @param localidad       la localidad del jugador.
+     * @param provincia       la provincia del jugador.
+     * @param pais            el país del jugador.
+     * @param image           la imagen del jugador.
+     * @param medical_rev_fin la fecha de finalización de la revisión médica del jugador.
+     */
+
     public Player(String name, String surname, String sex, Date birth_year, String legal_id, String iban,
-            String direccion, String codigo_postal, String localidad, String provincia,
-            String pais, Blob image, Integer medical_rev_fin) {
+                  String direccion, String codigo_postal, String localidad, String provincia,
+                  String pais, Blob image, Integer medical_rev_fin) {
         this.name = name;
         this.surname = surname;
         this.sex = sex;
@@ -97,20 +138,45 @@ public class Player implements Serializable {
         this.medical_rev_fin = medical_rev_fin;
     }
 
+    /**
+     * Obtiene el código postal del jugador.
+     *
+     * @return el código postal del jugador.
+     */
+
     public String getCodigo_postal() {
         return codigo_postal;
     }
+
+    /**
+     * Obtiene la titularidad del jugador.
+     *
+     * @return la titularidad del jugador.
+     */
 
     public String getTitularidad() {
         return titularidad;
     }
 
+    /**
+     * Establece la titularidad del jugador.
+     *
+     * @param titularidad la nueva titularidad del jugador.
+     * @throws RuntimeException si la titularidad es nula o vacía.
+     */
     public void setTitularidad(String titularidad) {
         if (titularidad == null || titularidad.isBlank()) {
             throw new RuntimeException("Titularidad del jugador no puede ser nulo o vacío");
         }
         this.titularidad = titularidad;
     }
+
+    /**
+     * Establece el código postal del jugador.
+     *
+     * @param codigo_postal el nuevo código postal del jugador.
+     * @throws RuntimeException si el código postal es nulo o vacío.
+     */
 
     public void setCodigo_postal(String codigo_postal) {
 
@@ -122,10 +188,21 @@ public class Player implements Serializable {
 
     }
 
+    /**
+     * Obtiene la localidad del jugador.
+     *
+     * @return la localidad del jugador.
+     */
     public String getLocalidad() {
         return localidad;
     }
 
+    /**
+     * Establece la localidad del jugador.
+     *
+     * @param localidad la nueva localidad del jugador.
+     * @throws RuntimeException si la localidad es nula o vacía.
+     */
     public void setLocalidad(String localidad) {
         if (localidad == null || localidad.isBlank()) {
             throw new RuntimeException("Localidad no puede ser vacio o null");
@@ -134,9 +211,22 @@ public class Player implements Serializable {
 
     }
 
+    /**
+     * Obtiene la provincia del jugador.
+     *
+     * @return la provincia del jugador.
+     */
+
     public String getProvincia() {
         return provincia;
     }
+
+    /**
+     * Establece la provincia del jugador.
+     *
+     * @param provincia la nueva provincia del jugador.
+     * @throws RuntimeException si la provincia es nula o vacía.
+     */
 
     public void setProvincia(String provincia) {
         if (provincia == null || provincia.isBlank()) {
@@ -147,10 +237,22 @@ public class Player implements Serializable {
 
     }
 
+    /**
+     * Obtiene el país del jugador.
+     *
+     * @return el país del jugador.
+     */
+
     public String getPais() {
         return pais;
     }
 
+    /**
+     * Establece el país del jugador.
+     *
+     * @param pais el nuevo país del jugador.
+     * @throws RuntimeException si el país es nulo o vacío.
+     */
     public void setPais(String pais) {
         if (pais == null || pais.isBlank()) {
             throw new RuntimeException("Pais no puede ser vacio o null");
@@ -158,9 +260,21 @@ public class Player implements Serializable {
         this.pais = pais;
     }
 
+    /**
+     * Obtiene el identificador del jugador.
+     *
+     * @return el identificador del jugador.
+     */
     public int getId() {
         return id;
     }
+
+    /**
+     * Establece el identificador del jugador.
+     *
+     * @param id el nuevo identificador del jugador.
+     * @throws RuntimeException si el identificador es menor o igual a 0.
+     */
 
     public void setId(int id) {
         if (id <= 0) {
@@ -170,42 +284,94 @@ public class Player implements Serializable {
         this.id = id;
     }
 
+    /**
+     * Obtiene el nombre del jugador.
+     *
+     * @return el nombre del jugador.
+     */
+
     public String getName() {
         return name;
     }
 
+    /**
+     * Obtiene el apellido del jugador.
+     *
+     * @return el apellido del jugador.
+     */
     public String getSurname() {
         return surname;
     }
 
+    /**
+     * Obtiene el sexo del jugador.
+     *
+     * @return el sexo del jugador.
+     */
     public String getSex() {
         return sex;
     }
 
+    /**
+     * Obtiene el año de nacimiento del jugador.
+     *
+     * @return el año de nacimiento del jugador.
+     */
     public Date getBirth_year() {
         return birth_year;
     }
 
+    /**
+     * Obtiene el identificador legal del jugador.
+     *
+     * @return el identificador legal del jugador.
+     */
     public String getLegal_id() {
         return legal_id;
     }
 
+    /**
+     * Obtiene el IBAN del jugador.
+     *
+     * @return el IBAN del jugador.
+     */
     public String getIban() {
         return iban;
     }
 
+    /**
+     * Obtiene la dirección del jugador.
+     *
+     * @return la dirección del jugador.
+     */
     public String getDireccion() {
         return direccion;
     }
 
+    /**
+     * Obtiene la imagen del jugador.
+     *
+     * @return la imagen del jugador como Blob.
+     */
     public Blob getImage() {
         return image;
     }
 
+    /**
+     * Obtiene la fecha de finalización de la revisión médica del jugador.
+     *
+     * @return la fecha de finalización de la revisión médica del jugador.
+     */
     public Integer getMedical_rev_fin() {
         return medical_rev_fin;
     }
 
+    /**
+     * Establece el nombre del jugador.
+     *
+     * @param name el nuevo nombre del jugador.
+     * @throws RuntimeException si el nombre es nulo o vacío.
+     */
     public void setName(String name) {
         if (!name.isEmpty() || name != null) {
             this.name = name;
@@ -214,6 +380,13 @@ public class Player implements Serializable {
         }
     }
 
+    /**
+     * Establece el apellido del jugador.
+     *
+     * @param surname el nuevo apellido del jugador.
+     * @throws RuntimeException si el apellido es nulo o vacío.
+     */
+
     public void setSurname(String surname) {
         if (!surname.isEmpty() || surname != null) {
             this.surname = surname;
@@ -221,6 +394,13 @@ public class Player implements Serializable {
             throw new RuntimeException("Appellido no puede ser null o vació");
         }
     }
+
+    /**
+     * Establece el sexo del jugador.
+     *
+     * @param sex el nuevo sexo del jugador.
+     * @throws RuntimeException si el sexo no es igual a H o D.
+     */
 
     public void setSex(String sex) {
 
@@ -231,6 +411,13 @@ public class Player implements Serializable {
         }
     }
 
+    /**
+     * Establece el año de nacimiento del jugador.
+     *
+     * @param birth_year el nuevo año de nacimiento del jugador.
+     * @throws RuntimeException si el año de nacimiento es nulo.
+     */
+
     public void setBirth_year(Date birth_year) {
         if (birth_year == null) {
             throw new RuntimeException("Año Nacieminto no puede ser null");
@@ -238,6 +425,13 @@ public class Player implements Serializable {
 
         this.birth_year = birth_year;
     }
+
+    /**
+     * Establece el identificador legal del jugador.
+     *
+     * @param legal_id el nuevo identificador legal del jugador.
+     * @throws RuntimeException si el NIF no es igual a 8 o vacío.
+     */
 
     public void setLegal_id(String legal_id) {
         if (!legal_id.isEmpty() && legal_id.length() == 8) {
@@ -247,6 +441,13 @@ public class Player implements Serializable {
         }
     }
 
+    /**
+     * Establece el IBAN del jugador.
+     *
+     * @param iban el nuevo IBAN del jugador.
+     * @throws RuntimeException si el IBAN no es igual al 24 o vacío.
+     */
+
     public void setIban(String iban) {
         if (!iban.isEmpty() || iban.length() == 24) {
             this.iban = iban;
@@ -254,6 +455,13 @@ public class Player implements Serializable {
             throw new RuntimeException("IBAN tiene que ser 24 caracteres");
         }
     }
+
+    /**
+     * Establece la dirección del jugador.
+     *
+     * @param direccion la nueva dirección del jugador.
+     * @throws RuntimeException si la dirección es nula o vacía.
+     */
 
     public void setDireccion(String direccion) {
         if (!direccion.isEmpty() || direccion != null) {
@@ -263,6 +471,13 @@ public class Player implements Serializable {
         }
     }
 
+    /**
+     * Establece la imagen del jugador.
+     *
+     * @param image la nueva imagen del jugador.
+     * @throws RuntimeException si la imagen es nula.
+     */
+
     public void setImage(Blob image) {
         if (image == null) {
             throw new RuntimeException("Imagen no puede ser null");
@@ -270,6 +485,13 @@ public class Player implements Serializable {
 
         this.image = image;
     }
+
+    /**
+     * Establece la fecha de finalización de la revisión médica del jugador.
+     *
+     * @param medical_rev_fin la nueva fecha de finalización de la revisión médica del jugador.
+     * @throws RuntimeException si la fecha de finalización de la revisión médica es nula.
+     */
 
     public void setMedical_rev_fin(Integer medical_rev_fin) {
 
@@ -280,6 +502,9 @@ public class Player implements Serializable {
         this.medical_rev_fin = medical_rev_fin;
     }
 
+    /**
+     * Muestra los detalles del jugador.
+     */
     public void mostrarJugDetalle() {
         System.out.println("ID: " + getId());
         System.out.println("Nombre: " + getName());
@@ -294,11 +519,25 @@ public class Player implements Serializable {
         System.out.println("Category " + getCategory());
     }
 
+    /**
+     * Obtiene la categoría del jugador.
+     *
+     * @return la categoría del jugador.
+     */
     public String getCategory() {
         return category;
     }
 
+    /**
+     * Establece la categoría del jugador.
+     *
+     * @param category la nueva categoría del jugador.
+     * @throws RuntimeException si la categoría es nula o vacía.
+     */
     public void setCategory(String category) {
+        if (category == null || category.isBlank()) {
+            throw new RuntimeException("Categoría del jugador no puede ser nulo o vacío");
+        }
         this.category = category;
     }
 }

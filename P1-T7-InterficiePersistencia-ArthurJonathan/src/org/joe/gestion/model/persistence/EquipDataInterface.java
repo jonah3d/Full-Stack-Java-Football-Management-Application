@@ -10,47 +10,84 @@ import org.joe.gestion.model.data.Team;
 import org.joe.gestion.model.helperclasses.TeamPlayers;
 
 /**
+ * La interfaz {@code EquipDataInterface} define los métodos necesarios para la
+ * gestión de datos de jugadores, equipos, temporadas y usuarios en la
+ * aplicación.
+ * <p>
+ * Esta interfaz proporciona operaciones para crear usuarios, validar
+ * credenciales, restaurar contraseñas, conectar y desconectar fuentes de datos,
+ * así como gestionar jugadores, equipos y temporadas.
+ * </p>
  *
  * @author jonah
  * @version 1.0
+ * @since 2025-01-01
  */
 public interface EquipDataInterface {
 
     //Application Management
+    /**
+     * Crea un nuevo usuario en el sistema.
+     *
+     * @param username el nombre de usuario.
+     * @param name el nombre completo del usuario.
+     * @param password la contraseña del usuario.
+     * @return {@code true} si el usuario fue creado exitosamente, {@code false}
+     * en caso contrario.
+     */
     public boolean createUser(String username, String name, String password);
 
+    /**
+     * Valida las credenciales de un usuario.
+     *
+     * @param username el nombre de usuario.
+     * @param password la contraseña del usuario.
+     * @return {@code true} si las credenciales son válidas, {@code false} en
+     * caso contrario.
+     */
     public boolean validateUser(String username, String password);
 
+    /**
+     * Restaura la contraseña de un usuario.
+     *
+     * @param username el nombre de usuario.
+     * @param Password la nueva contraseña.
+     */
     public void restorePassword(String username, String Password);
 
+    /**
+     * Conecta la aplicación a una fuente de datos.
+     *
+     * @param Filename el nombre del archivo de los propiedades que que tiene la
+     * fuente de datos.
+     * @return {@code true} si la conexión fue exitosa, {@code false} en caso
+     * contrario.
+     */
     public boolean connectDatasource(String Filename);
 
+    /**
+     * Desconecta la aplicación de la fuente de datos.
+     *
+     * @return {@code true} si la desconexión fue exitosa, {@code false} en caso
+     * contrario.
+     */
     public boolean disconnectDatasource();
 
     //Player Management
-    public List<Player> getPlayersByLegalId(String legalID);
-
+    /**
+     * Obtiene un jugador por su identificación legal.
+     *
+     * @param legalId el ID legal del jugador.
+     * @return el jugador con la identificación legal proporcionada.
+     */
     public Player getPlayerByLegalId(String legalId);
 
-    public List<Player> getPlayerByBirthYear(Date date);
-
-    public List<Player> getPlayerByBirthYear_ordCognom(Date date);
-
-    public List<Player> getPlayerByBirthYear_orddDatnaix(Date date);
-
-    public List<Player> getPlayerByName(String Name);
-
-    public List<Player> getPlayerBySurname(String surname);
-
-    public List<Player> getPlayerBySurname_ordCognom(String surname);
-
-    public List<Player> getPlayerBySurname_ordDatnaix(String surname);
-
+    /**
+     * Obtiene todos los jugadores registrados en el sistema de bases de datos.
+     *
+     * @return una lista de todos los jugadores.
+     */
     public List<Player> getPlayers();
-
-    public List<Player> getPlayers_ordCognom();
-
-    public List<Player> getPlayers_ordDatnaix();
 
     public void addNewPlayer(Player player);
 
@@ -70,8 +107,6 @@ public interface EquipDataInterface {
     public List<Category> getCategorys();
 
     public List<Team> getTeamsByCategory(String cat);
-
-    public List<Team> getTeamsByType(String type);
 
     public List<Team> getTeamsBySeason(Date season);
 
@@ -96,20 +131,11 @@ public interface EquipDataInterface {
     //Season management
     public void addNewSeason(String season_n, Date date);
 
-    public void removeSeason(String season_n);
-
     public void removeTeamFromSeason(String t_name);
 
     public void removeTeamWithPlayers(Team team);
 
     public List<Season> getSeasons();
-
-    //PlayerTeam
-    public List<Player> getPlayersByCat(String cat);
-
-    public List<Player> getPlayeraByCat_ordCognom(String cat);
-
-    public List<Player> getPlayeraByCat_ordDatnaix(String cat);
 
     public void editarJugador(Player player);
 }
