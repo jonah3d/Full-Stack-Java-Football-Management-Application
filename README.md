@@ -72,4 +72,6 @@ Jasper.properties contains the path to the Jasper Reports template that is used 
 You will need to modify this file to match your template path. Also the user and password.
 
 ## Running the Application Demo
-https://youtu.be/pzZ8VhWGeqs
+[![Watch the video](https://img.youtube.com/vi/pzZ8VhWGeqs/maxresdefault.jpg)](https://youtu.be/pzZ8VhWGeqs)
+
+### [Watch this video on YouTube](https://youtu.be/pzZ8VhWGeqs)
